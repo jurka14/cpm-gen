@@ -1,0 +1,13 @@
+{
+  "var":
+  {"operation": [{"@id": "ex:op1"}],
+    "operation_type": [{"@id": "ex:plus"}],
+    "consumed1": [{"@id": "ex:e1"}],
+    "consumed_value1": [ {"@value": "10", "@type": "xsd:int"}],
+    "consumed2": [{"@id": "ex:e2"}],
+    "consumed_value2": [{"@value": "11", "@type": "xsd:int"}],
+    "produced": [{"@id": "ex:e3"}],
+    "produced_value": [ {"@value": "21", "@type": "xsd:int"} ],
+    "agent": [{"@id": "ex:Luc"}]},
+  "context": {"ex": "http://example.org/"}
+}
