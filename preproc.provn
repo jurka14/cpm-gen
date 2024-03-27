@@ -1,0 +1,86 @@
+document
+  default <https://gitlab.ics.muni.cz/422328/pid-test/-/blob/master/>
+  prefix fi_muni <https://gitlab.ics.muni.cz/422328/pid-test/-/blob/master/provn/>
+  prefix mmci <https://gitlab.ics.muni.cz/422328/pid-mmci/-/blob/master/output/provn_pid/provn/>
+  prefix doi <https://doi.org/10.58092/>
+  prefix cpm <https://www.commonprovenancemodel.org/cpm-namespace-v1-0/>
+  prefix dct <http://purl.org/dc/terms/>
+
+  bundle fi_muni:preproc.provn
+    entity(doi:trainIndexROITablesConnector, [prov:type='cpm:forwardConnector', cpm:receiverBundleId='fi_muni:train.provn', cpm:metabundle='fi_muni:meta.provn'])
+    entity(doi:evalIndexROITablesConnector, [prov:type='cpm:forwardConnector', cpm:receiverBundleId='fi_muni:eval.provn', cpm:metabundle='fi_muni:meta.provn'])
+    entity(doi:WSIDataConnectorPreproc, [prov:type='cpm:backwardConnector', cpm:senderBundleId='mmci:pathology.provn', cpm:metabundle='mmci:meta.provn'])
+    agent(pathologyDepartment, [prov:type='cpm:senderAgent'])
+    activity(preprocessing, -, -, [prov:type='cpm:mainActivity', dct:hasPart="tilesGeneration"])
+    wasAttributedTo(doi:WSIDataConnectorPreproc, pathologyDepartment)
+    used(preprocessing, doi:WSIDataConnectorPreproc, -)
+    wasDerivedFrom(doi:trainIndexROITablesConnector, doi:WSIDataConnectorPreproc, -, -, -)
+    wasGeneratedBy(doi:trainIndexROITablesConnector, preprocessing, -)
+    wasDerivedFrom(doi:evalIndexROITablesConnector, doi:WSIDataConnectorPreproc, -, -, -)
+    wasGeneratedBy(doi:evalIndexROITablesConnector, preprocessing, -)
+    activity(tilesGeneration, -, -, [prov:label="tiles generation", git_commit_hash="742bffb6c81c663b57fa4c1c50ab95b466e8907b"])
+    entity(hdf5DatasetFile, [filepath="/home/meta/matejg/Data/camelyon16/prov_anon/prov_anon.h5", hash="a8db231b54e91d0fbe8f4bfbdc0d2b4bc5e1b04313166b5cb04b9d31852803bb"])
+
+    entity(testGroup, [table_0_sha256="0a9993ab72f8d2a0fac8bddd646110109d04e58f027bd20de37e2b35f1f5eef1"])
+    entity(WSIDataTest, [cpm:primaryId="", imagesDirSHA256="163c8174886cd53bbe234df1400ebc51cc4dcb1662d2a2573172abba0db88251", imagesDirPath="/home/meta/matejg/Data/camelyon16/cam16_mrxs/test", annotationsDirHash="163c8174886cd53bbe234df1400ebc51cc4dcb1662d2a2573172abba0db88251", annotationsDirPath="/home/meta/matejg/Data/camelyon16/cam16_mrxs/test", prov:type='prov:collection'])
+    entity(configTest, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, force="0" %% xsd:boolean, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="0" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=2, glob_pattern="*.mrxs", slide_dir="/mnt/Prostata/slides/Prospective test cases", label_dir="/mnt/Prostata/slides/Prospective test cases"])
+    entity(roiTablesTest)
+    wasGeneratedBy(roiTablesTest, tilesGeneration, -)
+    wasDerivedFrom(roiTablesTest, WSIDataTest, -, -, -)
+    wasDerivedFrom(roiTablesTest, configTest, -, -, -)
+    used(tilesGeneration, WSIDataTest, -)
+    used(tilesGeneration, configTest, -)
+    wasDerivedFrom(testGroup, roiTablesTest, -, -, -)
+    specializationOf(WSIDataTest, doi:WSIDataConnectorPreproc)
+    wasDerivedFrom(hdf5DatasetFile, testGroup, -, -, -)
+    entity(trainGroup, [table_0_sha256="ce1185458957b1eed63cad36bedcd9b4a6aa8eb333112729073cf0b0d187363d", table_1_sha256="adca7888d8530bddfd866e5df02ac9ca4a9ce4632c595f41562c6a32a76f1808"])
+
+    entity(WSIDataTrainPos, [cpm:primaryId="", imagesDirSHA256="cab5397a851f16bf3c3584c6382ef46be6db361c2e571d03756a38aafb8cfb07", imagesDirPath="/home/meta/matejg/Data/camelyon16/cam16_mrxs/train_pos", annotationsDirHash="cab5397a851f16bf3c3584c6382ef46be6db361c2e571d03756a38aafb8cfb07", annotationsDirPath="/home/meta/matejg/Data/camelyon16/cam16_mrxs/train_pos", prov:type='prov:collection'])
+    entity(configTrainPos, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, force="?????" %% xsd:boolean, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="0" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=1, glob_pattern="*.mrxs", slide_dir="/mnt/data/scans/AI scans/Prostata/Prospective tumor cases", label_dir="/mnt/data/scans/AI scans/Prostata/Prospective tumor cases"])
+    entity(roiTablesTrainPos)
+    wasGeneratedBy(roiTablesTrainPos, tilesGeneration, -)
+    wasDerivedFrom(roiTablesTrainPos, WSIDataTrainPos, -, -, -)
+    wasDerivedFrom(roiTablesTrainPos, configTrainPos, -, -, -)
+    used(tilesGeneration, WSIDataTrainPos, -)
+    used(tilesGeneration, configTrainPos, -)
+    wasDerivedFrom(trainGroup, roiTablesTrainPos, -, -, -)
+    specializationOf(WSIDataTrainPos, doi:WSIDataConnectorPreproc)
+
+    entity(WSIDataTrainArchPos, [cpm:primaryId="", imagesDirSHA256="cab5397a851f16bf3c3584c6382ef46be6db361c2e571d03756a38aafb8cfb07", imagesDirPath="/home/meta/matejg/Data/camelyon16/cam16_mrxs/train_pos", annotationsDirHash="cab5397a851f16bf3c3584c6382ef46be6db361c2e571d03756a38aafb8cfb07", annotationsDirPath="/home/meta/matejg/Data/camelyon16/cam16_mrxs/train_pos", prov:type='prov:collection'])
+    entity(configTrainArchPos, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, force="?????" %% xsd:boolean, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="0" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=1, glob_pattern="*.mrxs", slide_dir="/mnt/data/scans/AI scans/Prostata/archive tumor cases", label_dir="/mnt/data/scans/AI scans/Prostata/archive tumor cases"])
+    entity(roiTablesTrainArchPos)
+    wasGeneratedBy(roiTablesTrainArchPos, tilesGeneration, -)
+    wasDerivedFrom(roiTablesTrainArchPos, WSIDataTrainArchPos, -, -, -)
+    wasDerivedFrom(roiTablesTrainArchPos, configTrainArchPos, -, -, -)
+    used(tilesGeneration, WSIDataTrainArchPos, -)
+    used(tilesGeneration, configTrainArchPos, -)
+    wasDerivedFrom(trainGroup, roiTablesTrainArchPos, -, -, -)
+    specializationOf(WSIDataTrainArchPos, doi:WSIDataConnectorPreproc)
+
+    entity(WSIDataTrainNeg, [cpm:primaryId="", imagesDirSHA256="a9726eb9b6f8925f122028a3dc2066bc293229c83919d9729ebe63394ca4ee12", imagesDirPath="/home/meta/matejg/Data/camelyon16/cam16_mrxs/train_neg", annotationsDirHash="None", annotationsDirPath="None", prov:type='prov:collection'])
+    entity(configTrainNeg, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, force="?????" %% xsd:boolean, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="1" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=1, glob_pattern="*.mrxs", slide_dir="/mnt/data/scans/AI scans/Prostata/Prospective negative cases", label_dir=""])
+    entity(roiTablesTrainNeg)
+    wasGeneratedBy(roiTablesTrainNeg, tilesGeneration, -)
+    wasDerivedFrom(roiTablesTrainNeg, WSIDataTrainNeg, -, -, -)
+    wasDerivedFrom(roiTablesTrainNeg, configTrainNeg, -, -, -)
+    used(tilesGeneration, WSIDataTrainNeg, -)
+    used(tilesGeneration, configTrainNeg, -)
+    wasDerivedFrom(trainGroup, roiTablesTrainNeg, -, -, -)
+    specializationOf(WSIDataTrainNeg, doi:WSIDataConnectorPreproc)
+
+    entity(WSIDataTrainArchNeg, [cpm:primaryId="", imagesDirSHA256="a9726eb9b6f8925f122028a3dc2066bc293229c83919d9729ebe63394ca4ee12", imagesDirPath="/home/meta/matejg/Data/camelyon16/cam16_mrxs/train_neg", annotationsDirHash="None", annotationsDirPath="None", prov:type='prov:collection'])
+    entity(configTrainArchNeg, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, force="?????" %% xsd:boolean, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="1" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=1, glob_pattern="*.mrxs", slide_dir="/mnt/data/scans/AI scans/Prostata/archive negative cases", label_dir=""])
+    entity(roiTablesTrainArchNeg)
+    wasGeneratedBy(roiTablesTrainArchNeg, tilesGeneration, -)
+    wasDerivedFrom(roiTablesTrainArchNeg, WSIDataTrainArchNeg, -, -, -)
+    wasDerivedFrom(roiTablesTrainArchNeg, configTrainArchNeg, -, -, -)
+    used(tilesGeneration, WSIDataTrainArchNeg, -)
+    used(tilesGeneration, configTrainArchNeg, -)
+    wasDerivedFrom(trainGroup, roiTablesTrainArchNeg, -, -, -)
+    specializationOf(WSIDataTrainArchNeg, doi:WSIDataConnectorPreproc)
+
+    wasDerivedFrom(hdf5DatasetFile, trainGroup, -, -, -)
+    specializationOf(hdf5DatasetFile, doi:trainIndexROITablesConnector)
+    specializationOf(hdf5DatasetFile, doi:evalIndexROITablesConnector)
+  endBundle
+endDocument
