@@ -10,9 +10,12 @@ document
     entity(doi:evalTilesConnector, [prov:type='cpm:forwardConnector', cpm:receiverBundleId='fi_muni:eval.provn'])
     activity(preprocessing, -, -, [prov:type='cpm:mainActivity', repr:hasPart="tilesGeneration"])
     wasGeneratedBy(doi:evalTilesConnector, preprocessing, -)
+
     activity(tilesGeneration, -, -)
 
     entity(WSIDataEval, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/d76b2a494da447c39b64d93e89e106fa/artifacts/dataset/slides.parquet"])
+    entity(configFile, [path="mlflow-artifacts:/4/d76b2a494da447c39b64d93e89e106fa/artifacts/conf/config_resolved.yaml"])
+    wasDerivedFrom(configEval, configFile, -, -, -)
     entity(configEval, [tile_size=512, center_size=256, step_size=128, sample_level=1, bg_level=5, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="1" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=8, glob_pattern="*.mrxs", slide_dir="/mnt/data/Projects/Prostate-whole_slide_annotations/Prostaty2023-tabulka-final-corrections.xlsx", label_dir=""])
     entity(tilesEval, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/d76b2a494da447c39b64d93e89e106fa/artifacts/dataset/tiles.parquet"])
     wasGeneratedBy(tilesEval, tilesGeneration, -)
