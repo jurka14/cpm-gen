@@ -1,0 +1,77 @@
+document
+  default <https://gitlab.ics.muni.cz/422328/pid-test/-/blob/master/>
+  prefix fi_muni <https://gitlab.ics.muni.cz/422328/pid-test/-/blob/master/provn/>
+  prefix mmci <https://gitlab.ics.muni.cz/422328/pid-mmci/-/blob/master/output/provn_pid/provn/>
+  prefix doi <https://doi.org/10.58092/>
+  prefix cpm <https://www.commonprovenancemodel.org/cpm-namespace-v1-0/>
+  prefix repr <https://w3id.org/reproduceme#>
+
+  bundle fi_muni:preproc.provn
+    entity(doi:trainTrainingTilesConnector, [prov:type='cpm:forwardConnector', cpm:receiverBundleId='fi_muni:train.provn'])
+    entity(doi:evalTrainingTilesConnector, [prov:type='cpm:forwardConnector', cpm:receiverBundleId='fi_muni:eval.provn'])
+    activity(preprocessing, -, -, [prov:type='cpm:mainActivity', repr:hasPart="tilesGeneration"])
+    wasGeneratedBy(doi:trainTrainingTilesConnector, preprocessing, -)
+    wasGeneratedBy(doi:evalTrainingTilesConnector, preprocessing, -)
+    activity(tilesGeneration, -, -)
+
+    entity(testGroup)
+
+    entity(WSIDataTest, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/42a6acd9b91942b4838646b6e9a2c158/artifacts/dataset/slides.parquet"])
+    entity(configTest, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, force="0" %% xsd:boolean, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="0" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=2, glob_pattern="*.mrxs", slide_dir="/mnt/Prostata/slides/Prospective test cases", label_dir="/mnt/Prostata/slides/Prospective test cases"])
+    entity(tilesTest, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/42a6acd9b91942b4838646b6e9a2c158/artifacts/dataset/tiles.parquet"])
+    wasGeneratedBy(tilesTest, tilesGeneration, -)
+    wasDerivedFrom(tilesTest, WSIDataTest, -, -, -)
+    wasDerivedFrom(tilesTest, configTest, -, -, -)
+    used(tilesGeneration, WSIDataTest, -)
+    used(tilesGeneration, configTest, -)
+    wasDerivedFrom(testGroup, tilesTest, -, -, -)
+
+    entity(trainGroup)
+
+    entity(WSIDataTrainPos, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/271f5067346048eba64af3ae561863ba/artifacts/dataset/slides.parquet"])
+    entity(configTrainPos, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="0" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=1, glob_pattern="*.mrxs", slide_dir="/mnt/data/scans/AI scans/Prostata/Prospective tumor cases", label_dir="/mnt/data/scans/AI scans/Prostata/Prospective tumor cases"])
+    entity(tilesTrainPos, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/271f5067346048eba64af3ae561863ba/artifacts/dataset/tiles.parquet"])
+    wasGeneratedBy(tilesTrainPos, tilesGeneration, -)
+    wasDerivedFrom(tilesTrainPos, WSIDataTrainPos, -, -, -)
+    wasDerivedFrom(tilesTrainPos, configTrainPos, -, -, -)
+    used(tilesGeneration, WSIDataTrainPos, -)
+    used(tilesGeneration, configTrainPos, -)
+    wasDerivedFrom(trainGroup, tilesTrainPos, -, -, -)
+
+    entity(WSIDataTrainArchPos, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/bf58eedba3c24be2ad046ee99b401f6e/artifacts/dataset/slides.parquet"])
+    entity(configTrainArchPos, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="0" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=1, glob_pattern="*.mrxs", slide_dir="/mnt/data/scans/AI scans/Prostata/archive tumor cases", label_dir="/mnt/data/scans/AI scans/Prostata/archive tumor cases"])
+    entity(tilesTrainArchPos, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/bf58eedba3c24be2ad046ee99b401f6e/artifacts/dataset/tiles.parquet"])
+    wasGeneratedBy(tilesTrainArchPos, tilesGeneration, -)
+    wasDerivedFrom(tilesTrainArchPos, WSIDataTrainArchPos, -, -, -)
+    wasDerivedFrom(tilesTrainArchPos, configTrainArchPos, -, -, -)
+    used(tilesGeneration, WSIDataTrainArchPos, -)
+    used(tilesGeneration, configTrainArchPos, -)
+    wasDerivedFrom(trainGroup, tilesTrainArchPos, -, -, -)
+
+    entity(WSIDataTrainNeg, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/bf25a3c2995545bc91f7936f83c66c7e/artifacts/dataset/slides.parquet"])
+    entity(configTrainNeg, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="1" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=1, glob_pattern="*.mrxs", slide_dir="/mnt/data/scans/AI scans/Prostata/Prospective negative cases", label_dir=""])
+    entity(tilesTrainNeg, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/bf25a3c2995545bc91f7936f83c66c7e/artifacts/dataset/tiles.parquet"])
+    wasGeneratedBy(tilesTrainNeg, tilesGeneration, -)
+    wasDerivedFrom(tilesTrainNeg, WSIDataTrainNeg, -, -, -)
+    wasDerivedFrom(tilesTrainNeg, configTrainNeg, -, -, -)
+    used(tilesGeneration, WSIDataTrainNeg, -)
+    used(tilesGeneration, configTrainNeg, -)
+    wasDerivedFrom(trainGroup, tilesTrainNeg, -, -, -)
+
+    entity(WSIDataTrainArchNeg, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/5b7897d856964f04bd1fefe3e05d0981/artifacts/dataset/slides.parquet"])
+    entity(configTrainArchNeg, [tile_size=512, center_size=256, step_size=256, sample_level=1, bg_level=5, include_keywords="Carcinoma", exclude_keywords="Exclude", min_tissue="0.5" %% xsd:float, max_tissue="1" %% xsd:float, disk_size=10, negative_mode="1" %% xsd:boolean, strict_mode="0" %% xsd:boolean, max_workers=1, glob_pattern="*.mrxs", slide_dir="/mnt/data/scans/AI scans/Prostata/archive negative cases", label_dir=""])
+    entity(tilesTrainArchNeg, [prov:type='repr:Dataset', path="mlflow-artifacts:/4/5b7897d856964f04bd1fefe3e05d0981/artifacts/dataset/tiles.parquet"])
+    wasGeneratedBy(tilesTrainArchNeg, tilesGeneration, -)
+    wasDerivedFrom(tilesTrainArchNeg, WSIDataTrainArchNeg, -, -, -)
+    wasDerivedFrom(tilesTrainArchNeg, configTrainArchNeg, -, -, -)
+    used(tilesGeneration, WSIDataTrainArchNeg, -)
+    used(tilesGeneration, configTrainArchNeg, -)
+    wasDerivedFrom(trainGroup, tilesTrainArchNeg, -, -, -)
+
+    entity(dataset)
+    wasDerivedFrom(dataset, testGroup, -, -, -)
+    wasDerivedFrom(dataset, trainGroup, -, -, -)
+    specializationOf(dataset, doi:trainTrainingTilesConnector)
+    specializationOf(dataset, doi:evalTrainingTilesConnector)
+  endBundle
+endDocument
