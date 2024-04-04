@@ -1,10 +1,13 @@
 {
   "var":
   {
-    "send_agent_id": [{"@id": "cpm:sender_agent"}],
+    "send_agent_id": [{"@id": "def:sender_agent"}],
     "main_activity_id": [{"@id": "cpm:main_act"}],
     "back_conn_id": [{"@id": "cpm:back_conn"}],
     "forward_conn_id": [{"@id": "cpm:forward_conn"}]
   },
-  "context": {"cpm": "http://commonprovenancemodel.org/ns/cpm/"}
+  "context": {
+    "def" : "https://gitlab.ics.muni.cz/422328/pid-test/-/blob/master/",
+    "cpm": "http://commonprovenancemodel.org/ns/cpm/"
+  }
 }

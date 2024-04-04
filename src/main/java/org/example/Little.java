@@ -96,6 +96,21 @@ public class Little {
 
     public static void main(String [] args) {
 
+        /*
+        ProvFactory pf = InteropFramework.getDefaultFactory();
+        InteropFramework intF = new InteropFramework();
+
+        Little little=new Little(pf);
+        little.openingBanner();
+        Document document = intF.readDocumentFromFile("eval.provn");
+        little.doConversions(document, "eval.svg");
+        little.closingBanner();
+
+
+         */
+
+
+
 
         ProvFactory pf = InteropFramework.getDefaultFactory();
 

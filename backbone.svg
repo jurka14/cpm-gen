@@ -10,10 +10,10 @@
 <title>title</title>
 <polygon fill="white" stroke="none" points="-4,4 -4,-383.75 294,-383.75 294,4 -4,4"/>
 <g id="clust1" class="cluster">
-<title>clusterurn:uuid:5ed434e7&#45;71bb&#45;41b5&#45;914e&#45;49c8320333e3</title>
-<g id="a_clust1"><a xlink:href="urn:uuid:5ed434e7-71bb-41b5-914e-49c8320333e3" xlink:title="5ed434e7&#45;71bb&#45;41b5&#45;914e&#45;49c8320333e3">
+<title>clusterurn:uuid:3d8f955d&#45;ed7b&#45;423c&#45;833e&#45;67ba272fcd1b</title>
+<g id="a_clust1"><a xlink:href="urn:uuid:3d8f955d-ed7b-423c-833e-67ba272fcd1b" xlink:title="3d8f955d&#45;ed7b&#45;423c&#45;833e&#45;67ba272fcd1b">
 <polygon fill="none" stroke="black" points="8,-8 8,-371.75 282,-371.75 282,-8 8,-8"/>
-<text text-anchor="middle" x="145" y="-14.45" font-family="Times New Roman,serif" font-size="14.00">5ed434e7&#45;71bb&#45;41b5&#45;914e&#45;49c8320333e3</text>
+<text text-anchor="middle" x="145" y="-14.45" font-family="Times New Roman,serif" font-size="14.00">3d8f955d&#45;ed7b&#45;423c&#45;833e&#45;67ba272fcd1b</text>
 </a>
 </g>
 </g>
@@ -60,20 +60,20 @@
 <title>&#45;attrs0&#45;&gt;http://commonprovenancemodel.org/ns/cpm/main_act</title>
 <path fill="none" stroke="gray" stroke-dasharray="5,2" d="M183.78,-148.23C162.54,-159.09 135.38,-172.97 114.31,-183.73"/>
 </g>
-<!-- http://commonprovenancemodel.org/ns/cpm/sender_agent -->
-<!-- PROV_AGENT cpm:sender_agent -->
+<!-- https://gitlab.ics.muni.cz/422328/pid&#45;test/&#45;/blob/master/sender_agent -->
+<!-- PROV_AGENT def:sender_agent -->
 <g id="node7" class="node">
-<title>http://commonprovenancemodel.org/ns/cpm/sender_agent</title>
-<g id="a_node7"><a xlink:href="http://commonprovenancemodel.org/ns/cpm/sender_agent" xlink:title="sender_agent">
+<title>https://gitlab.ics.muni.cz/422328/pid&#45;test/&#45;/blob/master/sender_agent</title>
+<g id="a_node7"><a xlink:href="https://gitlab.ics.muni.cz/422328/pid-test/-/blob/master/sender_agent" xlink:title="sender_agent">
 <polygon fill="#fdb266" stroke="black" points="218.6,-351.31 145,-363.75 71.4,-351.31 71.46,-331.19 218.54,-331.19 218.6,-351.31"/>
 <text text-anchor="middle" x="145" y="-340.32" font-family="Times New Roman,serif" font-size="14.00">sender_agent</text>
 </a>
 </g>
 </g>
-<!-- http://commonprovenancemodel.org/ns/cpm/back_conn&#45;&gt;http://commonprovenancemodel.org/ns/cpm/sender_agent -->
+<!-- http://commonprovenancemodel.org/ns/cpm/back_conn&#45;&gt;https://gitlab.ics.muni.cz/422328/pid&#45;test/&#45;/blob/master/sender_agent -->
 <!-- PROV_ATTRIBUTION _:_ -->
 <g id="edge7" class="edge">
-<title>http://commonprovenancemodel.org/ns/cpm/back_conn&#45;&gt;http://commonprovenancemodel.org/ns/cpm/sender_agent</title>
+<title>http://commonprovenancemodel.org/ns/cpm/back_conn&#45;&gt;https://gitlab.ics.muni.cz/422328/pid&#45;test/&#45;/blob/master/sender_agent</title>
 <path fill="none" stroke="black" d="M186.97,-291.34C179.74,-300.53 170.66,-312.09 162.79,-322.1"/>
 <polygon fill="black" stroke="black" points="160.09,-319.88 156.66,-329.91 165.59,-324.21 160.09,-319.88"/>
 <text text-anchor="middle" x="192.55" y="-302.91" font-family="Times New Roman,serif" font-size="8.00">att</text>
@@ -143,10 +143,10 @@
 <text text-anchor="start" x="26.25" y="-269.88" font-family="Times New Roman,serif" font-size="10.00">type:</text>
 <text text-anchor="start" x="48.5" y="-269.88" font-family="Times New Roman,serif" font-size="10.00">cpm:senderAgent</text>
 </g>
-<!-- &#45;attrs3&#45;&gt;http://commonprovenancemodel.org/ns/cpm/sender_agent -->
+<!-- &#45;attrs3&#45;&gt;https://gitlab.ics.muni.cz/422328/pid&#45;test/&#45;/blob/master/sender_agent -->
 <!-- null _:_ -->
 <g id="edge4" class="edge">
-<title>&#45;attrs3&#45;&gt;http://commonprovenancemodel.org/ns/cpm/sender_agent</title>
+<title>&#45;attrs3&#45;&gt;https://gitlab.ics.muni.cz/422328/pid&#45;test/&#45;/blob/master/sender_agent</title>
 <path fill="none" stroke="gray" stroke-dasharray="5,2" d="M90.8,-292.05C103.12,-304.04 119.31,-319.78 130.78,-330.93"/>
 </g>
 </g>
