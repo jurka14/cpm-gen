@@ -1,11 +1,12 @@
 package cpm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
+import org.openprovenance.prov.model.*;
 import org.openprovenance.prov.model.Bundle;
-import org.openprovenance.prov.model.Document;
+import org.openprovenance.prov.model.HasType;
 import org.openprovenance.prov.model.Identifiable;
-import org.openprovenance.prov.model.ProvFactory;
 import org.openprovenance.prov.model.Statement;
 import org.openprovenance.prov.scala.interop.FileInput;
 import org.openprovenance.prov.scala.nf.*;
@@ -15,18 +16,37 @@ import org.openprovenance.prov.template.json.Bindings;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
-public class CpmFactory  {
+public class CpmGenerator {
 
-    private ProvFactory pf;
-    private InteropFramework intF;
+    private static final String BB_TEMPLATE = "backbone_tmpl.provn";
+    private final ProvFactory pf;
+    private final InteropFramework intF;
 
-    public CpmFactory() {
+    public CpmGenerator() {
         pf = InteropFramework.getDefaultFactory();
         intF = new InteropFramework();
+    }
+
+    public Document createBundle(String backboneBindingsPath, DSProvGenerator dsprovGen, PidGenerator pidGen) throws IOException {
+        Document bbDoc = createBackbone(backboneBindingsPath);
+
+        createPids(bbDoc, pidGen);
+
+        Document dsDoc = dsprovGen.generate();
+
+        IndexedDocument iDoc = new IndexedDocument(pf, bbDoc, true);
+        iDoc.merge(dsDoc);
+
+        Path temp = Files.createTempFile("bundle", ".provn");
+        intF.writeDocument(temp.toString(), iDoc.toDocument(), Formats.ProvFormat.PROVN);
+
+        return canonize(temp.toString());
     }
 
     private Document canonize(String filePath) {
@@ -54,23 +74,27 @@ public class CpmFactory  {
             throw new FileNotFoundException("Bindings file for the backbone was not found.");
         }
 
-        return expand.expander(intF.readDocumentFromFile("backbone_tmpl.provn"), bind);
+
+        return expand.expander(intF.readDocumentFromFile(BB_TEMPLATE), bind);
     }
 
-    private void createPids(Document backboneDoc) {
-        Iterator<Statement> it = ((Bundle) backboneDoc.getStatementOrBundle().get(0)).getStatement().iterator();
+    private void createPids(Document backboneDoc, PidGenerator pidGen) {
+        Bundle b = (Bundle) backboneDoc.getStatementOrBundle().get(0);
+        String bundleId = b.getId().getPrefix() + ":" + b.getId().getLocalPart();
 
-        while(it.hasNext()) {
-            Statement s = it.next();
+        for (Statement s : b.getStatement()) {
             List<Class<?>> interfaces = Arrays.asList(s.getClass().getInterfaces());
-            if (interfaces.contains(Identifiable.class)) {
-                String prefix = ((Identifiable) s).getId().getPrefix();
-                if (prefix == "doi") { //TODO move this dependency to the pid generator
-                    // create doi
+
+            if (interfaces.contains(Identifiable.class) && interfaces.contains(HasType.class)) {
+                QualifiedName id = ((Identifiable) s).getId();
+
+                if (Objects.equals(id.getPrefix(), pidGen.getNamespace())) {
+                    String type = ((HasType) s).getType().get(0).getType().getLocalPart();
+                    String name = bundleId + "-" + type;
+
+                    pidGen.generate(id.getLocalPart(), name);
                 }
             }
-
         }
-
     }
 }

@@ -16,6 +16,7 @@ import java.util.Base64;
 
 public class DoiGenerator implements PidGenerator {
 
+    private static final String NAMESPACE = "doi";
     private static final String PREFIX = "10.82851";
     private static final String APIURL = "https://api.test.datacite.org/";
     private static final String USER = "NOWA.SIVCDZ";
@@ -36,12 +37,13 @@ public class DoiGenerator implements PidGenerator {
     }
 
     @Override
-    public void generate(String pid, String name, String url) {
+    public void generate(String pid, String name) {
         String doi = PREFIX + "/" + pid;
         var model = new DoiSimplifiedModel();
         model.setDoi(doi);
         model.setEvent(EVENT);
-        model.setUrl(url);
+        //TODO create target url generation
+        model.setUrl("https://test.url/");
         model.setXml(createXml(doi, name));
         var response = client.updateDoi(doi, new JSONAPIDocument<>(model));
 
@@ -49,6 +51,11 @@ public class DoiGenerator implements PidGenerator {
             throw new DataCiteClientException(new Exception());
         }
 
+    }
+
+    @Override
+    public String getNamespace() {
+        return NAMESPACE;
     }
 
     private String createXml(String doi, String name) {
