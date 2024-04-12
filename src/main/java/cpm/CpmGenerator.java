@@ -1,6 +1,7 @@
 package cpm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cpm.pid.PidGenerator;
 import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
@@ -33,12 +34,12 @@ public class CpmGenerator {
         intF = new InteropFramework();
     }
 
-    public Document createBundle(String backboneBindingsPath, DSProvGenerator dsprovGen, PidGenerator pidGen) throws IOException {
+    public Document createBundle(String backboneBindingsPath, DSProvGenerator dsProvGen, PidGenerator pidGen) throws IOException {
         Document bbDoc = createBackbone(backboneBindingsPath);
 
         createPids(bbDoc, pidGen);
 
-        Document dsDoc = dsprovGen.generate();
+        Document dsDoc = dsProvGen.generate();
 
         IndexedDocument iDoc = new IndexedDocument(pf, bbDoc, true);
         iDoc.merge(dsDoc);
@@ -79,6 +80,11 @@ public class CpmGenerator {
     }
 
     private void createPids(Document backboneDoc, PidGenerator pidGen) {
+        //check if the generator does something
+        if (pidGen.getNamespace() == null) {
+            return;
+        }
+
         Bundle b = (Bundle) backboneDoc.getStatementOrBundle().get(0);
         String bundleId = b.getId().getPrefix() + ":" + b.getId().getLocalPart();
 

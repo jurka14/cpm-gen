@@ -1,7 +1,6 @@
 package org.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cpm.DoiGenerator;
 import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
@@ -9,17 +8,12 @@ import org.openprovenance.prov.model.Agent;
 import org.openprovenance.prov.model.Entity;
 import org.openprovenance.prov.model.WasAttributedTo;
 import org.openprovenance.prov.model.WasDerivedFrom;
-import org.openprovenance.prov.scala.interop.FileInput;
-import org.openprovenance.prov.scala.nf.*;
 import org.openprovenance.prov.template.expander.Expand;
 import org.openprovenance.prov.template.json.Bindings;
-import scala.jdk.CollectionConverters;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
 
 public class Little {
 

@@ -1,4 +1,4 @@
-package cpm;
+package cpm.pid;
 
 
 import com.github.jasminb.jsonapi.JSONAPIDocument;
