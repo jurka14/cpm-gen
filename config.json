@@ -1,0 +1,16 @@
+{
+  "d76b2a494da447c39b64d93e89e106fa": {
+    "config": {
+      "name": "configEval",
+      "path": "conf/config_resolved.yaml"
+    },
+    "inputParquet": {
+      "name": "WSIDataEval",
+      "path": "dataset/slides.parquet"
+    },
+    "outputParquet": {
+      "name": "tilesEval",
+      "path": "dataset/tiles.parquet"
+    }
+  }
+}

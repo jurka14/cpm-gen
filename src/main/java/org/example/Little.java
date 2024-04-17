@@ -1,6 +1,9 @@
 package org.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cpm.MLFlowGenerator;
+import org.json.JSONObject;
+import org.mlflow.tracking.MlflowClient;
 import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
@@ -12,8 +15,12 @@ import org.openprovenance.prov.template.expander.Expand;
 import org.openprovenance.prov.template.json.Bindings;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Little {
 
@@ -103,10 +110,21 @@ public class Little {
 
          */
 
+        /*
+        MlflowClient client = new MlflowClient("https://mlflow.rationai.cloud.trusted.e-infra.cz/");
+        System.out.println(client.downloadArtifacts("5b7897d856964f04bd1fefe3e05d0981", "conf/config_resolved.yaml").getPath());
+        client.close();
+        */
 
+        JSONObject cfg = null;
+        try {
+            cfg = new JSONObject(Files.readString(Path.of("config.json")));
+        } catch (IOException e) {
+            System.out.println("iofail");
+        }
+        System.out.println(cfg.keySet().toString());
 
-
-        ProvFactory pf = InteropFramework.getDefaultFactory();
+        /*ProvFactory pf = InteropFramework.getDefaultFactory();
 
         Little little=new Little(pf);
 
@@ -128,7 +146,7 @@ public class Little {
         little.doConversions(doc, "backbone.svg");
 
 
-        little.closingBanner();
+        little.closingBanner();*/
 
         //new DoiGenerator().generate("lol", "Test2", "https://lmaoo.lol/");
 
