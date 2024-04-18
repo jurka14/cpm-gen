@@ -1,69 +1,109 @@
 package cpm;
 
-import com.github.wnameless.json.flattener.JsonFlattener;
 import org.json.JSONObject;
 import org.mlflow.tracking.MlflowClient;
 import org.openprovenance.prov.model.Document;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Map;
-
-import static com.github.wnameless.json.flattener.JsonFlattener.flatten;
 
 public class MLFlowGenerator implements DSProvGenerator {
 
     private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
+
+    private static final Map<String, Object> METHOD_MAP = Map.of(
+            "config", "loadConfig",
+            "inParquet", "loadParquet",
+            "outParquet", "loadParquet"
+    );
     private final MlflowClient client;
     private final JSONObject config;
-    private JSONObject bindings = new JSONObject();
+    private final JSONObject bindings = new JSONObject();
+    
 
-    protected MLFlowGenerator(String configPath) throws IOException {
+    public MLFlowGenerator(String configPath) throws IOException {
         client = new MlflowClient(TRACKING_URI);
         config = new JSONObject(Files.readString(Path.of(configPath)));
     }
 
-    private void loadRunData(String runId) {
-        JSONObject runCfg = config.getJSONObject(runId);
-        JSONObject mlfCfg = runCfg.optJSONObject("config");
-        JSONObject inParquet = runCfg.optJSONObject("inputParquet");
-        JSONObject outParquet = runCfg.optJSONObject("outputParquet");
+    private File loadFile(String runId, JSONObject fileInfo) {
+        String path = fileInfo.getString("path");
+        String name = fileInfo.getString("name");
+        bindings.put(name + "Path", path);
 
-        if (mlfCfg != null) {
-            loadConfig(runId, mlfCfg);
-        }
-
+        return client.downloadArtifacts(runId, path);
     }
 
-    void loadConfig(String runId, JSONObject mlfCfg) {
+    private void loadParquet(String runId, JSONObject parquetInfo) {
 
-        String path = mlfCfg.getString("path");
-        String name = mlfCfg.getString("name");
+        File file = loadFile(runId, parquetInfo);
 
         try {
-            //convert yaml to json, flatten and save
-            Object obj = new Yaml().load(new FileInputStream(client.downloadArtifacts(runId, path)));
-            JSONObject cfg = new JSONObject(obj);
-            Map<String, Object> map = JsonFlattener.flattenAsMap(cfg.toString());
+            //convert to base64 data for json storage
+            String b64parquet = Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
 
-            // save to the template
-
-        } catch (FileNotFoundException e) {
+            bindings.put(parquetInfo.getString("name"), b64parquet);
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
 
     }
 
+    private void loadConfig(String runId, JSONObject configInfo) {
+
+        File file = loadFile(runId, configInfo);
+
+        try {
+            //convert yaml to json and save
+            Object obj = new Yaml().load(new FileInputStream(file));
+            JSONObject cfg = new JSONObject(obj);
+            bindings.put(configInfo.getString("name"), cfg);
+
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private void loadData(String runId, String dataType, JSONObject runCfg) {
+
+        JSONObject dataInfo = runCfg.getJSONObject(dataType);
+
+        try { //choose the right method based on reflection
+            Method m = this.getClass().getMethod((String) METHOD_MAP.get(dataType), String.class, JSONObject.class);
+            m.invoke(this, runId, dataInfo);
+
+        } catch (ReflectiveOperationException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private Document generateDoc(String templatePath, String bindingsPath) {
+        return null;
+    }
+
     @Override
     public Document generate() {
 
-        for(String runId : config.keySet()) {
-            loadRunData(runId);
+        JSONObject globalCfg = config.getJSONObject("global");
+        JSONObject runsCfg = config.getJSONObject("runs");
+
+        for(String runId : runsCfg.keySet()) {
+            JSONObject runCfg = runsCfg.getJSONObject(runId);
+
+            for(String dataType : runCfg.keySet()) {
+                loadData(runId, dataType, runCfg);
+            }
         }
 
-        return null;
+        return generateDoc(globalCfg.getString("templatePath"), globalCfg.getString("bindingsPath"));
     }
 }
 

@@ -1,7 +1,14 @@
 package org.example;
 
+import com.exasol.parquetio.data.Row;
+import com.exasol.parquetio.reader.RowParquetReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cpm.MLFlowGenerator;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.parquet.hadoop.ParquetReader;
+import org.apache.parquet.hadoop.util.HadoopInputFile;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mlflow.tracking.MlflowClient;
 import org.openprovenance.prov.interop.Formats;
@@ -16,11 +23,10 @@ import org.openprovenance.prov.template.json.Bindings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class Little {
 
@@ -110,19 +116,39 @@ public class Little {
 
          */
 
-        /*
-        MlflowClient client = new MlflowClient("https://mlflow.rationai.cloud.trusted.e-infra.cz/");
-        System.out.println(client.downloadArtifacts("5b7897d856964f04bd1fefe3e05d0981", "conf/config_resolved.yaml").getPath());
-        client.close();
-        */
 
-        JSONObject cfg = null;
-        try {
-            cfg = new JSONObject(Files.readString(Path.of("config.json")));
-        } catch (IOException e) {
-            System.out.println("iofail");
+        MlflowClient client = new MlflowClient("https://mlflow.rationai.cloud.trusted.e-infra.cz/");
+        File f = client.downloadArtifacts("d76b2a494da447c39b64d93e89e106fa", "dataset/tiles.parquet");
+        client.close();
+
+        var json = new JSONObject();
+
+        try (ParquetReader<Row> reader = RowParquetReader
+                .builder(HadoopInputFile.fromPath(new Path(f.getPath()), new Configuration())).build()) {
+            Row row = reader.read();
+
+            json.put("fieldNames", row.getFieldNames());
+            json.put("values", new ArrayList());
+            System.out.println(json);
+
+            java.nio.file.Path temp = Files.createTempFile("temp", ".json");
+
+            FileWriter writer = new FileWriter(temp.toFile());
+
+
+
+            int i = 0;
+            while (i < 10) {
+                List<Object> values = row.getValues();
+                System.out.println(values);
+                json.getJSONArray("values").put(values);
+
+                row = reader.read();
+                i++;
+            }
+        } catch (final IOException exception) {
+            //
         }
-        System.out.println(cfg.keySet().toString());
 
         /*ProvFactory pf = InteropFramework.getDefaultFactory();
 
