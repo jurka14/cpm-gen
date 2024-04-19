@@ -1,14 +1,14 @@
 document
  prefix tmpl <http://openprovenance.org/tmpl#>
  prefix var <http://openprovenance.org/var#>
- prefix vargen <http://openprovenance.org/vargen#>
  prefix cpm <http://commonprovenancemodel.org/ns/cpm/>
+ prefix repr <https://w3id.org/reproduceme#>
 
- bundle vargen:b
+ bundle var:bndl
   agent(var:send_agent_id, [prov:type='cpm:senderAgent])
-  activity(var:main_activity_id, [prov:type='cpm:mainActivity'])
-  entity(var:back_conn_id, [prov:type='cpm:backwardConnector'])
-  entity(var:forward_conn_id, [prov:type='cpm:forwardConnector'])
+  activity(var:main_activity_id, [prov:type='cpm:mainActivity', repr:hasPart='var:has_part'])
+  entity(var:back_conn_id, [prov:type='cpm:backwardConnector', cpm:receiverBundleId='var:send_id'])
+  entity(var:forward_conn_id, [prov:type='cpm:forwardConnector', cpm:senderBundleId='var:rec_id'])
   wasGeneratedBy(var:forward_conn_id, var:main_activity_id, - )
   used(var:main_activity_id, var:back_conn_id, - )
   wasAttributedTo(var:back_conn_id, var:send_agent_id)

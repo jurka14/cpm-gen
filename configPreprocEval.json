@@ -1,7 +1,6 @@
 {
   "global": {
-    "templatePath": "preprocEvalTemplate.provn",
-    "bindingsPath": "preprocEvalBindings.json"
+    "templatePath": "preprocEval_tmpl.provn"
   },
   "runs": {
     "d76b2a494da447c39b64d93e89e106fa": {

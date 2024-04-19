@@ -26,6 +26,7 @@ import java.util.Objects;
 public class CpmGenerator {
 
     private static final String BB_TEMPLATE = "backbone_tmpl.provn";
+    private static final String BB_TEMPLATE_FIRST = "backbone_tmpl_first.provn";
     private final ProvFactory pf;
     private final InteropFramework intF;
 
@@ -34,12 +35,10 @@ public class CpmGenerator {
         intF = new InteropFramework();
     }
 
-    public Document createBundle(String backboneBindingsPath, DSProvGenerator dsProvGen, PidGenerator pidGen) throws IOException {
-        Document bbDoc = createBackbone(backboneBindingsPath);
+    public Document createBundle(String backboneBindingsPath, Document dsDoc, PidGenerator pidGen, boolean first) throws IOException {
+        Document bbDoc = createBackbone(backboneBindingsPath, first);
 
         createPids(bbDoc, pidGen);
-
-        Document dsDoc = dsProvGen.generate();
 
         IndexedDocument iDoc = new IndexedDocument(pf, bbDoc, true);
         iDoc.merge(dsDoc);
@@ -64,7 +63,7 @@ public class CpmGenerator {
         ).toDocument();
     }
 
-    private Document createBackbone(String bindingsFilePath) throws FileNotFoundException {
+    private Document createBackbone(String bindingsFilePath, boolean first) throws FileNotFoundException {
         Expand expand = new Expand(pf, false, false);
 
         Bindings bind;
@@ -76,7 +75,7 @@ public class CpmGenerator {
         }
 
 
-        return expand.expander(intF.readDocumentFromFile(BB_TEMPLATE), bind);
+        return expand.expander(intF.readDocumentFromFile(first ? BB_TEMPLATE_FIRST : BB_TEMPLATE), bind);
     }
 
     private void createPids(Document backboneDoc, PidGenerator pidGen) {

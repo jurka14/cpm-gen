@@ -3,7 +3,9 @@ package org.example;
 import com.exasol.parquetio.data.Row;
 import com.exasol.parquetio.reader.RowParquetReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cpm.CpmGenerator;
 import cpm.MLFlowGenerator;
+import cpm.pid.DummyPidGenerator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.hadoop.ParquetReader;
@@ -103,6 +105,22 @@ public class Little {
 
     public static void main(String [] args) {
 
+        CpmGenerator gen = new CpmGenerator();
+        MLFlowGenerator mlfGen = new MLFlowGenerator();
+        Document dsDoc = mlfGen.generate("configPreprocEval.json");
+        Document doc = null;
+
+        try {
+            doc = gen.createBundle("bindings_bb.json", dsDoc, new DummyPidGenerator(), true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        InteropFramework intF = new InteropFramework();
+        intF.writeDocument("preprocEval.svg", doc);
+
+
+
         /*
         ProvFactory pf = InteropFramework.getDefaultFactory();
         InteropFramework intF = new InteropFramework();
@@ -116,7 +134,7 @@ public class Little {
 
          */
 
-
+/*
         MlflowClient client = new MlflowClient("https://mlflow.rationai.cloud.trusted.e-infra.cz/");
         File f = client.downloadArtifacts("d76b2a494da447c39b64d93e89e106fa", "dataset/tiles.parquet");
         client.close();
@@ -148,9 +166,11 @@ public class Little {
             }
         } catch (final IOException exception) {
             //
-        }
+        }*/
 
-        /*ProvFactory pf = InteropFramework.getDefaultFactory();
+
+        /*
+        ProvFactory pf = InteropFramework.getDefaultFactory();
 
         Little little=new Little(pf);
 
@@ -161,16 +181,15 @@ public class Little {
         Bindings bind;
 
         try {
-            bind = new ObjectMapper().readValue(new File("bindings_bb.json"), Bindings.class);
+            bind = new ObjectMapper().readValue(new File("bindings.json"), Bindings.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        Document doc = expand.expander(intF.readDocumentFromFile("backbone_tmpl.provn"), bind);
+        Document doc = expand.expander(intF.readDocumentFromFile("preprocEval.provn"), bind);
 
         intF.writeDocument(System.out, doc, Formats.ProvFormat.PROVN);
-        little.doConversions(doc, "backbone.svg");
-
+        little.doConversions(doc, "preprocEval_t.svg");
 
         little.closingBanner();*/
 
