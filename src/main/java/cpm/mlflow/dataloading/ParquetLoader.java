@@ -1,6 +1,7 @@
-package cpm;
+package cpm.mlflow.dataloading;
 
 import org.json.JSONObject;
+import org.mlflow.tracking.MlflowClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +12,8 @@ public class ParquetLoader extends MLFDataLoader {
 
     private static final String DATA_TYPE = "xsd:base64Binary";
 
-    protected ParquetLoader(JSONObject bindings) {
-        super(bindings, DATA_TYPE);
+    public ParquetLoader(MlflowClient client, JSONObject bindings) {
+        super(client, bindings, DATA_TYPE);
     }
 
     @Override

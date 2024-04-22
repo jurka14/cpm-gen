@@ -60,12 +60,12 @@ public class DoiGenerator implements PidGenerator {
 
     private String createXml(String doi, String name) {
         Document doc = new Document();
-        Namespace ns = Namespace.getNamespace("http://datacite.org/schema/kernel-4");
+        Namespace ns = Namespace.getNamespace("https://datacite.org/schema/kernel-4");
         Element root = new Element("resource", ns)
                 .setAttribute(
                         "schemaLocation",
-                        "http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd",
-                        Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance"));
+                        "https://datacite.org/schema/kernel-4 https://schema.datacite.org/meta/kernel-4/metadata.xsd",
+                        Namespace.getNamespace("xsi", "https://www.w3.org/2001/XMLSchema-instance"));
         Element identifier = new Element("identifier", ns)
                 .addContent(doi)
                 .setAttribute("identifierType", "DOI");

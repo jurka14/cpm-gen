@@ -1,7 +1,5 @@
 package cpm.pid;
 
-import cpm.pid.PidGenerator;
-
 public class DummyPidGenerator implements PidGenerator {
     @Override
     public void generate(String pid, String name) {

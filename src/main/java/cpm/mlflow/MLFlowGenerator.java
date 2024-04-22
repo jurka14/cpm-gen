@@ -1,8 +1,10 @@
-package cpm;
+package cpm.mlflow;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONArray;
+import cpm.mlflow.dataloading.ConfigLoader;
+import cpm.mlflow.dataloading.MLFDataLoader;
+import cpm.mlflow.dataloading.ParquetLoader;
 import org.json.JSONObject;
 import org.mlflow.tracking.MlflowClient;
 import org.openprovenance.prov.interop.InteropFramework;
@@ -10,91 +12,34 @@ import org.openprovenance.prov.model.Document;
 import org.openprovenance.prov.model.ProvFactory;
 import org.openprovenance.prov.template.expander.Expand;
 import org.openprovenance.prov.template.json.Bindings;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Base64;
 import java.util.Map;
 
 public class MLFlowGenerator {
 
     private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
-
-    private static final Map<String, String> METHOD_MAP = Map.of(
-            "config", "loadConfig",
-            "inParquet", "loadParquet",
-            "outParquet", "loadParquet"
+    private static final MlflowClient CLIENT = new MlflowClient(TRACKING_URI);
+    private static final JSONObject BINDINGS = new JSONObject();
+    private static final ConfigLoader CONFIG_LOADER = new ConfigLoader(CLIENT, BINDINGS);
+    private static final ParquetLoader PARQUET_LOADER = new ParquetLoader(CLIENT, BINDINGS);
+    private static final Map<String, MLFDataLoader> LOADER_MAP = Map.of(
+            "config", CONFIG_LOADER,
+            "inParquet", PARQUET_LOADER,
+            "outParquet", PARQUET_LOADER
     );
-    private final MlflowClient client;
-    private final JSONObject bindings = new JSONObject();
-    
-
-    public MLFlowGenerator() {
-        client = new MlflowClient(TRACKING_URI);
-    }
-
-    private File loadFile(String runId, JSONObject fileInfo) {
-        String path = fileInfo.getString("path");
-        String name = fileInfo.getString("name");
-        bindings.put(name + "Path", path);
-
-        return client.downloadArtifacts(runId, path);
-    }
-
-    private void saveData(String name, String data, String type) {
-        JSONArray arr = new JSONArray();
-        arr.put(new JSONObject().put("@value", data).put("@type", type));
-        bindings.put(name, arr);
-    }
-
-    private void loadParquet(String runId, JSONObject parquetInfo) {
-
-        File file = loadFile(runId, parquetInfo);
-
-        try {
-            //convert to base64 data for string storage
-            String b64parquet = Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
-
-            saveData(parquetInfo.getString("name"), b64parquet, "xsd:base64Binary");
-
-        } catch (IOException e) {
-            throw new MLFlowGenException(e);
-        }
-
-    }
-
-    private void loadConfig(String runId, JSONObject configInfo) {
-
-        File file = loadFile(runId, configInfo);
-
-        try {
-            //convert yaml to json and save
-            Object obj = new Yaml().load(new FileInputStream(file));
-            JSONObject cfg = new JSONObject(obj);
-            saveData(configInfo.getString("name"), cfg.toString(), "xsd:string");
-
-        } catch (FileNotFoundException e) {
-            throw new MLFlowGenException(e);
-        }
-    }
 
     private void loadData(String runId, String dataType, JSONObject runCfg) {
 
         JSONObject dataInfo = runCfg.getJSONObject(dataType);
-        var s = METHOD_MAP.get(dataType);
+        MLFDataLoader loader = LOADER_MAP.get(dataType);
 
-        try { //choose the right method based on the dataType
-            Method m = this.getClass().getDeclaredMethod(METHOD_MAP.get(dataType), String.class, JSONObject.class);
-            m.setAccessible(true);
-            m.invoke(this, runId, dataInfo);
+        try { //choose the right loader based on the dataType
+            loader.load(runId, dataInfo);
 
-        } catch (ReflectiveOperationException e) {
+        } catch (IOException e) {
             throw new MLFlowGenException(e);
         }
     }
@@ -117,8 +62,8 @@ public class MLFlowGenerator {
 
         JSONObject varObj = finalBindings.getJSONObject("var");
         //append generated bindings to the defaults
-        for (String name : bindings.keySet()) {
-            varObj.put(name, bindings.get("name"));
+        for (String name : BINDINGS.keySet()) {
+            varObj.put(name, BINDINGS.get(name));
         }
 
         //fill in the template
@@ -138,7 +83,7 @@ public class MLFlowGenerator {
     public Document generate(String configPath) throws MLFlowGenException {
 
         //clear the bindings in case of repeated generation
-        bindings.clear();
+        BINDINGS.clear();
 
         JSONObject config;
         try {

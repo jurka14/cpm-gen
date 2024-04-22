@@ -1,33 +1,16 @@
 package org.example;
 
-import com.exasol.parquetio.data.Row;
-import com.exasol.parquetio.reader.RowParquetReader;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cpm.CpmGenerator;
-import cpm.MLFlowGenerator;
+import cpm.mlflow.MLFlowGenerator;
 import cpm.pid.DummyPidGenerator;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.parquet.hadoop.ParquetReader;
-import org.apache.parquet.hadoop.util.HadoopInputFile;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.mlflow.tracking.MlflowClient;
-import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
 import org.openprovenance.prov.model.Agent;
 import org.openprovenance.prov.model.Entity;
 import org.openprovenance.prov.model.WasAttributedTo;
 import org.openprovenance.prov.model.WasDerivedFrom;
-import org.openprovenance.prov.template.expander.Expand;
-import org.openprovenance.prov.template.json.Bindings;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
 
 public class Little {
@@ -108,7 +91,7 @@ public class Little {
         CpmGenerator gen = new CpmGenerator();
         MLFlowGenerator mlfGen = new MLFlowGenerator();
         Document dsDoc = mlfGen.generate("configPreprocEval.json");
-        Document doc = null;
+        Document doc;
 
         try {
             doc = gen.createBundle("bindings_bb.json", dsDoc, new DummyPidGenerator(), true);
@@ -117,7 +100,7 @@ public class Little {
         }
 
         InteropFramework intF = new InteropFramework();
-        intF.writeDocument("preprocEval.svg", doc);
+        intF.writeDocument("preprocEvalGen.svg", doc);
 
 
 

@@ -1,4 +1,4 @@
-package cpm;
+package cpm.mlflow;
 
 public class MLFlowGenException extends RuntimeException{
     public MLFlowGenException(Exception e) {
