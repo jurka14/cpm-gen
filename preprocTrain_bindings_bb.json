@@ -1,0 +1,17 @@
+{
+  "var":
+  {
+    "bndl": [{"@id": "def:preprocTrain.provn"}],
+    "send_agent_id": [{"@id": "def:sender_agent"}],
+    "main_activity_id": [{"@id": "def:preprocessing"}],
+    "back_conn_id": [{"@id": "cpm:back_conn"}],
+    "forward_conn_id": [{"@id": "def:evalTilesConnector"}],
+    "has_part": [{"@id": "def:tilesGeneration"}],
+    "rec_id": [{"@id": "def:eval.provn"}],
+    "send_id": [{"@id": "def:eval.provn"}]
+  },
+  "context": {
+    "def" : "https://example.org/",
+    "cpm": "https://commonprovenancemodel.org/ns/cpm/"
+  }
+}

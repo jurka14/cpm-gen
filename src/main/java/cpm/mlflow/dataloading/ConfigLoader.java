@@ -1,8 +1,9 @@
 package cpm.mlflow.dataloading;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.json.JSONObject;
 import org.mlflow.tracking.MlflowClient;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,9 +21,10 @@ public class ConfigLoader extends MLFDataLoader {
     protected String getData(File file) throws IOException {
 
         //convert yaml to json and save
-        Object obj = new Yaml().load(new FileInputStream(file));
-        JSONObject cfg = new JSONObject(obj);
+        ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
+        Object obj = yamlReader.readValue(new FileInputStream(file), Object.class);
 
-        return cfg.toString();
+        ObjectMapper jsonWriter = new ObjectMapper();
+        return jsonWriter.writeValueAsString(obj);
     }
 }

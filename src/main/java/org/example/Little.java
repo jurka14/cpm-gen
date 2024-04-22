@@ -3,13 +3,17 @@ package org.example;
 import cpm.CpmGenerator;
 import cpm.mlflow.MLFlowGenerator;
 import cpm.pid.DummyPidGenerator;
+import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
 import org.openprovenance.prov.model.Agent;
 import org.openprovenance.prov.model.Entity;
 import org.openprovenance.prov.model.WasAttributedTo;
 import org.openprovenance.prov.model.WasDerivedFrom;
+import org.openprovenance.prov.scala.interop.FileInput;
+import org.openprovenance.prov.scala.nf.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -88,19 +92,21 @@ public class Little {
 
     public static void main(String [] args) {
 
+
         CpmGenerator gen = new CpmGenerator();
         MLFlowGenerator mlfGen = new MLFlowGenerator();
-        Document dsDoc = mlfGen.generate("configPreprocEval.json");
+        Document dsDoc = mlfGen.generate("preprocEval_config.json");
         Document doc;
 
         try {
-            doc = gen.createBundle("bindings_bb.json", dsDoc, new DummyPidGenerator(), true);
+            doc = gen.createBundle("preprocEval_bindings_bb.json", dsDoc, new DummyPidGenerator(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         InteropFramework intF = new InteropFramework();
-        intF.writeDocument("preprocEvalGen.svg", doc);
+        intF.writeDocument("preprocEval.provn", doc);
+        intF.writeDocument("preprocEval.svg", doc);
 
 
 
@@ -178,12 +184,19 @@ public class Little {
 
         //new DoiGenerator().generate("lol", "Test2", "https://lmaoo.lol/");
 
-/*
-        Document doc = CommandLine$.MODULE$.
-                parseDocumentToNormalForm(new FileInput(new File("test.provn"))).toDocument();
+
+        /*
+        InteropFramework intF = new InteropFramework();
+        Document noNormalDoc = intF.readDocumentFromFile("test.provn");
+
+
+        org.openprovenance.prov.scala.immutable.Document doc = CommandLine$.MODULE$.
+                parseDocument(new FileInput(new File("test.provn")));
 
         DocumentProxyFromStatements newdoc = Normalizer$.MODULE$.
-                fusion((org.openprovenance.prov.scala.immutable.Document) doc);
+                fusion(doc);
+
+
 
         System.out.println(newdoc);
 
@@ -192,12 +205,12 @@ public class Little {
         var o = new DocumentProxy(ni, i, newdoc.getNamespace());
 
 
-        InteropFramework intF=new InteropFramework();
+
         intF.writeDocument(System.out, o.toDocument(), Formats.ProvFormat.PROVN);
         intF.writeDocument(System.out, doc, Formats.ProvFormat.PROVN);
 
-
 */
+
 
 /*
         String file="little.svg";

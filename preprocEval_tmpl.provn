@@ -1,7 +1,6 @@
 document
   prefix tmpl <http://openprovenance.org/tmpl#>
   prefix var <http://openprovenance.org/var#>
-  prefix vargen <http://openprovenance.org/vargen#>
   prefix def <https://example.org/>
   prefix cpm <https://www.commonprovenancemodel.org/cpm-namespace-v1-0/>
   prefix repr <https://w3id.org/reproduceme#>
@@ -9,11 +8,11 @@ document
   bundle def:preprocEval.provn
     activity(def:tilesGeneration, -, -)
 
-    entity(def:WSIDataEval, [prov:type='repr:Dataset', def:path='var:WSIDataEvalPath', def:data='var:WSIDataEval'])
-    entity(def:configFile, [def:path='var:configEvalPath'])
+    entity(def:WSIDataEval, [prov:type='repr:Dataset', def:path='var:WSIDataEvalPath', def:runID='var:WSIDataEvalRunId', def:data='var:WSIDataEval'])
+    entity(def:configFile, [def:path='var:configEvalPath', def:runID='var:configEvalRunId'])
     wasDerivedFrom(def:configEval, def:configFile, -, -, -)
     entity(def:configEval, [def:data='var:configEval'])
-    entity(def:tilesEval, [prov:type='repr:Dataset', def:path='var:tilesEvalPath', def:data='var:tilesEval'])
+    entity(def:tilesEval, [prov:type='repr:Dataset', def:path='var:tilesEvalPath', def:runID='var:tilesEvalRunId', def:data='var:tilesEval'])
     wasGeneratedBy(def:tilesEval, def:tilesGeneration, -)
     wasDerivedFrom(def:tilesEval, def:WSIDataEval, -, -, -)
     wasDerivedFrom(def:tilesEval, def:configEval, -, -, -)

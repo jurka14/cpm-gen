@@ -20,6 +20,7 @@ public abstract class MLFDataLoader {
     private File loadFile(String runId, String name, String path) {
 
         File file = client.downloadArtifacts(runId, path);
+        saveData(name + "RunId", runId, "xsd:string");
         saveData(name + "Path", path, "xsd:string");
 
         return file;

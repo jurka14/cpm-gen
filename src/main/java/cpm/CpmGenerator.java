@@ -2,7 +2,6 @@ package cpm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cpm.pid.PidGenerator;
-import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
 import org.openprovenance.prov.model.Bundle;
@@ -17,8 +16,6 @@ import org.openprovenance.prov.template.json.Bindings;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -40,13 +37,15 @@ public class CpmGenerator {
 
         createPids(bbDoc, pidGen);
 
-        IndexedDocument iDoc = new IndexedDocument(pf, bbDoc, true);
+        IndexedDocument iDoc = new IndexedDocument(pf, bbDoc, false);
         iDoc.merge(dsDoc);
 
+        /*
         Path temp = Files.createTempFile("bundle", ".provn");
         intF.writeDocument(temp.toString(), iDoc.toDocument(), Formats.ProvFormat.PROVN);
+        Document ndoc = canonize(temp.toString());*/
 
-        return canonize(temp.toString());
+        return iDoc.toDocument();
     }
 
     private Document canonize(String filePath) {
