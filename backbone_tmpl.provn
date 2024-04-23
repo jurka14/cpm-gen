@@ -6,7 +6,7 @@ document
 
  bundle var:bndl
   agent(var:send_agent_id, [prov:type='cpm:senderAgent])
-  activity(var:main_activity_id, [prov:type='cpm:mainActivity', repr:hasPart='var:has_part'])
+  activity(var:main_activity_id, [prov:type='cpm:mainActivity', repr:hasPart='var:has_part', cpm:metabundle='var:main_activity_meta'])
   entity(var:back_conn_id, [prov:type='cpm:backwardConnector', cpm:receiverBundleId='var:send_id'])
   entity(var:forward_conn_id, [prov:type='cpm:forwardConnector', cpm:senderBundleId='var:rec_id'])
   wasGeneratedBy(var:forward_conn_id, var:main_activity_id, - )

@@ -4,8 +4,10 @@ document
   prefix def <https://example.org/>
   prefix cpm <https://www.commonprovenancemodel.org/cpm-namespace-v1-0/>
   prefix repr <https://w3id.org/reproduceme#>
+  prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
+  prefix conn <http://_PLACEHOLER_:8000/api/v1/connectors/>
 
-  bundle def:preprocEval.provn
+  bundle bndl:preprocEval.provn
     activity(def:tilesGeneration, -, -)
 
     entity(def:WSIDataEval, [prov:type='repr:Dataset', def:path='var:WSIDataEvalPath', def:runID='var:WSIDataEvalRunId', def:data='var:WSIDataEval'])
@@ -19,6 +21,7 @@ document
     used(def:tilesGeneration, def:WSIDataEval, -)
     used(def:tilesGeneration, def:configEval, -)
 
-    specializationOf(def:tilesEval, def:evalTilesConnector)
+    specializationOf(def:tilesEval, conn:evalTilesConnector)
+    specializationOf(def:tilesEval, conn:trainTilesConnector)
   endBundle
 endDocument

@@ -1,20 +1,32 @@
 package org.example;
 
+import com.exasol.parquetio.data.Row;
+import com.exasol.parquetio.reader.RowParquetReader;
 import cpm.CpmGenerator;
 import cpm.mlflow.MLFlowGenerator;
 import cpm.pid.DummyPidGenerator;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.parquet.hadoop.ParquetReader;
+import org.apache.parquet.hadoop.util.HadoopInputFile;
+import org.json.JSONObject;
 import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
 import org.openprovenance.prov.model.Agent;
+import org.openprovenance.prov.model.Bundle;
 import org.openprovenance.prov.model.Entity;
+import org.openprovenance.prov.model.Identifiable;
+import org.openprovenance.prov.model.Statement;
 import org.openprovenance.prov.model.WasAttributedTo;
 import org.openprovenance.prov.model.WasDerivedFrom;
 import org.openprovenance.prov.scala.interop.FileInput;
 import org.openprovenance.prov.scala.nf.*;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class Little {
@@ -124,40 +136,54 @@ public class Little {
          */
 
 /*
-        MlflowClient client = new MlflowClient("https://mlflow.rationai.cloud.trusted.e-infra.cz/");
-        File f = client.downloadArtifacts("d76b2a494da447c39b64d93e89e106fa", "dataset/tiles.parquet");
-        client.close();
+        InteropFramework intF = new InteropFramework();
+        ProvFactory pf = InteropFramework.getDefaultFactory();
 
-        var json = new JSONObject();
+        Document doc = intF.readDocumentFromFile("preprocEval.provn");
+        Bundle b = (Bundle) doc.getStatementOrBundle().get(0);
+        String data = null;
+
+        for (Statement s : b.getStatement()) {
+            if (s.getKind() == StatementOrBundle.Kind.PROV_ENTITY &&
+                (Objects.equals(((Identifiable) s).getId().getLocalPart(), "WSIDataEval"))
+            ) {
+                for (Other o : ((Entity) s).getOther()) {
+                    if (Objects.equals(o.getElementName().getLocalPart(), "data")) {
+                        data = (String) o.getValue();
+                    }
+                }
+
+            }
+        }
+
+        Path temp;
+
+        try {
+            temp = Files.createTempFile("temp", ".parquet");
+            Files.write(temp, Base64.getDecoder().decode(data));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         try (ParquetReader<Row> reader = RowParquetReader
-                .builder(HadoopInputFile.fromPath(new Path(f.getPath()), new Configuration())).build()) {
+                .builder(HadoopInputFile.fromPath(new org.apache.hadoop.fs.Path(temp.toString()), new Configuration())).build()) {
             Row row = reader.read();
 
-            json.put("fieldNames", row.getFieldNames());
-            json.put("values", new ArrayList());
-            System.out.println(json);
-
-            java.nio.file.Path temp = Files.createTempFile("temp", ".json");
-
-            FileWriter writer = new FileWriter(temp.toFile());
-
-
+            System.out.println(row.getFieldNames());
 
             int i = 0;
-            while (i < 10) {
+            while (i < 100) {
                 List<Object> values = row.getValues();
                 System.out.println(values);
-                json.getJSONArray("values").put(values);
 
                 row = reader.read();
                 i++;
             }
         } catch (final IOException exception) {
             //
-        }*/
+        }
 
-
+*/
         /*
         ProvFactory pf = InteropFramework.getDefaultFactory();
 
