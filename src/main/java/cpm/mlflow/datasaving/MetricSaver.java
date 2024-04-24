@@ -1,0 +1,41 @@
+package cpm.mlflow.datasaving;
+
+import org.json.JSONObject;
+import org.mlflow.api.proto.Service.Metric;
+import org.mlflow.tracking.MlflowClient;
+
+import java.util.List;
+
+/**
+ * Saves the metrics based on the keys specified in config. If no keys are specified, saves all metrics from the run.
+ * The metrics are saved as a JSON object string.
+ *
+ */
+public class MetricSaver extends DataSaver {
+
+    private static final String DATA_TYPE = "xsd:string";
+    private final MlflowClient client;
+
+    public MetricSaver(MlflowClient client, JSONObject bindings) {
+        super(bindings, DATA_TYPE);
+        this.client = client;
+    }
+
+    @Override
+    protected String getData(String runId, JSONObject dataInfo) {
+
+        List<Object> list = dataInfo.getJSONArray("keyList").toList();
+        JSONObject finalData = new JSONObject();
+
+        List<Metric> allMetrics = client.getRun(runId).getData().getMetricsList();
+
+        for (Metric m : allMetrics) {
+            if (list.isEmpty() || list.contains(m.getKey())) {
+                finalData.put(m.getKey(), m.getValue());
+            }
+        }
+
+        return finalData.toString();
+    }
+
+}

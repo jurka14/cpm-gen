@@ -9,6 +9,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.parquet.hadoop.util.HadoopInputFile;
 import org.json.JSONObject;
+import org.mlflow.tracking.MlflowClient;
 import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
@@ -105,6 +106,17 @@ public class Little {
 
     public static void main(String [] args) {
 
+/*
+        try (var client = new MlflowClient(TRACKING_URI)) {
+
+            var data = client.getRun("6bc00f9abbd0465d865f0c1e1fa7196a").getData().getMetricsList();
+
+            System.out.println(data);
+
+        }
+*/
+
+
 
         CpmGenerator gen = new CpmGenerator();
         MLFlowGenerator mlfGen = new MLFlowGenerator(TRACKING_URI);
@@ -120,8 +132,6 @@ public class Little {
         InteropFramework intF = new InteropFramework();
         intF.writeDocument("train.provn", doc);
         intF.writeDocument("train.svg", doc);
-
-
 
         /*
         ProvFactory pf = InteropFramework.getDefaultFactory();

@@ -32,7 +32,7 @@ public class DataSaver {
     }
 
     /**
-     * @param ignoredRunId This string may be used for further computation in overriding classes
+     * @param ignoredRunId This string may be used for further computation in overriding classes.
      */
     protected String getData(String ignoredRunId, JSONObject dataInfo) {
         return dataInfo.getString("value");

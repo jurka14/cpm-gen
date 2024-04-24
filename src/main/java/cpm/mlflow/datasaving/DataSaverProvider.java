@@ -14,13 +14,15 @@ public class DataSaverProvider {
         FileSaver fileSaver = new FileSaver(client, bindings, "xsd:string");
         ConfigSaver configSaver = new ConfigSaver(client, bindings);
         ParquetSaver parquetSaver = new ParquetSaver(client, bindings);
+        MetricSaver metricSaver = new MetricSaver(client, bindings);
 
         saverMap = Map.of(
                 "data", dataSaver,
                 "file", fileSaver,
                 "config", configSaver,
                 "inParquet", parquetSaver,
-                "outParquet", parquetSaver
+                "outParquet", parquetSaver,
+                "metrics", metricSaver
         );
     }
 

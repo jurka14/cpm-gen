@@ -13,7 +13,8 @@
         "value": "model/"
       },
       "metrics": {
-        "name": "metricsTrain"
+        "name": "metricsTrain",
+        "keyList": []
       },
       "file": {
         "name": "logsTrain",
