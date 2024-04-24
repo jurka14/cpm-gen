@@ -32,6 +32,8 @@ public class DataSaver {
     }
 
     /**
+     * This method returns the data string to be stored as a binding.
+     * Child classes override this method for their specific behaviour.
      * @param ignoredRunId This string may be used for further computation in overriding classes.
      */
     protected String getData(String ignoredRunId, JSONObject dataInfo) {

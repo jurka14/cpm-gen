@@ -4,6 +4,8 @@ import com.exasol.parquetio.data.Row;
 import com.exasol.parquetio.reader.RowParquetReader;
 import cpm.CpmGenerator;
 import cpm.mlflow.MLFlowGenerator;
+import cpm.mlflow.datasaving.DataSaver;
+import cpm.mlflow.datasaving.FileNamesSaver;
 import cpm.pid.DummyPidGenerator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.hadoop.ParquetReader;
@@ -109,9 +111,11 @@ public class Little {
 /*
         try (var client = new MlflowClient(TRACKING_URI)) {
 
-            var data = client.getRun("6bc00f9abbd0465d865f0c1e1fa7196a").getData().getMetricsList();
+            var b = new JSONObject();
+            DataSaver s = new FileNamesSaver(client, b);
+            s.saveData("50643d978335412591f42c970dd5b2b2", new JSONObject().put("name", "h1").put("path", "test_heatmaps"));
 
-            System.out.println(data);
+            System.out.println(b);
 
         }
 */
@@ -120,18 +124,18 @@ public class Little {
 
         CpmGenerator gen = new CpmGenerator();
         MLFlowGenerator mlfGen = new MLFlowGenerator(TRACKING_URI);
-        Document dsDoc = mlfGen.generate("train_config.json");
+        Document dsDoc = mlfGen.generate("eval_config.json");
         Document doc;
 
         try {
-            doc = gen.createBundle("train_bindings_bb.json", dsDoc, new DummyPidGenerator(), false);
+            doc = gen.createBundle("eval_bindings_bb.json", dsDoc, new DummyPidGenerator(), false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         InteropFramework intF = new InteropFramework();
-        intF.writeDocument("train.provn", doc);
-        intF.writeDocument("train.svg", doc);
+        intF.writeDocument("eval.provn", doc);
+        intF.writeDocument("eval.svg", doc);
 
         /*
         ProvFactory pf = InteropFramework.getDefaultFactory();
@@ -139,7 +143,7 @@ public class Little {
 
         Little little=new Little(pf);
         little.openingBanner();
-        Document document = intF.readDocumentFromFile("eval.provn");
+        Document document = intF.readDocumentFromFile("eval_tmpl.provn");
         little.doConversions(document, "eval.svg");
         little.closingBanner();
 

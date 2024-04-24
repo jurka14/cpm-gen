@@ -15,6 +15,7 @@ public class DataSaverProvider {
         ConfigSaver configSaver = new ConfigSaver(client, bindings);
         ParquetSaver parquetSaver = new ParquetSaver(client, bindings);
         MetricSaver metricSaver = new MetricSaver(client, bindings);
+        FileNamesSaver fileNamesSaver = new FileNamesSaver(client, bindings);
 
         saverMap = Map.of(
                 "data", dataSaver,
@@ -22,7 +23,8 @@ public class DataSaverProvider {
                 "config", configSaver,
                 "inParquet", parquetSaver,
                 "outParquet", parquetSaver,
-                "metrics", metricSaver
+                "metrics", metricSaver,
+                "filenames", fileNamesSaver
         );
     }
 
