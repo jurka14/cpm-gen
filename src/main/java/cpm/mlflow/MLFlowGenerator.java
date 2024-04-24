@@ -2,11 +2,8 @@ package cpm.mlflow;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cpm.mlflow.dataloading.ConfigLoader;
-import cpm.mlflow.dataloading.MLFDataLoader;
-import cpm.mlflow.dataloading.ParquetLoader;
+import cpm.mlflow.datasaving.DataSaverProvider;
 import org.json.JSONObject;
-import org.mlflow.tracking.MlflowClient;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.Document;
 import org.openprovenance.prov.model.ProvFactory;
@@ -16,32 +13,21 @@ import org.openprovenance.prov.template.json.Bindings;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 
 public class MLFlowGenerator {
+    private final JSONObject bindings;
+    private final DataSaverProvider dataSaverProvider;
 
-    private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
-    private static final MlflowClient CLIENT = new MlflowClient(TRACKING_URI);
-    private static final JSONObject BINDINGS = new JSONObject();
-    private static final ConfigLoader CONFIG_LOADER = new ConfigLoader(CLIENT, BINDINGS);
-    private static final ParquetLoader PARQUET_LOADER = new ParquetLoader(CLIENT, BINDINGS);
-    private static final Map<String, MLFDataLoader> LOADER_MAP = Map.of(
-            "config", CONFIG_LOADER,
-            "inParquet", PARQUET_LOADER,
-            "outParquet", PARQUET_LOADER
-    );
+    public MLFlowGenerator(String trackingUri) {
+        bindings = new JSONObject();
+        dataSaverProvider = new DataSaverProvider(trackingUri, bindings);
+    }
 
     private void loadData(String runId, String dataType, JSONObject runCfg) {
 
         JSONObject dataInfo = runCfg.getJSONObject(dataType);
-        MLFDataLoader loader = LOADER_MAP.get(dataType);
 
-        try { //choose the right loader based on the dataType
-            loader.load(runId, dataInfo);
-
-        } catch (IOException e) {
-            throw new MLFlowGenException(e);
-        }
+        dataSaverProvider.getSaver(dataType).saveData(runId, dataInfo);
     }
 
     private Document generateDoc(String templatePath, String bindingsPath) {
@@ -62,8 +48,8 @@ public class MLFlowGenerator {
 
         JSONObject varObj = finalBindings.getJSONObject("var");
         //append generated bindings to the defaults
-        for (String name : BINDINGS.keySet()) {
-            varObj.put(name, BINDINGS.get(name));
+        for (String name : bindings.keySet()) {
+            varObj.put(name, bindings.get(name));
         }
 
         //fill in the template
@@ -83,7 +69,7 @@ public class MLFlowGenerator {
     public Document generate(String configPath) throws MLFlowGenException {
 
         //clear the bindings in case of repeated generation
-        BINDINGS.clear();
+        bindings.clear();
 
         JSONObject config;
         try {

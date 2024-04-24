@@ -1,4 +1,4 @@
-package cpm.mlflow.dataloading;
+package cpm.mlflow.datasaving;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -9,18 +9,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class ConfigLoader extends MLFDataLoader {
+/**
+ * Converts YAML config data to JSON
+ */
+public class ConfigSaver extends FileSaver {
 
     private static final String DATA_TYPE = "xsd:string";
 
-    public ConfigLoader(MlflowClient client, JSONObject bindings) {
+    public ConfigSaver(MlflowClient client, JSONObject bindings) {
         super(client, bindings, DATA_TYPE);
     }
 
     @Override
-    protected String getData(File file) throws IOException {
+    protected String getFileData(File file) throws IOException {
 
-        //convert yaml to json and save
+        //convert yaml to json
         ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
         Object obj = yamlReader.readValue(new FileInputStream(file), Object.class);
 

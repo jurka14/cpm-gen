@@ -101,24 +101,25 @@ public class Little {
         System.out.println("* Converting document  ");
         System.out.println("*************************");
     }
+    private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
 
     public static void main(String [] args) {
 
 
         CpmGenerator gen = new CpmGenerator();
-        MLFlowGenerator mlfGen = new MLFlowGenerator();
-        Document dsDoc = mlfGen.generate("preprocEval_config.json");
+        MLFlowGenerator mlfGen = new MLFlowGenerator(TRACKING_URI);
+        Document dsDoc = mlfGen.generate("train_config.json");
         Document doc;
 
         try {
-            doc = gen.createBundle("preprocEval_bindings_bb.json", dsDoc, new DummyPidGenerator(), true);
+            doc = gen.createBundle("train_bindings_bb.json", dsDoc, new DummyPidGenerator(), false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         InteropFramework intF = new InteropFramework();
-        intF.writeDocument("preprocEval.provn", doc);
-        intF.writeDocument("preprocEval.svg", doc);
+        intF.writeDocument("train.provn", doc);
+        intF.writeDocument("train.svg", doc);
 
 
 
