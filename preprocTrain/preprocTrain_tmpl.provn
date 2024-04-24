@@ -1,0 +1,82 @@
+document
+  prefix tmpl <http://openprovenance.org/tmpl#>
+  prefix var <http://openprovenance.org/var#>
+  prefix def <https://example.org/>
+  prefix repr <https://w3id.org/reproduceme#>
+  prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
+  prefix conn <http://_PLACEHOLER_:8000/api/v1/connectors/>
+
+  bundle bndl:preprocTrain
+    activity(def:tilesGeneration, -, -)
+
+    entity(def:testGroup)
+
+    entity(def:WSIDataTest, [prov:type='repr:Dataset', def:path='var:WSIDataTestPath', def:runID='var:WSIDataTestRunId', def:data='var:WSIDataTest'])
+    entity(def:configFileTest, [def:path='var:configTestPath', def:runID='var:configTestRunId'])
+    wasDerivedFrom(def:configTest, def:configFileTest, -, -, -)
+    entity(def:configTest, [def:data='var:configTest'])
+    entity(def:tilesTest, [prov:type='repr:Dataset', def:path='var:tilesTestPath', def:runID='var:tilesTestRunId', def:data='var:tilesTest'])
+    wasGeneratedBy(def:tilesTest, def:tilesGeneration, -)
+    wasDerivedFrom(def:tilesTest, def:WSIDataTest, -, -, -)
+    wasDerivedFrom(def:tilesTest, def:configTest, -, -, -)
+    used(def:tilesGeneration, def:WSIDataTest, -)
+    used(def:tilesGeneration, def:configTest, -)
+    wasDerivedFrom(def:testGroup, def:tilesTest, -, -, -)
+
+    entity(def:trainGroup)
+
+    entity(def:WSIDataTrainPos, [prov:type='repr:Dataset', def:path='var:WSIDataTrainPosPath', def:runID='var:WSIDataTrainPosRunId', def:data='var:WSIDataTrainPos'])
+    entity(def:configFileTrainPos, [def:path='var:configTrainPosPath', def:runID='var:configTrainPosRunId'])
+    wasDerivedFrom(def:configTrainPos, def:configFileTrainPos, -, -, -)
+    entity(def:configTrainPos, [def:data='var:configTrainPos'])
+    entity(def:tilesTrainPos, [prov:type='repr:Dataset', def:path='var:tilesTrainPosPath', def:runID='var:tilesTrainPosRunId', def:data='var:tilesTrainPos'])
+    wasGeneratedBy(def:tilesTrainPos, def:tilesGeneration, -)
+    wasDerivedFrom(def:tilesTrainPos, def:WSIDataTrainPos, -, -, -)
+    wasDerivedFrom(def:tilesTrainPos, def:configTrainPos, -, -, -)
+    used(def:tilesGeneration, def:WSIDataTrainPos, -)
+    used(def:tilesGeneration, def:configTrainPos, -)
+    wasDerivedFrom(def:trainGroup, def:tilesTrainPos, -, -, -)
+
+    entity(def:WSIDataTrainArchPos, [prov:type='repr:Dataset', def:path='var:WSIDataTrainArchPosPath', def:runID='var:WSIDataTrainArchPosRunId', def:data='var:WSIDataTrainArchPos'])
+    entity(def:configFileTrainArchPos, [def:path='var:configTrainArchPosPath', def:runID='var:configTrainArchPosRunId'])
+    wasDerivedFrom(def:configTrainArchPos, def:configFileTrainArchPos, -, -, -)
+    entity(def:configTrainArchPos, [def:data='var:configTrainArchPos'])
+    entity(def:tilesTrainArchPos, [prov:type='repr:Dataset', def:path='var:tilesTrainArchPosPath', def:runID='var:tilesTrainArchPosRunId', def:data='var:tilesTrainArchPos'])
+    wasGeneratedBy(def:tilesTrainArchPos, def:tilesGeneration, -)
+    wasDerivedFrom(def:tilesTrainArchPos, def:WSIDataTrainArchPos, -, -, -)
+    wasDerivedFrom(def:tilesTrainArchPos, def:configTrainArchPos, -, -, -)
+    used(def:tilesGeneration, def:WSIDataTrainArchPos, -)
+    used(def:tilesGeneration, def:configTrainArchPos, -)
+    wasDerivedFrom(def:trainGroup, def:tilesTrainArchPos, -, -, -)
+
+    entity(def:WSIDataTrainNeg, [prov:type='repr:Dataset', def:path='var:WSIDataTrainNegPath', def:runID='var:WSIDataTrainNegRunId', def:data='var:WSIDataTrainNeg'])
+    entity(def:configFileTrainNeg, [def:path='var:configTrainNegPath', def:runID='var:configTrainNegRunId'])
+    wasDerivedFrom(def:configTrainNeg, def:configFileTrainNeg, -, -, -)
+    entity(def:configTrainNeg, [def:data='var:configTrainNeg'])
+    entity(def:tilesTrainNeg, [prov:type='repr:Dataset', def:path='var:tilesTrainNegPath', def:runID='var:tilesTrainNegRunId', def:data='var:tilesTrainNeg'])
+    wasGeneratedBy(def:tilesTrainNeg, def:tilesGeneration, -)
+    wasDerivedFrom(def:tilesTrainNeg, def:WSIDataTrainNeg, -, -, -)
+    wasDerivedFrom(def:tilesTrainNeg, def:configTrainNeg, -, -, -)
+    used(def:tilesGeneration, def:WSIDataTrainNeg, -)
+    used(def:tilesGeneration, def:configTrainNeg, -)
+    wasDerivedFrom(def:trainGroup, def:tilesTrainNeg, -, -, -)
+
+    entity(def:WSIDataTrainArchNeg, [prov:type='repr:Dataset', def:path='var:WSIDataTrainArchNegPath', def:runID='var:WSIDataTrainArchNegRunId', def:data='var:WSIDataTrainArchNeg'])
+    entity(def:configFileTrainArchNeg, [def:path='var:configTrainArchNegPath', def:runID='var:configTrainArchNegRunId'])
+    wasDerivedFrom(def:configTrainArchNeg, def:configFileTrainArchNeg, -, -, -)
+    entity(def:configTrainArchNeg, [def:data='var:configTrainArchNeg'])
+    entity(def:tilesTrainArchNeg, [prov:type='repr:Dataset', def:path='var:tilesTrainArchNegPath', def:runID='var:tilesTrainArchNegRunId', def:data='var:tilesTrainArchNeg'])
+    wasGeneratedBy(def:tilesTrainArchNeg, def:tilesGeneration, -)
+    wasDerivedFrom(def:tilesTrainArchNeg, def:WSIDataTrainArchNeg, -, -, -)
+    wasDerivedFrom(def:tilesTrainArchNeg, def:configTrainArchNeg, -, -, -)
+    used(def:tilesGeneration, def:WSIDataTrainArchNeg, -)
+    used(def:tilesGeneration, def:configTrainArchNeg, -)
+    wasDerivedFrom(def:trainGroup, def:tilesTrainArchNeg, -, -, -)
+
+    entity(def:dataset, [prov:type='repr:Dataset'])
+    wasDerivedFrom(def:dataset, def:testGroup, -, -, -)
+    wasDerivedFrom(def:dataset, def:trainGroup, -, -, -)
+    specializationOf(def:dataset, conn:trainTrainingTilesConnector)
+    specializationOf(def:dataset, conn:evalTrainingTilesConnector)
+  endBundle
+endDocument

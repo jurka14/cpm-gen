@@ -1,0 +1,27 @@
+document
+  prefix tmpl <http://openprovenance.org/tmpl#>
+  prefix var <http://openprovenance.org/var#>
+  prefix def <https://example.org/>
+  prefix repr <https://w3id.org/reproduceme#>
+  prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
+  prefix conn <http://_PLACEHOLER_:8000/api/v1/connectors/>
+
+  bundle bndl:train
+    entity(def:trainingTilesDataset, [prov:type='repr:Dataset'])
+    specializationOf(def:trainingTilesDataset, conn:trainTrainingTilesConnector)
+    entity(def:configFile, [def:path='var:configTrainPath', def:runID='var:configTrainRunId'])
+    wasDerivedFrom(def:configTrain, def:configFile, -, -, -)
+    entity(def:configTrain, [def:data='var:configTrain'])
+    entity(def:trainedModel, [prov:type='repr:Model', def:path='var:trainedModel', def:runID='var:trainedModelRunId'])
+    entity(def:logsTrain, [prov:type='repr:Log', def:path='var:logsTrainPath', def:runID='var:logsTrainRunId', def:data='var:logsTrain'])
+    activity(def:prostateTrain, -, -, [def:metrics='var:metricsTrain', def:runID='var:metricsTrainRunId'])
+    wasGeneratedBy(def:logsTrain, def:prostateTrain, -)
+    wasGeneratedBy(def:trainedModel, def:prostateTrain, -)
+    wasDerivedFrom(def:trainedModel, def:trainingTilesDataset, -, -, -)
+    wasDerivedFrom(def:trainedModel, def:configTrain, -, -, -)
+    used(def:prostateTrain, def:trainingTilesDataset, -)
+    used(def:prostateTrain, def:configTrain, -)
+    specializationOf(def:trainedModel, conn:trainedModelConnector)
+
+  endBundle
+endDocument

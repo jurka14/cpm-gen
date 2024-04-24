@@ -1,0 +1,25 @@
+document
+  prefix tmpl <http://openprovenance.org/tmpl#>
+  prefix var <http://openprovenance.org/var#>
+  prefix def <https://example.org/>
+  prefix repr <https://w3id.org/reproduceme#>
+  prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
+  prefix conn <http://_PLACEHOLER_:8000/api/v1/connectors/>
+
+  bundle bndl:preprocEval
+    activity(def:tilesGeneration, -, -)
+
+    entity(def:WSIDataEval, [prov:type='repr:Dataset', def:path='var:WSIDataEvalPath', def:runID='var:WSIDataEvalRunId', def:data='var:WSIDataEval'])
+    entity(def:configFile, [def:path='var:configEvalPath', def:runID='var:configEvalRunId'])
+    wasDerivedFrom(def:configEval, def:configFile, -, -, -)
+    entity(def:configEval, [def:data='var:configEval'])
+    entity(def:tilesEval, [prov:type='repr:Dataset', def:path='var:tilesEvalPath', def:runID='var:tilesEvalRunId', def:data='var:tilesEval'])
+    wasGeneratedBy(def:tilesEval, def:tilesGeneration, -)
+    wasDerivedFrom(def:tilesEval, def:WSIDataEval, -, -, -)
+    wasDerivedFrom(def:tilesEval, def:configEval, -, -, -)
+    used(def:tilesGeneration, def:WSIDataEval, -)
+    used(def:tilesGeneration, def:configEval, -)
+
+    specializationOf(def:tilesEval, conn:evalTilesConnector)
+  endBundle
+endDocument

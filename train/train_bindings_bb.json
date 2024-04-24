@@ -1,0 +1,20 @@
+{
+  "var":
+  {
+    "bndl": [{"@id": "bndl:train"}],
+    "send_agent_id": [{"@id": "def:researchDataCentre"}],
+    "main_activity_id": [{"@id": "def:training"}],
+    "main_activity_meta": [{"@id": "meta:trainMeta"}],
+    "has_part": [{"@id": "def:prostateTrain"}],
+    "back_conn_id": [{"@id": "conn:trainTrainingTilesConnector"}],
+    "send_id": [{"@id": "bndl:preprocTrain"}],
+    "forward_conn_id": [{"@id": "conn:trainedModelConnector"}],
+    "rec_id": [{"@id": "bndl:eval"}]
+  },
+  "context": {
+    "def" : "https://example.org/",
+    "bndl": "http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/",
+    "meta" : "http://_PLACEHOLER_:8000/api/v1/graphs/meta/",
+    "conn" : "http://_PLACEHOLER_:8000/api/v1/connectors/"
+  }
+}
