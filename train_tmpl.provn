@@ -12,7 +12,7 @@ document
     entity(def:configFile, [def:path='var:configTrainPath', def:runID='var:configTrainRunId'])
     wasDerivedFrom(def:configTrain, def:configFile, -, -, -)
     entity(def:configTrain, [def:data='var:configTrain'])
-    entity(def:trainedModel, [prov:type='repr:Model', def:path='var:trainedModelPath', def:runID='var:trainedModelRunId'])
+    entity(def:trainedModel, [prov:type='repr:Model', def:path='var:trainedModel', def:runID='var:trainedModelRunId'])
     entity(def:logsTrain, [prov:type='repr:Log', def:path='var:logsTrainPath', def:runID='var:logsTrainRunId', def:data='var:logsTrain'])
     activity(def:prostateTrain, -, -, [def:metrics='var:metricsTrain', def:runID='var:metricsTrainRunId'])
     wasGeneratedBy(def:logsTrain, def:prostateTrain, -)
