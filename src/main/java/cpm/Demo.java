@@ -4,6 +4,7 @@ import com.exasol.parquetio.data.Row;
 import com.exasol.parquetio.reader.RowParquetReader;
 import cpm.mlflow.MLFlowGenerator;
 import cpm.pid.DummyPidGenerator;
+import cpm.pid.PidGenerator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.parquet.hadoop.util.HadoopInputFile;
@@ -24,14 +25,15 @@ public class Demo {
 
         CpmGenerator gen = new CpmGenerator();
         MLFlowGenerator mlfGen = new MLFlowGenerator(TRACKING_URI);
+        PidGenerator pidGen = new DummyPidGenerator();
 
-        generateBundle(gen, mlfGen, "preprocEval", true);
-        generateBundle(gen, mlfGen, "preprocTrain", true);
-        generateBundle(gen, mlfGen, "train", false);
-        generateBundle(gen, mlfGen, "eval", false);
+        generateBundle(gen, mlfGen, pidGen, "preprocEval", true);
+        generateBundle(gen, mlfGen, pidGen, "preprocTrain", true);
+        generateBundle(gen, mlfGen, pidGen, "train", false);
+        generateBundle(gen, mlfGen, pidGen, "eval", false);
     }
 
-    private static void generateBundle(CpmGenerator gen, MLFlowGenerator mlfGen, String name, boolean first) {
+    private static void generateBundle(CpmGenerator gen, MLFlowGenerator mlfGen, PidGenerator pidGen, String name, boolean first) {
 
         name = name + "/" + name;
 
@@ -39,7 +41,7 @@ public class Demo {
         Document doc;
 
         try {
-            doc = gen.createBundle(name + "_bindings_bb.json", dsDoc, new DummyPidGenerator(), first);
+            doc = gen.createBundle(name + "_bindings_bb.json", dsDoc, pidGen, first);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
