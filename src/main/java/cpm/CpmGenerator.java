@@ -2,20 +2,19 @@ package cpm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cpm.pid.PidGenerator;
+import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
-import org.openprovenance.prov.model.*;
 import org.openprovenance.prov.model.Bundle;
 import org.openprovenance.prov.model.HasType;
 import org.openprovenance.prov.model.Identifiable;
 import org.openprovenance.prov.model.Statement;
-import org.openprovenance.prov.scala.interop.FileInput;
+import org.openprovenance.prov.model.*;
+import org.openprovenance.prov.scala.interop.StreamInput;
 import org.openprovenance.prov.scala.nf.*;
 import org.openprovenance.prov.template.expander.Expand;
 import org.openprovenance.prov.template.json.Bindings;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -40,26 +39,46 @@ public class CpmGenerator {
         IndexedDocument iDoc = new IndexedDocument(pf, bbDoc, false);
         iDoc.merge(dsDoc);
 
-        /*
-        Path temp = Files.createTempFile("bundle", ".provn");
-        intF.writeDocument(temp.toString(), iDoc.toDocument(), Formats.ProvFormat.PROVN);
-        Document ndoc = canonize(temp.toString());*/
+        Document finalDoc = iDoc.toDocument();
 
-        return iDoc.toDocument();
+        canonize(finalDoc);
+
+        return finalDoc;
     }
 
-    private Document canonize(String filePath) {
+
+    private void canonize(Document doc) {
+
+        //all the statements from the bundle in the document must be taken out to a blank document
+        Bundle b = (Bundle) doc.getStatementOrBundle().get(0);
+        Document docToCanonize = pf.newDocument();
+
+        docToCanonize.getStatementOrBundle().addAll(b.getStatement());
+        docToCanonize.setNamespace(doc.getNamespace());
+
+        b.getStatement().clear();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        intF.writeDocument(baos, docToCanonize, Formats.ProvFormat.PROVN);
+
         org.openprovenance.prov.scala.immutable.Document nDoc = CommandLine$.MODULE$
-                .parseDocumentToNormalForm(new FileInput(new File(filePath))).toDocument();
+                .parseDocumentToNormalForm(new StreamInput(new ByteArrayInputStream(baos.toByteArray()))).toDocument();
 
         DocumentProxyFromStatements fDoc = Normalizer$.MODULE$.
                 fusion(nDoc);
 
-        return new DocumentProxy(
+        Document canonizedDoc = new DocumentProxy(
                 new NoIdStatementIndexer(fDoc.getStatements()),
                 new StatementIndexer(),
                 fDoc.getNamespace()
         ).toDocument();
+
+        canonizedDoc.getStatementOrBundle();
+
+        for (StatementOrBundle s : canonizedDoc.getStatementOrBundle()) {
+            b.getStatement().add((Statement) s);
+        }
     }
 
     private Document createBackbone(String bindingsFilePath, boolean first) throws FileNotFoundException {

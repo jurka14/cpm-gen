@@ -8,20 +8,9 @@ import cpm.pid.PidGenerator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.parquet.hadoop.util.HadoopInputFile;
-import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
-import org.openprovenance.prov.model.Bundle;
-import org.openprovenance.prov.model.Entity;
-import org.openprovenance.prov.model.Identifiable;
-import org.openprovenance.prov.model.Statement;
-import org.openprovenance.prov.scala.interop.FileInput;
-import org.openprovenance.prov.scala.interop.StreamInput;
-import org.openprovenance.prov.scala.nf.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -64,42 +53,8 @@ public class Demo {
 
     public static void main(String [] args) {
 
+        generateProvenance();
 
-        InteropFramework intF = new InteropFramework();
-        Document doc = intF.readDocumentFromFile("train/train.provn");
-
-
-        Bundle b = (Bundle) doc.getStatementOrBundle().get(0);
-        Document newDoc = InteropFramework.getDefaultFactory().newDocument();
-
-        newDoc.getStatementOrBundle().addAll(b.getStatement());
-        newDoc.setNamespace(doc.getNamespace());
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        intF.writeDocument(baos, doc, Formats.ProvFormat.PROVN);
-
-        Document d = canonize(baos.toString());
-
-        int a = 2;
-
-
-        //generateProvenance();
-
-    }
-
-    private static Document canonize(String document) {
-        org.openprovenance.prov.scala.immutable.Document nDoc = CommandLine$.MODULE$
-                .parseDocumentToNormalForm(new StreamInput(new ByteArrayInputStream(document.getBytes()))).toDocument();
-
-        DocumentProxyFromStatements fDoc = Normalizer$.MODULE$.
-                fusion(nDoc);
-
-        return new DocumentProxy(
-                new NoIdStatementIndexer(fDoc.getStatements()),
-                new StatementIndexer(),
-                fDoc.getNamespace()
-        ).toDocument();
     }
 
     private static void query() {
@@ -150,5 +105,14 @@ public class Demo {
             //
         }
     }
+
+    /*
+        //convert yaml to json
+        ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
+        Object obj = yamlReader.readValue(new FileInputStream(file), Object.class);
+
+        ObjectMapper jsonWriter = new ObjectMapper();
+        return jsonWriter.writeValueAsString(obj);
+     */
 
 }
