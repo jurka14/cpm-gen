@@ -44,7 +44,7 @@ public class DoiGenerator extends PidGenerator {
         var model = new DoiSimplifiedModel();
         model.setDoi(doi);
         model.setEvent(EVENT);
-        model.setUrl(generateUri());
+        model.setUrl(generateUri(pid, name));
         model.setXml(createXml(doi, name));
         var response = client.updateDoi(doi, new JSONAPIDocument<>(model));
 

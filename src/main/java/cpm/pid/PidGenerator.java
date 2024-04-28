@@ -12,7 +12,7 @@ public abstract class PidGenerator {
     public abstract void generate(String pid, String name);
     public abstract String getNamespace();
 
-    protected String generateUri() {
-        return uriGenerator.generate();
+    protected String generateUri(String pid, String name) {
+        return uriGenerator.generate(pid, name);
     }
 }
