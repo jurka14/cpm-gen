@@ -14,6 +14,9 @@ document
     activity(def:heatmapGeneration)
     used(def:heatmapGeneration, def:evalTiles, -)
     used(def:heatmapGeneration, def:trainedModel, -)
+    used(def:heatmapGeneration, def:configHeatmaps1, -)
+    used(def:heatmapGeneration, def:configHeatmaps2, -)
+    used(def:heatmapGeneration, def:configHeatmaps3, -)
 
     entity(def:configFileHeatmaps1, [def:path='var:configHeatmaps1Path', def:runID='var:configHeatmaps1RunId'])
     entity(def:configHeatmaps1, [def:data='var:configHeatmaps1'])
