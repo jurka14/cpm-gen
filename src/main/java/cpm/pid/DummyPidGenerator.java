@@ -1,6 +1,12 @@
 package cpm.pid;
 
-public class DummyPidGenerator implements PidGenerator {
+import cpm.pid.uri.PidUriGenerator;
+
+public class DummyPidGenerator extends PidGenerator {
+    public DummyPidGenerator(PidUriGenerator uriGenerator) {
+        super(uriGenerator);
+    }
+
     @Override
     public void generate(String pid, String name) {
         // do not generate anything

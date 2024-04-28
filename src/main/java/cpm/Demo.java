@@ -5,6 +5,7 @@ import com.exasol.parquetio.reader.RowParquetReader;
 import cpm.mlflow.MLFlowGenerator;
 import cpm.pid.DummyPidGenerator;
 import cpm.pid.PidGenerator;
+import cpm.pid.uri.DummyPidUriGenerator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.parquet.hadoop.util.HadoopInputFile;
@@ -25,7 +26,7 @@ public class Demo {
 
         CpmGenerator gen = new CpmGenerator();
         MLFlowGenerator mlfGen = new MLFlowGenerator(TRACKING_URI);
-        PidGenerator pidGen = new DummyPidGenerator();
+        PidGenerator pidGen = new DummyPidGenerator(new DummyPidUriGenerator());
 
         generateBundle(gen, mlfGen, pidGen, "preprocEval", true);
         generateBundle(gen, mlfGen, pidGen, "preprocTrain", true);

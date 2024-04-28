@@ -2,6 +2,7 @@ package cpm.pid;
 
 
 import com.github.jasminb.jsonapi.JSONAPIDocument;
+import cpm.pid.uri.PidUriGenerator;
 import org.gbif.datacite.rest.client.DataCiteClient;
 import org.gbif.datacite.rest.client.configuration.ClientConfiguration;
 import org.gbif.datacite.rest.client.exception.DataCiteClientException;
@@ -14,7 +15,7 @@ import org.jdom2.output.XMLOutputter;
 
 import java.util.Base64;
 
-public class DoiGenerator implements PidGenerator {
+public class DoiGenerator extends PidGenerator {
 
     private static final String NAMESPACE = "doi";
     private static final String PREFIX = "10.82851";
@@ -27,7 +28,8 @@ public class DoiGenerator implements PidGenerator {
 
     private final DataCiteClient client;
 
-    public DoiGenerator() {
+    public DoiGenerator(PidUriGenerator uriGenerator) {
+        super(uriGenerator);
         var config = ClientConfiguration.builder()
                 .withBaseApiUrl(APIURL)
                 .withUser(USER)
@@ -42,8 +44,7 @@ public class DoiGenerator implements PidGenerator {
         var model = new DoiSimplifiedModel();
         model.setDoi(doi);
         model.setEvent(EVENT);
-        //TODO create target url generation
-        model.setUrl("https://test.url/");
+        model.setUrl(generateUri());
         model.setXml(createXml(doi, name));
         var response = client.updateDoi(doi, new JSONAPIDocument<>(model));
 
