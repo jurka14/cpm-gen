@@ -7,12 +7,17 @@ import org.mlflow.tracking.MlflowClient;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Base64;
 
+/**
+ * Encodes the file data to base64 string
+ */
 public class FileSaver extends DataSaver {
     private final MlflowClient client;
+    private static final String DATA_TYPE = "xsd:base64Binary";
 
-    public FileSaver(MlflowClient client, JSONObject bindings, String dataType) {
-        super(bindings, dataType);
+    public FileSaver(MlflowClient client, JSONObject bindings) {
+        super(bindings, DATA_TYPE);
         this.client = client;
     }
 
@@ -33,14 +38,14 @@ public class FileSaver extends DataSaver {
         File file = loadFile(runId, name, path);
 
         try {
-            return getFileData(file);
+            return Base64.getEncoder().encodeToString(getFileData(file));
         } catch (IOException e) {
             throw new MLFlowGenConfigException(e);
         }
     }
 
-    protected String getFileData(File file) throws IOException {
-        return Files.readString(file.toPath());
+    protected byte[] getFileData(File file) throws IOException {
+        return Files.readAllBytes(file.toPath());
     }
 
 }
