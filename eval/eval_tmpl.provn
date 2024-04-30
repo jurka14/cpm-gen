@@ -3,8 +3,8 @@ document
   prefix var <http://openprovenance.org/var#>
   prefix def <https://example.org/>
   prefix repr <https://w3id.org/reproduceme#>
-  prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
-  prefix conn <http://_PLACEHOLER_:8000/api/v1/connectors/>
+  prefix bndl <http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/>
+  prefix conn <http://10.16.48.121:42069/api/v1/connectors/>
 
   bundle bndl:eval
     entity(def:trainedModel, [prov:type='repr:Model'])

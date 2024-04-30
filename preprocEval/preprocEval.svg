@@ -10,49 +10,20 @@
 <title>title</title>
 <polygon fill="white" stroke="none" points="-4,4 -4,-435.75 1610,-435.75 1610,4 -4,4"/>
 <g id="clust1" class="cluster">
-<title>clusterhttp://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/preprocEval</title>
-<g id="a_clust1"><a xlink:href="http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/preprocEval" xlink:title="preprocEval">
+<title>clusterhttp://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval</title>
+<g id="a_clust1"><a xlink:href="http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval" xlink:title="preprocEval">
 <polygon fill="none" stroke="black" points="8,-8 8,-423.75 1598,-423.75 1598,-8 8,-8"/>
 <text text-anchor="middle" x="803" y="-14.45" font-family="Times New Roman,serif" font-size="14.00">preprocEval</text>
 </a>
 </g>
 </g>
-<!-- https://example.org/preprocessing -->
-<!-- PROV_ACTIVITY def:preprocessing -->
-<g id="node1" class="node">
-<title>https://example.org/preprocessing</title>
-<g id="a_node1"><a xlink:href="https://example.org/preprocessing" xlink:title="preprocessing">
-<polygon fill="#9fb1fc" stroke="#0000ff" points="1466.38,-343.75 1371.62,-343.75 1371.62,-307.75 1466.38,-307.75 1466.38,-343.75"/>
-<text text-anchor="middle" x="1419" y="-320.32" font-family="Times New Roman,serif" font-size="14.00">preprocessing</text>
-</a>
-</g>
-</g>
-<!-- &#45;attrs0 -->
-<g id="node2" class="node">
-<title>&#45;attrs0</title>
-<polygon fill="none" stroke="gray" points="1584,-265.25 1430,-265.25 1430,-216.25 1590,-216.25 1590,-259.25 1584,-265.25"/>
-<polyline fill="none" stroke="gray" points="1584,-265.25 1584,-259.25"/>
-<polyline fill="none" stroke="gray" points="1590,-259.25 1584,-259.25"/>
-<text text-anchor="start" x="1440" y="-249.75" font-family="Times New Roman,serif" font-size="10.00">type:</text>
-<text text-anchor="start" x="1490" y="-249.75" font-family="Times New Roman,serif" font-size="10.00">cpm:mainActivity</text>
-<text text-anchor="start" x="1439.62" y="-236.75" font-family="Times New Roman,serif" font-size="10.00">metabundle:</text>
-<text text-anchor="start" x="1490" y="-236.75" font-family="Times New Roman,serif" font-size="10.00">meta:preprocEvalMeta</text>
-<text text-anchor="start" x="1440" y="-223.75" font-family="Times New Roman,serif" font-size="10.00">hasPart:</text>
-<text text-anchor="start" x="1490" y="-223.75" font-family="Times New Roman,serif" font-size="10.00">def:tilesGeneration</text>
-</g>
-<!-- &#45;attrs0&#45;&gt;https://example.org/preprocessing -->
-<!-- null _:_ -->
-<g id="edge1" class="edge">
-<title>&#45;attrs0&#45;&gt;https://example.org/preprocessing</title>
-<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M1484.17,-265.31C1469.45,-278.73 1451.34,-295.25 1437.95,-307.46"/>
-</g>
 <!-- https://example.org/tilesGeneration -->
 <!-- PROV_ACTIVITY def:tilesGeneration -->
-<g id="node3" class="node">
+<g id="node1" class="node">
 <title>https://example.org/tilesGeneration</title>
-<g id="a_node3"><a xlink:href="https://example.org/tilesGeneration" xlink:title="tilesGeneration">
-<polygon fill="#9fb1fc" stroke="#0000ff" points="638.25,-258.75 539.75,-258.75 539.75,-222.75 638.25,-222.75 638.25,-258.75"/>
-<text text-anchor="middle" x="589" y="-235.32" font-family="Times New Roman,serif" font-size="14.00">tilesGeneration</text>
+<g id="a_node1"><a xlink:href="https://example.org/tilesGeneration" xlink:title="tilesGeneration">
+<polygon fill="#9fb1fc" stroke="#0000ff" points="704.25,-258.75 605.75,-258.75 605.75,-222.75 704.25,-222.75 704.25,-258.75"/>
+<text text-anchor="middle" x="655" y="-235.32" font-family="Times New Roman,serif" font-size="14.00">tilesGeneration</text>
 </a>
 </g>
 </g>
@@ -61,26 +32,26 @@
 <g id="node10" class="node">
 <title>https://example.org/configEval</title>
 <g id="a_node10"><a xlink:href="https://example.org/configEval" xlink:title="configEval">
-<ellipse fill="#fffc87" stroke="#808080" cx="932" cy="-325.75" rx="50.07" ry="18"/>
-<text text-anchor="middle" x="932" y="-320.32" font-family="Times New Roman,serif" font-size="14.00">configEval</text>
+<ellipse fill="#fffc87" stroke="#808080" cx="483" cy="-325.75" rx="50.07" ry="18"/>
+<text text-anchor="middle" x="483" y="-320.32" font-family="Times New Roman,serif" font-size="14.00">configEval</text>
 </a>
 </g>
 </g>
 <!-- https://example.org/tilesGeneration&#45;&gt;https://example.org/configEval -->
 <!-- PROV_USAGE _:_ -->
-<g id="edge8" class="edge">
+<g id="edge9" class="edge">
 <title>https://example.org/tilesGeneration&#45;&gt;https://example.org/configEval</title>
-<path fill="none" stroke="black" d="M618.66,-259.21C627.54,-263.85 637.46,-268.47 647,-271.75 722.64,-297.71 814.19,-311.86 872.75,-318.86"/>
-<polygon fill="black" stroke="black" points="872.17,-322.32 882.51,-320 872.98,-315.37 872.17,-322.32"/>
-<text text-anchor="middle" x="631.28" y="-248.76" font-family="Times New Roman,serif" font-size="8.00">use</text>
+<path fill="none" stroke="black" d="M622,-259.13C613.86,-263.33 605.14,-267.75 597,-271.75 572.75,-283.65 545.31,-296.43 523.43,-306.46"/>
+<polygon fill="black" stroke="black" points="522.19,-303.18 514.54,-310.52 525.09,-309.54 522.19,-303.18"/>
+<text text-anchor="middle" x="621.28" y="-271.76" font-family="Times New Roman,serif" font-size="8.00">use</text>
 </g>
 <!-- https://example.org/WSIDataEval -->
 <!-- PROV_ENTITY def:WSIDataEval -->
 <g id="node12" class="node">
 <title>https://example.org/WSIDataEval</title>
 <g id="a_node12"><a xlink:href="https://example.org/WSIDataEval" xlink:title="WSIDataEval">
-<ellipse fill="#fffc87" stroke="#808080" cx="521" cy="-325.75" rx="61.04" ry="18"/>
-<text text-anchor="middle" x="521" y="-320.32" font-family="Times New Roman,serif" font-size="14.00">WSIDataEval</text>
+<ellipse fill="#fffc87" stroke="#808080" cx="965" cy="-325.75" rx="61.04" ry="18"/>
+<text text-anchor="middle" x="965" y="-320.32" font-family="Times New Roman,serif" font-size="14.00">WSIDataEval</text>
 </a>
 </g>
 </g>
@@ -88,178 +59,207 @@
 <!-- PROV_USAGE _:_ -->
 <g id="edge10" class="edge">
 <title>https://example.org/tilesGeneration&#45;&gt;https://example.org/WSIDataEval</title>
-<path fill="none" stroke="black" d="M574.91,-258.95C565.36,-270.6 552.59,-286.2 541.87,-299.28"/>
-<polygon fill="black" stroke="black" points="539.43,-296.73 535.8,-306.69 544.84,-301.17 539.43,-296.73"/>
-<text text-anchor="middle" x="580.21" y="-270.63" font-family="Times New Roman,serif" font-size="8.00">use</text>
+<path fill="none" stroke="black" d="M685.56,-259.2C694.51,-263.79 704.46,-268.38 714,-271.75 775.11,-293.31 847.83,-307.49 899.23,-315.7"/>
+<polygon fill="black" stroke="black" points="898.59,-319.15 909.01,-317.23 899.68,-312.23 898.59,-319.15"/>
+<text text-anchor="middle" x="698.12" y="-248.65" font-family="Times New Roman,serif" font-size="8.00">use</text>
 </g>
-<!-- http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector -->
-<!-- PROV_ENTITY conn:evalTilesConnector -->
-<g id="node4" class="node">
-<title>http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector</title>
-<g id="a_node4"><a xlink:href="http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector" xlink:title="evalTilesConnector">
-<ellipse fill="#fffc87" stroke="#808080" cx="1329" cy="-240.75" rx="82.5" ry="18"/>
-<text text-anchor="middle" x="1329" y="-235.32" font-family="Times New Roman,serif" font-size="14.00">evalTilesConnector</text>
+<!-- https://example.org/preprocessing -->
+<!-- PROV_ACTIVITY def:preprocessing -->
+<g id="node2" class="node">
+<title>https://example.org/preprocessing</title>
+<g id="a_node2"><a xlink:href="https://example.org/preprocessing" xlink:title="preprocessing">
+<polygon fill="#9fb1fc" stroke="#0000ff" points="1373.38,-343.75 1278.62,-343.75 1278.62,-307.75 1373.38,-307.75 1373.38,-343.75"/>
+<text text-anchor="middle" x="1326" y="-320.32" font-family="Times New Roman,serif" font-size="14.00">preprocessing</text>
 </a>
 </g>
 </g>
-<!-- http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector&#45;&gt;https://example.org/preprocessing -->
-<!-- PROV_GENERATION _:_ -->
-<g id="edge13" class="edge">
-<title>http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector&#45;&gt;https://example.org/preprocessing</title>
-<path fill="none" stroke="black" d="M1347.21,-258.55C1360.09,-270.43 1377.58,-286.55 1392.07,-299.91"/>
-<polygon fill="black" stroke="black" points="1389.36,-302.17 1399.08,-306.38 1394.1,-297.03 1389.36,-302.17"/>
-<text text-anchor="middle" x="1361.53" y="-251.73" font-family="Times New Roman,serif" font-size="8.00">gen</text>
+<!-- &#45;attrs0 -->
+<g id="node3" class="node">
+<title>&#45;attrs0</title>
+<polygon fill="none" stroke="gray" points="1400,-265.25 1246,-265.25 1246,-216.25 1406,-216.25 1406,-259.25 1400,-265.25"/>
+<polyline fill="none" stroke="gray" points="1400,-265.25 1400,-259.25"/>
+<polyline fill="none" stroke="gray" points="1406,-259.25 1400,-259.25"/>
+<text text-anchor="start" x="1256" y="-249.75" font-family="Times New Roman,serif" font-size="10.00">type:</text>
+<text text-anchor="start" x="1306" y="-249.75" font-family="Times New Roman,serif" font-size="10.00">cpm:mainActivity</text>
+<text text-anchor="start" x="1255.62" y="-236.75" font-family="Times New Roman,serif" font-size="10.00">metabundle:</text>
+<text text-anchor="start" x="1306" y="-236.75" font-family="Times New Roman,serif" font-size="10.00">meta:preprocEvalMeta</text>
+<text text-anchor="start" x="1256" y="-223.75" font-family="Times New Roman,serif" font-size="10.00">hasPart:</text>
+<text text-anchor="start" x="1306" y="-223.75" font-family="Times New Roman,serif" font-size="10.00">def:tilesGeneration</text>
 </g>
-<!-- &#45;attrs1 -->
-<g id="node5" class="node">
-<title>&#45;attrs1</title>
-<polygon fill="none" stroke="gray" points="1414.5,-173.75 1237.5,-173.75 1237.5,-137.75 1420.5,-137.75 1420.5,-167.75 1414.5,-173.75"/>
-<polyline fill="none" stroke="gray" points="1414.5,-173.75 1414.5,-167.75"/>
-<polyline fill="none" stroke="gray" points="1420.5,-167.75 1414.5,-167.75"/>
-<text text-anchor="start" x="1247.5" y="-158.25" font-family="Times New Roman,serif" font-size="10.00">type:</text>
-<text text-anchor="start" x="1319.25" y="-158.25" font-family="Times New Roman,serif" font-size="10.00">cpm:forwardConnector</text>
-<text text-anchor="start" x="1247.25" y="-145.25" font-family="Times New Roman,serif" font-size="10.00">receiverBundleId:</text>
-<text text-anchor="start" x="1319.5" y="-145.25" font-family="Times New Roman,serif" font-size="10.00">bndl:eval</text>
-</g>
-<!-- &#45;attrs1&#45;&gt;http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector -->
+<!-- &#45;attrs0&#45;&gt;https://example.org/preprocessing -->
 <!-- null _:_ -->
-<g id="edge2" class="edge">
-<title>&#45;attrs1&#45;&gt;http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector</title>
-<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M1329,-173.95C1329,-188.1 1329,-208.07 1329,-222.29"/>
+<g id="edge1" class="edge">
+<title>&#45;attrs0&#45;&gt;https://example.org/preprocessing</title>
+<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M1326,-265.31C1326,-278.73 1326,-295.25 1326,-307.46"/>
 </g>
 <!-- https://example.org/tilesEval -->
 <!-- PROV_ENTITY def:tilesEval -->
-<g id="node6" class="node">
+<g id="node4" class="node">
 <title>https://example.org/tilesEval</title>
-<g id="a_node6"><a xlink:href="https://example.org/tilesEval" xlink:title="tilesEval">
-<ellipse fill="#fffc87" stroke="#808080" cx="883" cy="-155.75" rx="41.08" ry="18"/>
-<text text-anchor="middle" x="883" y="-150.32" font-family="Times New Roman,serif" font-size="14.00">tilesEval</text>
+<g id="a_node4"><a xlink:href="https://example.org/tilesEval" xlink:title="tilesEval">
+<ellipse fill="#fffc87" stroke="#808080" cx="941" cy="-155.75" rx="41.08" ry="18"/>
+<text text-anchor="middle" x="941" y="-150.32" font-family="Times New Roman,serif" font-size="14.00">tilesEval</text>
 </a>
 </g>
 </g>
 <!-- https://example.org/tilesEval&#45;&gt;https://example.org/tilesGeneration -->
 <!-- PROV_GENERATION _:_ -->
-<g id="edge11" class="edge">
+<g id="edge12" class="edge">
 <title>https://example.org/tilesEval&#45;&gt;https://example.org/tilesGeneration</title>
-<path fill="none" stroke="black" d="M844.54,-162.27C797.11,-169.79 714.48,-185.19 647,-209.75 641.14,-211.88 635.12,-214.48 629.28,-217.25"/>
-<polygon fill="black" stroke="black" points="627.78,-214.09 620.39,-221.68 630.91,-220.36 627.78,-214.09"/>
-<text text-anchor="middle" x="839.24" y="-173.96" font-family="Times New Roman,serif" font-size="8.00">gen</text>
+<path fill="none" stroke="black" d="M902.84,-162.76C857.06,-170.62 778.44,-186.24 714,-209.75 708.13,-211.89 702.09,-214.48 696.22,-217.22"/>
+<polygon fill="black" stroke="black" points="694.71,-214.06 687.27,-221.6 697.79,-220.35 694.71,-214.06"/>
+<text text-anchor="middle" x="897.71" y="-174.51" font-family="Times New Roman,serif" font-size="8.00">gen</text>
 </g>
-<!-- https://example.org/tilesEval&#45;&gt;http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector -->
+<!-- http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector -->
+<!-- PROV_ENTITY conn:evalTilesConnector -->
+<g id="node8" class="node">
+<title>http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector</title>
+<g id="a_node8"><a xlink:href="http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector" xlink:title="evalTilesConnector">
+<ellipse fill="#fffc87" stroke="#808080" cx="1507" cy="-240.75" rx="82.5" ry="18"/>
+<text text-anchor="middle" x="1507" y="-235.32" font-family="Times New Roman,serif" font-size="14.00">evalTilesConnector</text>
+</a>
+</g>
+</g>
+<!-- https://example.org/tilesEval&#45;&gt;http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector -->
 <!-- PROV_SPECIALIZATION _:_ -->
-<g id="edge9" class="edge">
-<title>https://example.org/tilesEval&#45;&gt;http://_PLACEHOLER_:8000/api/v1/connectors/evalTilesConnector</title>
-<path fill="none" stroke="black" d="M922.88,-160.84C988.08,-167.98 1121.34,-184.38 1232,-209.75 1246.24,-213.01 1261.42,-217.31 1275.44,-221.62"/>
-<polygon fill="black" stroke="black" points="1274.37,-224.95 1284.95,-224.61 1276.46,-218.27 1274.37,-224.95"/>
-<text text-anchor="middle" x="931.78" y="-146.42" font-family="Times New Roman,serif" font-size="8.00">spe</text>
+<g id="edge11" class="edge">
+<title>https://example.org/tilesEval&#45;&gt;http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector</title>
+<path fill="none" stroke="black" d="M982.03,-158.52C1064.77,-162.71 1257.19,-175.57 1415,-209.75 1428.47,-212.67 1442.75,-216.8 1455.95,-221.06"/>
+<polygon fill="black" stroke="black" points="1454.7,-224.33 1465.29,-224.17 1456.91,-217.69 1454.7,-224.33"/>
+<text text-anchor="middle" x="990.23" y="-143.61" font-family="Times New Roman,serif" font-size="8.00">spe</text>
 </g>
 <!-- https://example.org/tilesEval&#45;&gt;https://example.org/configEval -->
 <!-- PROV_DERIVATION _:_ -->
-<g id="edge12" class="edge">
+<g id="edge13" class="edge">
 <title>https://example.org/tilesEval&#45;&gt;https://example.org/configEval</title>
-<path fill="none" stroke="black" d="M924.21,-156.92C1005.05,-158.23 1179.78,-166.16 1217,-209.75 1234.89,-230.71 1234.88,-250.78 1217,-271.75 1184.14,-310.28 1041.44,-296.83 992,-307.75 988.18,-308.59 984.25,-309.54 980.31,-310.53"/>
-<polygon fill="black" stroke="black" points="979.51,-307.13 970.74,-313.07 981.3,-313.89 979.51,-307.13"/>
-<text text-anchor="middle" x="932.01" y="-141.76" font-family="Times New Roman,serif" font-size="8.00">der</text>
+<path fill="none" stroke="black" d="M899.7,-157.58C725.38,-161.3 57.34,-177.6 27,-209.75 8.09,-229.79 8.67,-251.17 27,-271.75 52.84,-300.77 303.91,-316.33 422.08,-322.1"/>
+<polygon fill="black" stroke="black" points="421.76,-325.59 431.92,-322.57 422.1,-318.6 421.76,-325.59"/>
+<text text-anchor="middle" x="892.5" y="-168.39" font-family="Times New Roman,serif" font-size="8.00">der</text>
 </g>
 <!-- https://example.org/tilesEval&#45;&gt;https://example.org/WSIDataEval -->
 <!-- PROV_DERIVATION _:_ -->
-<g id="edge7" class="edge">
+<g id="edge8" class="edge">
 <title>https://example.org/tilesEval&#45;&gt;https://example.org/WSIDataEval</title>
-<path fill="none" stroke="black" d="M841.53,-156.84C757.71,-157.95 572.57,-165.49 531,-209.75 509.58,-232.55 510.57,-270.3 514.6,-296.29"/>
-<polygon fill="black" stroke="black" points="511.1,-296.61 516.32,-305.82 517.98,-295.36 511.1,-296.61"/>
-<text text-anchor="middle" x="834.29" y="-167.62" font-family="Times New Roman,serif" font-size="8.00">der</text>
+<path fill="none" stroke="black" d="M982.06,-158.45C1051.55,-162.29 1187.67,-174.25 1217,-209.75 1234.55,-230.99 1234.36,-250.35 1217,-271.75 1194.46,-299.52 1101.67,-313.28 1035.23,-319.7"/>
+<polygon fill="black" stroke="black" points="1035.13,-316.19 1025.49,-320.6 1035.77,-323.16 1035.13,-316.19"/>
+<text text-anchor="middle" x="990.35" y="-143.6" font-family="Times New Roman,serif" font-size="8.00">der</text>
+</g>
+<!-- &#45;attrs1 -->
+<g id="node5" class="node">
+<title>&#45;attrs1</title>
+<polygon fill="none" stroke="gray" points="1252,-101.75 624,-101.75 624,-39.75 1258,-39.75 1258,-95.75 1252,-101.75"/>
+<polyline fill="none" stroke="gray" points="1252,-101.75 1252,-95.75"/>
+<polyline fill="none" stroke="gray" points="1258,-95.75 1252,-95.75"/>
+<text text-anchor="start" x="634" y="-86.25" font-family="Times New Roman,serif" font-size="10.00">type:</text>
+<text text-anchor="start" x="661" y="-86.25" font-family="Times New Roman,serif" font-size="10.00">repr:Dataset</text>
+<text text-anchor="start" x="634" y="-73.25" font-family="Times New Roman,serif" font-size="10.00">data:</text>
+<text text-anchor="start" x="660.88" y="-73.25" font-family="Times New Roman,serif" font-size="10.00">UEFSMRUEFdApFdQITBWaBRUAAAAotS/9AFgNEQBW3W0uELBXczAMwzAMwzAMwzAMwzDBrLDCCiussMIKK6ywwgorrEG2u2S7S7a7...</text>
+<text text-anchor="start" x="633.75" y="-60.25" font-family="Times New Roman,serif" font-size="10.00">runID:</text>
+<text text-anchor="start" x="661" y="-60.25" font-family="Times New Roman,serif" font-size="10.00">d76b2a494da447c39b64d93e89e106fa</text>
+<text text-anchor="start" x="634" y="-47.25" font-family="Times New Roman,serif" font-size="10.00">path:</text>
+<text text-anchor="start" x="661" y="-47.25" font-family="Times New Roman,serif" font-size="10.00">dataset/tiles.parquet</text>
+</g>
+<!-- &#45;attrs1&#45;&gt;https://example.org/tilesEval -->
+<!-- null _:_ -->
+<g id="edge2" class="edge">
+<title>&#45;attrs1&#45;&gt;https://example.org/tilesEval</title>
+<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M941,-102.18C941,-114.03 941,-127.17 941,-137.35"/>
+</g>
+<!-- https://example.org/configFile -->
+<!-- PROV_ENTITY def:configFile -->
+<g id="node6" class="node">
+<title>https://example.org/configFile</title>
+<g id="a_node6"><a xlink:href="https://example.org/configFile" xlink:title="configFile">
+<ellipse fill="#fffc87" stroke="#808080" cx="1071" cy="-397.75" rx="47.57" ry="18"/>
+<text text-anchor="middle" x="1071" y="-392.32" font-family="Times New Roman,serif" font-size="14.00">configFile</text>
+</a>
+</g>
 </g>
 <!-- &#45;attrs2 -->
 <g id="node7" class="node">
 <title>&#45;attrs2</title>
-<polygon fill="none" stroke="gray" points="1194,-101.75 566,-101.75 566,-39.75 1200,-39.75 1200,-95.75 1194,-101.75"/>
-<polyline fill="none" stroke="gray" points="1194,-101.75 1194,-95.75"/>
-<polyline fill="none" stroke="gray" points="1200,-95.75 1194,-95.75"/>
-<text text-anchor="start" x="576" y="-86.25" font-family="Times New Roman,serif" font-size="10.00">type:</text>
-<text text-anchor="start" x="603" y="-86.25" font-family="Times New Roman,serif" font-size="10.00">repr:Dataset</text>
-<text text-anchor="start" x="576" y="-73.25" font-family="Times New Roman,serif" font-size="10.00">data:</text>
-<text text-anchor="start" x="602.88" y="-73.25" font-family="Times New Roman,serif" font-size="10.00">UEFSMRUEFdApFdQITBWaBRUAAAAotS/9AFgNEQBW3W0uELBXczAMwzAMwzAMwzAMwzDBrLDCCiussMIKK6ywwgorrEG2u2S7S7a7...</text>
-<text text-anchor="start" x="575.75" y="-60.25" font-family="Times New Roman,serif" font-size="10.00">runID:</text>
-<text text-anchor="start" x="603" y="-60.25" font-family="Times New Roman,serif" font-size="10.00">d76b2a494da447c39b64d93e89e106fa</text>
-<text text-anchor="start" x="576" y="-47.25" font-family="Times New Roman,serif" font-size="10.00">path:</text>
-<text text-anchor="start" x="603" y="-47.25" font-family="Times New Roman,serif" font-size="10.00">dataset/tiles.parquet</text>
+<polygon fill="none" stroke="gray" points="1578.5,-343.75 1391.5,-343.75 1391.5,-307.75 1584.5,-307.75 1584.5,-337.75 1578.5,-343.75"/>
+<polyline fill="none" stroke="gray" points="1578.5,-343.75 1578.5,-337.75"/>
+<polyline fill="none" stroke="gray" points="1584.5,-337.75 1578.5,-337.75"/>
+<text text-anchor="start" x="1401.25" y="-328.25" font-family="Times New Roman,serif" font-size="10.00">runID:</text>
+<text text-anchor="start" x="1428.38" y="-328.25" font-family="Times New Roman,serif" font-size="10.00">d76b2a494da447c39b64d93e89e106fa</text>
+<text text-anchor="start" x="1401.5" y="-315.25" font-family="Times New Roman,serif" font-size="10.00">path:</text>
+<text text-anchor="start" x="1428.5" y="-315.25" font-family="Times New Roman,serif" font-size="10.00">conf/config_resolved.yaml</text>
 </g>
-<!-- &#45;attrs2&#45;&gt;https://example.org/tilesEval -->
+<!-- &#45;attrs2&#45;&gt;https://example.org/configFile -->
 <!-- null _:_ -->
 <g id="edge3" class="edge">
-<title>&#45;attrs2&#45;&gt;https://example.org/tilesEval</title>
-<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M883,-102.18C883,-114.03 883,-127.17 883,-137.35"/>
+<title>&#45;attrs2&#45;&gt;https://example.org/configFile</title>
+<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M1391.02,-343.03C1303.43,-357.73 1178.63,-378.68 1113.8,-389.56"/>
 </g>
-<!-- https://example.org/configFile -->
-<!-- PROV_ENTITY def:configFile -->
-<g id="node8" class="node">
-<title>https://example.org/configFile</title>
-<g id="a_node8"><a xlink:href="https://example.org/configFile" xlink:title="configFile">
-<ellipse fill="#fffc87" stroke="#808080" cx="1014" cy="-397.75" rx="47.57" ry="18"/>
-<text text-anchor="middle" x="1014" y="-392.32" font-family="Times New Roman,serif" font-size="14.00">configFile</text>
-</a>
-</g>
+<!-- http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector&#45;&gt;https://example.org/preprocessing -->
+<!-- PROV_GENERATION _:_ -->
+<g id="edge7" class="edge">
+<title>http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector&#45;&gt;https://example.org/preprocessing</title>
+<path fill="none" stroke="black" d="M1472.53,-257.56C1444.7,-270.32 1405.22,-288.42 1374.24,-302.63"/>
+<polygon fill="black" stroke="black" points="1373.1,-299.3 1365.47,-306.65 1376.02,-305.66 1373.1,-299.3"/>
+<text text-anchor="middle" x="1471.13" y="-270.14" font-family="Times New Roman,serif" font-size="8.00">gen</text>
 </g>
 <!-- &#45;attrs3 -->
 <g id="node9" class="node">
 <title>&#45;attrs3</title>
-<polygon fill="none" stroke="gray" points="1187.5,-343.75 1000.5,-343.75 1000.5,-307.75 1193.5,-307.75 1193.5,-337.75 1187.5,-343.75"/>
-<polyline fill="none" stroke="gray" points="1187.5,-343.75 1187.5,-337.75"/>
-<polyline fill="none" stroke="gray" points="1193.5,-337.75 1187.5,-337.75"/>
-<text text-anchor="start" x="1010.25" y="-328.25" font-family="Times New Roman,serif" font-size="10.00">runID:</text>
-<text text-anchor="start" x="1037.38" y="-328.25" font-family="Times New Roman,serif" font-size="10.00">d76b2a494da447c39b64d93e89e106fa</text>
-<text text-anchor="start" x="1010.5" y="-315.25" font-family="Times New Roman,serif" font-size="10.00">path:</text>
-<text text-anchor="start" x="1037.5" y="-315.25" font-family="Times New Roman,serif" font-size="10.00">conf/config_resolved.yaml</text>
+<polygon fill="none" stroke="gray" points="1583.5,-173.75 1406.5,-173.75 1406.5,-137.75 1589.5,-137.75 1589.5,-167.75 1583.5,-173.75"/>
+<polyline fill="none" stroke="gray" points="1583.5,-173.75 1583.5,-167.75"/>
+<polyline fill="none" stroke="gray" points="1589.5,-167.75 1583.5,-167.75"/>
+<text text-anchor="start" x="1416.5" y="-158.25" font-family="Times New Roman,serif" font-size="10.00">type:</text>
+<text text-anchor="start" x="1488.25" y="-158.25" font-family="Times New Roman,serif" font-size="10.00">cpm:forwardConnector</text>
+<text text-anchor="start" x="1416.25" y="-145.25" font-family="Times New Roman,serif" font-size="10.00">receiverBundleId:</text>
+<text text-anchor="start" x="1488.5" y="-145.25" font-family="Times New Roman,serif" font-size="10.00">bndl:eval</text>
 </g>
-<!-- &#45;attrs3&#45;&gt;https://example.org/configFile -->
+<!-- &#45;attrs3&#45;&gt;http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector -->
 <!-- null _:_ -->
 <g id="edge4" class="edge">
-<title>&#45;attrs3&#45;&gt;https://example.org/configFile</title>
-<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M1076.48,-344.05C1063.14,-355.31 1045.86,-369.88 1032.86,-380.84"/>
+<title>&#45;attrs3&#45;&gt;http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector</title>
+<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M1499.86,-173.95C1501.4,-188.1 1503.56,-208.07 1505.11,-222.29"/>
 </g>
 <!-- https://example.org/configEval&#45;&gt;https://example.org/configFile -->
 <!-- PROV_DERIVATION _:_ -->
 <g id="edge14" class="edge">
 <title>https://example.org/configEval&#45;&gt;https://example.org/configFile</title>
-<path fill="none" stroke="black" d="M950.61,-342.63C961.3,-351.76 974.93,-363.39 986.8,-373.53"/>
-<polygon fill="black" stroke="black" points="984.44,-376.12 994.32,-379.95 988.98,-370.79 984.44,-376.12"/>
-<text text-anchor="middle" x="964.75" y="-335.27" font-family="Times New Roman,serif" font-size="8.00">der</text>
+<path fill="none" stroke="black" d="M530.12,-332.36C637.36,-345.13 899.23,-376.3 1014.71,-390.05"/>
+<polygon fill="black" stroke="black" points="1014.23,-393.52 1024.58,-391.22 1015.06,-386.57 1014.23,-393.52"/>
+<text text-anchor="middle" x="539.11" y="-318" font-family="Times New Roman,serif" font-size="8.00">der</text>
 </g>
 <!-- &#45;attrs4 -->
 <g id="node11" class="node">
 <title>&#45;attrs4</title>
-<polygon fill="none" stroke="gray" points="1201.75,-258.75 656.25,-258.75 656.25,-222.75 1207.75,-222.75 1207.75,-252.75 1201.75,-258.75"/>
-<polyline fill="none" stroke="gray" points="1201.75,-258.75 1201.75,-252.75"/>
-<polyline fill="none" stroke="gray" points="1207.75,-252.75 1201.75,-252.75"/>
-<text text-anchor="start" x="666.25" y="-236.88" font-family="Times New Roman,serif" font-size="10.00">data:</text>
-<text text-anchor="start" x="687.75" y="-236.88" font-family="Times New Roman,serif" font-size="10.00">dGlsZXI6CiAgX3RhcmdldF86IHNsaWRldHlsZXIudGlsZXIuU2xpZGVUaWxlcgogIG1heF93b3JrZXJzOiA4CiAgc2xpZGVfbmFt...</text>
+<polygon fill="none" stroke="gray" points="581.75,-258.75 36.25,-258.75 36.25,-222.75 587.75,-222.75 587.75,-252.75 581.75,-258.75"/>
+<polyline fill="none" stroke="gray" points="581.75,-258.75 581.75,-252.75"/>
+<polyline fill="none" stroke="gray" points="587.75,-252.75 581.75,-252.75"/>
+<text text-anchor="start" x="46.25" y="-236.88" font-family="Times New Roman,serif" font-size="10.00">data:</text>
+<text text-anchor="start" x="67.75" y="-236.88" font-family="Times New Roman,serif" font-size="10.00">dGlsZXI6CiAgX3RhcmdldF86IHNsaWRldHlsZXIudGlsZXIuU2xpZGVUaWxlcgogIG1heF93b3JrZXJzOiA4CiAgc2xpZGVfbmFt...</text>
 </g>
 <!-- &#45;attrs4&#45;&gt;https://example.org/configEval -->
 <!-- null _:_ -->
 <g id="edge5" class="edge">
 <title>&#45;attrs4&#45;&gt;https://example.org/configEval</title>
-<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M932,-258.95C932,-273.1 932,-293.07 932,-307.29"/>
+<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M347.85,-259.15C379.38,-274.46 424.71,-296.46 454.01,-310.68"/>
 </g>
 <!-- &#45;attrs5 -->
 <g id="node13" class="node">
 <title>&#45;attrs5</title>
-<polygon fill="none" stroke="gray" points="495.5,-271.75 16.5,-271.75 16.5,-209.75 501.5,-209.75 501.5,-265.75 495.5,-271.75"/>
-<polyline fill="none" stroke="gray" points="495.5,-271.75 495.5,-265.75"/>
-<polyline fill="none" stroke="gray" points="501.5,-265.75 495.5,-265.75"/>
-<text text-anchor="start" x="26.5" y="-256.25" font-family="Times New Roman,serif" font-size="10.00">type:</text>
-<text text-anchor="start" x="53.5" y="-256.25" font-family="Times New Roman,serif" font-size="10.00">repr:Dataset</text>
-<text text-anchor="start" x="26.5" y="-243.25" font-family="Times New Roman,serif" font-size="10.00">data:</text>
-<text text-anchor="start" x="53.12" y="-243.25" font-family="Times New Roman,serif" font-size="10.00">UEFSMRUGFeCyBBWyXFwVjiIVABWOIhUAFaYEFQARAACjBP//////////////////////////////////////////////////////...</text>
-<text text-anchor="start" x="26.25" y="-230.25" font-family="Times New Roman,serif" font-size="10.00">runID:</text>
-<text text-anchor="start" x="53.5" y="-230.25" font-family="Times New Roman,serif" font-size="10.00">d76b2a494da447c39b64d93e89e106fa</text>
-<text text-anchor="start" x="26.5" y="-217.25" font-family="Times New Roman,serif" font-size="10.00">path:</text>
-<text text-anchor="start" x="53.5" y="-217.25" font-family="Times New Roman,serif" font-size="10.00">dataset/slides.parquet</text>
+<polygon fill="none" stroke="gray" points="1201.5,-271.75 722.5,-271.75 722.5,-209.75 1207.5,-209.75 1207.5,-265.75 1201.5,-271.75"/>
+<polyline fill="none" stroke="gray" points="1201.5,-271.75 1201.5,-265.75"/>
+<polyline fill="none" stroke="gray" points="1207.5,-265.75 1201.5,-265.75"/>
+<text text-anchor="start" x="732.5" y="-256.25" font-family="Times New Roman,serif" font-size="10.00">type:</text>
+<text text-anchor="start" x="759.5" y="-256.25" font-family="Times New Roman,serif" font-size="10.00">repr:Dataset</text>
+<text text-anchor="start" x="732.5" y="-243.25" font-family="Times New Roman,serif" font-size="10.00">data:</text>
+<text text-anchor="start" x="759.12" y="-243.25" font-family="Times New Roman,serif" font-size="10.00">UEFSMRUGFeCyBBWyXFwVjiIVABWOIhUAFaYEFQARAACjBP//////////////////////////////////////////////////////...</text>
+<text text-anchor="start" x="732.25" y="-230.25" font-family="Times New Roman,serif" font-size="10.00">runID:</text>
+<text text-anchor="start" x="759.5" y="-230.25" font-family="Times New Roman,serif" font-size="10.00">d76b2a494da447c39b64d93e89e106fa</text>
+<text text-anchor="start" x="732.5" y="-217.25" font-family="Times New Roman,serif" font-size="10.00">path:</text>
+<text text-anchor="start" x="759.5" y="-217.25" font-family="Times New Roman,serif" font-size="10.00">dataset/slides.parquet</text>
 </g>
 <!-- &#45;attrs5&#45;&gt;https://example.org/WSIDataEval -->
 <!-- null _:_ -->
 <g id="edge6" class="edge">
 <title>&#45;attrs5&#45;&gt;https://example.org/WSIDataEval</title>
-<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M355.07,-272.18C398.3,-285.88 447,-301.31 480.4,-311.89"/>
+<path fill="none" stroke="gray" stroke-dasharray="5,2" d="M965,-272.18C965,-284.03 965,-297.17 965,-307.35"/>
 </g>
 </g>
 </svg>

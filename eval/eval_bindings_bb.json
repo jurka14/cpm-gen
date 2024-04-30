@@ -13,8 +13,8 @@
   },
   "context": {
     "def" : "https://example.org/",
-    "bndl": "http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/",
-    "meta" : "http://_PLACEHOLER_:8000/api/v1/graphs/meta/",
-    "conn" : "http://_PLACEHOLER_:8000/api/v1/connectors/"
+    "bndl": "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/",
+    "meta" : "http://10.16.48.121:42069/api/v1/graphs/meta/",
+    "conn" : "http://10.16.48.121:42069/api/v1/connectors/"
   }
 }
