@@ -9,9 +9,11 @@ import cpm.pid.uri.DummyPidUriGenerator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.parquet.hadoop.util.HadoopInputFile;
+import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,19 +24,19 @@ import java.util.Objects;
 public class Demo {
     private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
 
-    private static void generateProvenance() {
+    private static void generateProvenance(Formats.ProvFormat format) {
 
         CpmGenerator gen = new CpmGenerator();
         MLFlowGenerator mlfGen = new MLFlowGenerator(TRACKING_URI);
         PidGenerator pidGen = new DummyPidGenerator(new DummyPidUriGenerator());
 
-        generateBundle(gen, mlfGen, pidGen, "preprocEval", true);
-        generateBundle(gen, mlfGen, pidGen, "preprocTrain", true);
-        generateBundle(gen, mlfGen, pidGen, "train", false);
-        generateBundle(gen, mlfGen, pidGen, "eval", false);
+        generateBundle(gen, mlfGen, pidGen, "preprocEval", true, format);
+        generateBundle(gen, mlfGen, pidGen, "preprocTrain", true, format);
+        generateBundle(gen, mlfGen, pidGen, "train", false, format);
+        generateBundle(gen, mlfGen, pidGen, "eval", false, format);
     }
 
-    private static void generateBundle(CpmGenerator gen, MLFlowGenerator mlfGen, PidGenerator pidGen, String name, boolean first) {
+    private static void generateBundle(CpmGenerator gen, MLFlowGenerator mlfGen, PidGenerator pidGen, String name, boolean first, Formats.ProvFormat format) {
 
         name = name + "/" + name;
 
@@ -48,13 +50,21 @@ public class Demo {
         }
 
         InteropFramework intF = new InteropFramework();
-        intF.writeDocument(name + ".provn", doc);
-        intF.writeDocument(name + ".svg", doc);
+        intF.writeDocument(name + "." + intF.getExtension(format), doc);
     }
 
     public static void main(String [] args) {
 
-        generateProvenance();
+        generateProvenance(Formats.ProvFormat.JSON);
+
+        try {
+            Files.writeString(Path.of("train/train64.txt"), Base64.getEncoder().encodeToString(Files.readAllBytes(Path.of("train/train.json"))));
+            Files.writeString(Path.of("preprocEval/preprocEval64.txt"), Base64.getEncoder().encodeToString(Files.readAllBytes(Path.of("preprocEval/preprocEval.json"))));
+            Files.writeString(Path.of("preprocTrain/preprocTrain64.txt"), Base64.getEncoder().encodeToString(Files.readAllBytes(Path.of("preprocTrain/preprocTrain.json"))));
+            Files.writeString(Path.of("eval/eval64.txt"), Base64.getEncoder().encodeToString(Files.readAllBytes(Path.of("eval/eval.json"))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
