@@ -68,11 +68,15 @@ public class CpmGenerator {
         DocumentProxyFromStatements fDoc = Normalizer$.MODULE$.
                 fusion(nDoc);
 
-        Document canonizedDoc = new DocumentProxy(
+        org.openprovenance.prov.scala.immutable.Document canonizedScalaDoc = new DocumentProxy(
                 new NoIdStatementIndexer(fDoc.getStatements()),
                 new StatementIndexer(),
                 fDoc.getNamespace()
         ).toDocument();
+
+        //convert to java representation
+        BeanTraversal bt = new BeanTraversal(pf, pf);
+        Document canonizedDoc = bt.doAction(canonizedScalaDoc);
 
         canonizedDoc.getStatementOrBundle();
 
