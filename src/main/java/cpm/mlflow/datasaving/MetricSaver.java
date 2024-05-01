@@ -4,11 +4,12 @@ import org.json.JSONObject;
 import org.mlflow.api.proto.Service.Metric;
 import org.mlflow.tracking.MlflowClient;
 
+import java.util.Base64;
 import java.util.List;
 
 /**
  * Saves the metrics based on the keys specified in config. If no keys are specified, saves all metrics from the run.
- * The metrics are saved as a JSON object string.
+ * The metrics are saved as a JSON object string encoded in base64.
  */
 public class MetricSaver extends DataSaver {
 
@@ -34,7 +35,7 @@ public class MetricSaver extends DataSaver {
             }
         }
 
-        return finalData.toString();
+        return Base64.getEncoder().encodeToString(finalData.toString().getBytes());
     }
 
 }
