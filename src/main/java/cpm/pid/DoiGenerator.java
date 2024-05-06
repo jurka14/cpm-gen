@@ -21,7 +21,7 @@ public class DoiGenerator extends PidGenerator {
     private static final String PREFIX = "10.82851";
     private static final String APIURL = "https://api.test.datacite.org/";
     private static final String USER = "NOWA.SIVCDZ";
-    private static final String PASS = "tCJi_qqPWSchb_4GSdA_UHDD";
+    private static final String PASS = "PASS";
     private static final String EVENT = "publish";
 
 

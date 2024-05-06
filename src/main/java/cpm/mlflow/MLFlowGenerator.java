@@ -23,7 +23,7 @@ public class MLFlowGenerator {
         dataSaverProvider = new DataSaverProvider(trackingUri, bindings);
     }
 
-    private void loadData(String runId, String dataType, JSONObject runCfg) {
+    private void saveRunData(String runId, String dataType, JSONObject runCfg) {
 
         JSONObject dataInfo = runCfg.getJSONObject(dataType);
 
@@ -42,7 +42,7 @@ public class MLFlowGenerator {
             try {
                 finalBindings = new JSONObject(Files.readString(Path.of(bindingsPath)));
             } catch (IOException e) {
-                throw new MLFlowGenException(e);
+                throw new MLFlowGenConfigException(e);
             }
         }
 
@@ -61,12 +61,12 @@ public class MLFlowGenerator {
         try {
             bind = new ObjectMapper().readValue(finalBindings.toString(), Bindings.class);
         } catch (JsonProcessingException e) {
-            throw new MLFlowGenException(e);
+            throw new MLFlowGenConfigException(e);
         }
         return expand.expander(intF.readDocumentFromFile(templatePath), bind);
     }
 
-    public Document generate(String configPath) throws MLFlowGenException {
+    public Document generate(String configPath) {
 
         //clear the bindings in case of repeated generation
         bindings.clear();
@@ -75,7 +75,7 @@ public class MLFlowGenerator {
         try {
             config = new JSONObject(Files.readString(Path.of(configPath)));
         } catch (IOException e) {
-            throw new MLFlowGenException(e);
+            throw new MLFlowGenConfigException(e);
         }
 
 
@@ -86,7 +86,7 @@ public class MLFlowGenerator {
             JSONObject runCfg = runsCfg.getJSONObject(runId);
 
             for(String dataType : runCfg.keySet()) {
-                loadData(runId, dataType, runCfg);
+                saveRunData(runId, dataType, runCfg);
             }
         }
 

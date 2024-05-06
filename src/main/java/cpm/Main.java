@@ -13,7 +13,6 @@ import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +20,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
-public class Demo {
+public class Main {
     private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
 
     private static void generateProvenance(Formats.ProvFormat format) {
@@ -56,15 +55,6 @@ public class Demo {
     public static void main(String [] args) {
 
         generateProvenance(Formats.ProvFormat.JSON);
-
-        try {
-            Files.writeString(Path.of("train/train64.txt"), Base64.getEncoder().encodeToString(Files.readAllBytes(Path.of("train/train.json"))));
-            Files.writeString(Path.of("preprocEval/preprocEval64.txt"), Base64.getEncoder().encodeToString(Files.readAllBytes(Path.of("preprocEval/preprocEval.json"))));
-            Files.writeString(Path.of("preprocTrain/preprocTrain64.txt"), Base64.getEncoder().encodeToString(Files.readAllBytes(Path.of("preprocTrain/preprocTrain.json"))));
-            Files.writeString(Path.of("eval/eval64.txt"), Base64.getEncoder().encodeToString(Files.readAllBytes(Path.of("eval/eval.json"))));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
     }
 

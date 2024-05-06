@@ -5,14 +5,15 @@ import org.json.JSONObject;
 import org.mlflow.tracking.MlflowClient;
 
 import java.io.File;
+import java.util.Base64;
 
 /**
  * Saves the filenames inside a specified directory (or the single filename in case a file is specified).
  * The search is non-recursive.
- * The filenames are saved as a JSON array string.
+ * The filenames are saved as a JSON array string encoded in base64.
  */
 public class FileNamesSaver extends DataSaver {
-    private static final String DATA_TYPE = "xsd:string";
+    private static final String DATA_TYPE = "xsd:base64Binary";
     private final MlflowClient client;
 
     public FileNamesSaver(MlflowClient client, JSONObject bindings) {
@@ -27,7 +28,7 @@ public class FileNamesSaver extends DataSaver {
 
         File fileOrDIr = client.downloadArtifacts(runId, path);
 
-        return loadFileNames(path, fileOrDIr);
+        return Base64.getEncoder().encodeToString(loadFileNames(path, fileOrDIr).getBytes());
     }
 
     private String loadFileNames(String path, File file) {

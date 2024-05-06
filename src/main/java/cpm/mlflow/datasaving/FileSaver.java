@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.Base64;
 
 /**
- * Encodes the file data to base64 string
+ * Encodes the file data to base64 string, also saves the file path string representation.
  */
 public class FileSaver extends DataSaver {
     private final MlflowClient client;
