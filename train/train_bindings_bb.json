@@ -6,7 +6,7 @@
     "main_activity_id": [{"@id": "def:training"}],
     "main_activity_meta": [{"@id": "meta:trainMeta"}],
     "has_part": [{"@id": "def:prostateTrain"}],
-    "back_conn_id": [{"@id": "conn:trainTrainingTilesConnector"}],
+    "back_conn_id": [{"@id": "conn:trainTilesConnector"}],
     "send_id": [{"@id": "bndl:preprocTrain"}],
     "forward_conn_id": [{"@id": "conn:trainedModelConnector"}],
     "rec_id": [{"@id": "bndl:eval"}]

@@ -76,7 +76,6 @@ document
     entity(def:dataset, [prov:type='repr:Dataset'])
     wasDerivedFrom(def:dataset, def:testGroup, -, -, -)
     wasDerivedFrom(def:dataset, def:trainGroup, -, -, -)
-    specializationOf(def:dataset, conn:trainTrainingTilesConnector)
-    specializationOf(def:dataset, conn:evalTrainingTilesConnector)
+    specializationOf(def:dataset, conn:trainTilesConnector)
   endBundle
 endDocument
