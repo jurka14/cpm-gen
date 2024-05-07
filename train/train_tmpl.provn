@@ -8,7 +8,7 @@ document
 
   bundle bndl:train
     entity(def:trainingTilesDataset, [prov:type='repr:Dataset'])
-    specializationOf(def:trainingTilesDataset, conn:trainTrainingTilesConnector)
+    specializationOf(def:trainingTilesDataset, conn:trainTilesConnector)
     entity(def:configFile, [def:path='var:configTrainPath', def:runID='var:configTrainRunId'])
     wasDerivedFrom(def:configTrain, def:configFile, -, -, -)
     entity(def:configTrain, [def:data='var:configTrain'])
