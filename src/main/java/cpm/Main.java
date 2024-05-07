@@ -37,13 +37,13 @@ public class Main {
 
     private static void generateBundle(CpmGenerator gen, MLFlowGenerator mlfGen, PidGenerator pidGen, String name, boolean first, Formats.ProvFormat format) {
 
-        name = name + "/" + name;
+        String namewfolder = name + "/" + name;
 
-        Document dsDoc = mlfGen.generate(name + "_config.json");
+        Document dsDoc = mlfGen.generate(namewfolder + "_config.json");
         Document doc;
 
         try {
-            doc = gen.createBundle(name + "_bindings_bb.json", dsDoc, pidGen, first);
+            doc = gen.createBundle(namewfolder + "_bindings_bb.json", dsDoc, pidGen, first);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +54,7 @@ public class Main {
 
     public static void main(String [] args) {
 
-        generateProvenance(Formats.ProvFormat.JSON);
+        generateProvenance(Formats.ProvFormat.PROVN);
 
     }
 
