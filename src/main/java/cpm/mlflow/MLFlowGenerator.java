@@ -2,7 +2,7 @@ package cpm.mlflow;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cpm.mlflow.datasaving.DataSaverProvider;
+import cpm.mlflow.dataloading.DataLoaderProvider;
 import org.json.JSONObject;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.Document;
@@ -16,18 +16,18 @@ import java.nio.file.Path;
 
 public class MLFlowGenerator {
     private final JSONObject bindings;
-    private final DataSaverProvider dataSaverProvider;
+    private final DataLoaderProvider dataLoaderProvider;
 
     public MLFlowGenerator(String trackingUri) {
         bindings = new JSONObject();
-        dataSaverProvider = new DataSaverProvider(trackingUri, bindings);
+        dataLoaderProvider = new DataLoaderProvider(trackingUri, bindings);
     }
 
     private void saveRunData(String runId, String dataType, JSONObject runCfg) {
 
         JSONObject dataInfo = runCfg.getJSONObject(dataType);
 
-        dataSaverProvider.getSaver(dataType).saveData(runId, dataInfo);
+        dataLoaderProvider.getLoader(dataType).loadData(runId, dataInfo);
     }
 
     private Document generateDoc(String templatePath, String bindingsPath) {

@@ -1,4 +1,4 @@
-package cpm.mlflow.datasaving;
+package cpm.mlflow.dataloading;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -7,16 +7,16 @@ import org.json.JSONObject;
 /**
  * Basic class for saving data from the config to the bindings.
  */
-public class DataSaver {
+public class DataLoader {
     protected final JSONObject bindings;
     protected final String dataType;
 
-    public DataSaver(JSONObject bindings, String dataType) {
+    public DataLoader(JSONObject bindings, String dataType) {
         this.bindings = bindings;
         this.dataType = dataType;
     }
 
-    public void saveData(String runId, JSONObject dataInfo) {
+    public void loadData(String runId, JSONObject dataInfo) {
 
         String name = dataInfo.getString("name");
         String data = getData(runId, dataInfo);

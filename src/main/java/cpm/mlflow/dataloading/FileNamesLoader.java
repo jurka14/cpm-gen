@@ -1,4 +1,4 @@
-package cpm.mlflow.datasaving;
+package cpm.mlflow.dataloading;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,11 +12,11 @@ import java.util.Base64;
  * The search is non-recursive.
  * The filenames are saved as a JSON array string encoded in base64.
  */
-public class FileNamesSaver extends DataSaver {
+public class FileNamesLoader extends DataLoader {
     private static final String DATA_TYPE = "xsd:base64Binary";
     private final MlflowClient client;
 
-    public FileNamesSaver(MlflowClient client, JSONObject bindings) {
+    public FileNamesLoader(MlflowClient client, JSONObject bindings) {
         super(bindings, DATA_TYPE);
         this.client = client;
     }

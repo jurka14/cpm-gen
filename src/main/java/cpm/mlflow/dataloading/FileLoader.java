@@ -1,4 +1,4 @@
-package cpm.mlflow.datasaving;
+package cpm.mlflow.dataloading;
 
 import cpm.mlflow.MLFlowGenConfigException;
 import org.json.JSONObject;
@@ -12,11 +12,11 @@ import java.util.Base64;
 /**
  * Encodes the file data to base64 string, also saves the file path string representation.
  */
-public class FileSaver extends DataSaver {
+public class FileLoader extends DataLoader {
     private final MlflowClient client;
     private static final String DATA_TYPE = "xsd:base64Binary";
 
-    public FileSaver(MlflowClient client, JSONObject bindings) {
+    public FileLoader(MlflowClient client, JSONObject bindings) {
         super(bindings, DATA_TYPE);
         this.client = client;
     }

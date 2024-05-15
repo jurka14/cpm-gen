@@ -1,4 +1,4 @@
-package cpm.mlflow.datasaving;
+package cpm.mlflow.dataloading;
 
 import org.json.JSONObject;
 import org.mlflow.api.proto.Service.Metric;
@@ -12,12 +12,12 @@ import java.util.List;
  * If no keys are specified, all metrics from the run are saved.
  * The metrics are saved as a JSON object string encoded in base64.
  */
-public class MetricSaver extends DataSaver {
+public class MetricLoader extends DataLoader {
 
     private static final String DATA_TYPE = "xsd:string";
     private final MlflowClient client;
 
-    public MetricSaver(MlflowClient client, JSONObject bindings) {
+    public MetricLoader(MlflowClient client, JSONObject bindings) {
         super(bindings, DATA_TYPE);
         this.client = client;
     }
