@@ -1,0 +1,151 @@
+package cpm.mlflow;
+
+import cpm.mlflow.dataloading.DataLoaderProvider;
+import org.apache.commons.text.StringEscapeUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openprovenance.prov.interop.Formats;
+import org.openprovenance.prov.interop.InteropFramework;
+import org.openprovenance.prov.model.Document;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class MLFlowGeneratorTest {
+
+    private MLFlowGenerator gen;
+    private Path confPath;
+    InteropFramework intF = new InteropFramework();
+
+    @BeforeEach
+    void setUp() {
+        gen = new MLFlowGenerator(getProvider());
+
+        try {
+            Path templPath = Files.createTempFile("template", ".provn");
+            confPath = Files.createTempFile("config", ".json");
+            Files.writeString(templPath, getTemplate());
+            Files.writeString(confPath, getConfig(templPath.toString()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void generateDocTest() {
+
+        Document doc = gen.generate(confPath.toString());
+
+        assertThat(doc).isNotNull();
+
+        OutputStream os = new ByteArrayOutputStream();
+
+        intF.writeDocument(os, doc, Formats.ProvFormat.PROVN);
+
+        String actual = os.toString().replaceAll("\\r\\n?", "\n");
+        String expected = (getDoc()).replaceAll("\\r\\n?", "\n");
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    private DataLoaderProvider getProvider() {
+
+        return new DataLoaderProvider("https://mlflow.rationai.cloud.trusted.e-infra.cz/");
+    }
+
+    private String getDoc() {
+        return """
+                document
+                bundle bndl:train
+                prefix repr <https://w3id.org/reproduceme#>
+                prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
+                prefix conn <http://_PLACEHOLER_:8000/api/v1/connectors/>
+                prefix def <https://example.org/>
+                                
+                entity(def:trainingTilesDataset,[prov:type = 'repr:Dataset'])
+                specializationOf(def:trainingTilesDataset,conn:trainTrainingTilesConnector)
+                entity(def:configFile,[def:path = "conf/config_resolved.yaml" %% xsd:string, def:runID = "6bc00f9abbd0465d865f0c1e1fa7196a" %% xsd:string])
+                wasDerivedFrom(def:configTrain, def:configFile)
+                entity(def:configTrain,[def:data = "bWw6CiAgX3RhcmdldF86IGhpc3RvcGlwZS5tbC5IaXN0b1BpcGVNb2R1bGUKICBuZXQ6CiAgICBmZWF0dXJlczoKICAgICAgX3RhcmdldF86IGhpc3RvcGlwZS5tbC5uZXRzLlZHRzE2RmVhdHVyZXMKICAgICAgd2VpZ2h0czogSU1BR0VORVQxS19WMQogICAgZ2xvYmFsX21heF9wb29saW5nOgogICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLm1sLm5ldHMuR01heFBvb2wKICAgIGNsYXNzaWZpZXI6CiAgICAgIF90YXJnZXRfOiBoaXN0b3BpcGUubWwubmV0cy5CaW5hcnlDbGFzc2lmaWVyCiAgb3V0cHV0X2FjdGl2YXRpb246CiAgICBfdGFyZ2V0XzogdG9yY2gubm4uU2lnbW9pZAogIG9wdGltaXplcjoKICAgIF90YXJnZXRfOiB0b3JjaC5vcHRpbS5BZGFtCiAgICBfcGFydGlhbF86IHRydWUKICAgIGxyOiA1LjBlLTA1CiAgICB3ZWlnaHRfZGVjYXk6IDUuMGUtMDUKICBsb3NzOgogICAgX3RhcmdldF86IHRvcmNoLm5uLkJDRUxvc3MKICAgIHJlZHVjdGlvbjogc3VtCiAgbWV0cmljczoKICAgIGJpbmFyeV9hY2N1cmFjeToKICAgICAgX3RhcmdldF86IHRvcmNobWV0cmljcy5jbGFzc2lmaWNhdGlvbi5CaW5hcnlBY2N1cmFjeQogICAgYmluYXJ5X2F1cm9jOgogICAgICBfdGFyZ2V0XzogdG9yY2htZXRyaWNzLmNsYXNzaWZpY2F0aW9uLkJpbmFyeUFVUk9DCiAgICBiaW5hcnlfcmVjYWxsOgogICAgICBfdGFyZ2V0XzogdG9yY2htZXRyaWNzLmNsYXNzaWZpY2F0aW9uLkJpbmFyeVJlY2FsbAogICAgYmluYXJ5X3NwZWNpZmljaXR5OgogICAgICBfdGFyZ2V0XzogdG9yY2htZXRyaWNzLmNsYXNzaWZpY2F0aW9uLkJpbmFyeVNwZWNpZmljaXR5CiAgbHJfc2NoZWR1bGVyOgogICAgc2NoZWR1bGVyOgogICAgICBfdGFyZ2V0XzogdG9yY2gub3B0aW0ubHJfc2NoZWR1bGVyLlJlZHVjZUxST25QbGF0ZWF1CiAgICAgIF9wYXJ0aWFsXzogdHJ1ZQogICAgICBtb2RlOiBtaW4KICAgICAgZmFjdG9yOiAwLjUKICAgICAgcGF0aWVuY2U6IDMKICAgIG1vbml0b3I6IHZhbGlkL2xvc3MKZGF0YW1vZHVsZToKICBfdGFyZ2V0XzogaGlzdG9waXBlLmRhdGFtb2R1bGUuV1NJRGF0YU1vZHVsZQogIGRhdGFfc291cmNlczoKICAgIHByb3N0YXRlOgogICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLmRhdGFtb2R1bGUuZGF0YXNvdXJjZXMuV1NJRGF0YVNvdXJjZQogICAgICBzZWVkOiAyODk4MjQzMzkKICAgICAgZGF0YV91cmlzOgogICAgICAtIG1sZmxvdy1hcnRpZmFjdHM6LzQvNWI3ODk3ZDg1Njk2NGYwNGJkMWZlZmUzZTA1ZDA5ODEvYXJ0aWZhY3RzL2RhdGFzZXQKICAgICAgLSBtbGZsb3ctYXJ0aWZhY3RzOi80L2JmNThlZWRiYTNjMjRiZTJhZDA0NmVlOTliNDAxZjZlL2FydGlmYWN0cy9kYXRhc2V0CiAgICAgIC0gbWxmbG93LWFydGlmYWN0czovNC9iZjI1YTNjMjk5NTU0NWJjOTFmNzkzNmY4M2M2NmM3ZS9hcnRpZmFjdHMvZGF0YXNldAogICAgICAtIG1sZmxvdy1hcnRpZmFjdHM6LzQvMjcxZjUwNjczNDYwNDhlYmE2NGFmM2FlNTYxODYzYmEvYXJ0aWZhY3RzL2RhdGFzZXQKICAgICAgZXhjbF91cmlzOiBudWxsCiAgICAgIHN0cmF0aWZpZWRfa2V5czoKICAgICAgLSBpc19jYW5jZXIKICAgICAgc3BsaXRzOgogICAgICAgIHRyYWluOiAwLjgKICAgICAgICB2YWxpZDogMC4yCiAgICBwcm9zdGF0ZV90ZXN0OgogICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLmRhdGFtb2R1bGUuZGF0YXNvdXJjZXMuV1NJRGF0YVNvdXJjZQogICAgICBzZWVkOiAyODk4MjQzMzkKICAgICAgZGF0YV91cmlzOgogICAgICAtIG1sZmxvdy1hcnRpZmFjdHM6LzQvNDJhNmFjZDliOTE5NDJiNDgzODY0NmI2ZTlhMmMxNTgvYXJ0aWZhY3RzL2RhdGFzZXQKICAgICAgZXhjbF91cmlzOiBudWxsCiAgICAgIHNwbGl0czoKICAgICAgICB0ZXN0OiAxLjAKICBkYXRhc2V0czoKICAgIHRyYWluOgogICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLmRhdGFtb2R1bGUuZGF0YXNldHMuQ2xhc3NpZmljYXRpb25EYXRhc2V0CiAgICAgIHNhbXBsZXI6CiAgICAgICAgX3RhcmdldF86IGhpc3RvcGlwZS5kYXRhbW9kdWxlLnNhbXBsZXJzLlJhbmRvbVRyZWVTYW1wbGVyCiAgICAgICAgc2VlZDogMjg5ODI0MzM5CiAgICAgICAgZXBvY2hfc2l6ZTogMjAwMDAKICAgICAgICBpbmRleF9sZXZlbHM6CiAgICAgICAgLSBpc19jYW5jZXIKICAgICAgICAtIHNsaWRlX25hbWUKICAgICAgYXVnbWVudGF0aW9uczoKICAgICAgICBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuQ29tcG9zZQogICAgICAgIHA6IDEuMAogICAgICAgIHRyYW5zZm9ybXM6CiAgICAgICAgLSBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuUmFuZG9tUm90YXRlOTAKICAgICAgICAgIHA6IDAuNzUKICAgICAgICAtIF90YXJnZXRfOiBhbGJ1bWVudGF0aW9ucy5GbGlwCiAgICAgICAgICBwOiAwLjUKICAgICAgICAtIF90YXJnZXRfOiBhbGJ1bWVudGF0aW9ucy5SYW5kb21HYW1tYQogICAgICAgICAgcDogMC41CiAgICAgICAgLSBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuUmFuZG9tQnJpZ2h0bmVzc0NvbnRyYXN0CiAgICAgICAgICBwOiAwLjUKICAgICAgICAtIF90YXJnZXRfOiBhbGJ1bWVudGF0aW9ucy5IdWVTYXR1cmF0aW9uVmFsdWUKICAgICAgICAgIHA6IDAuNQogICAgICAgIC0gX3RhcmdldF86IGFsYnVtZW50YXRpb25zLk5vcm1hbGl6ZQogICAgICAgICAgbWVhbjogMC41CiAgICAgICAgICBzdGQ6IDAuNQogICAgICAgICAgbWF4X3BpeGVsX3ZhbHVlOiAyNTUKICAgICAgICAgIHA6IDEuMAogICAgICBzZWVkOiAyODk4MjQzMzkKICAgIHZhbGlkOgogICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLmRhdGFtb2R1bGUuZGF0YXNldHMuQ2xhc3NpZmljYXRpb25EYXRhc2V0CiAgICAgIHNhbXBsZXI6CiAgICAgICAgX3RhcmdldF86IGhpc3RvcGlwZS5kYXRhbW9kdWxlLnNhbXBsZXJzLlJhbmRvbVRyZWVTYW1wbGVyCiAgICAgICAgc2VlZDogMjg5ODI0MzM5CiAgICAgICAgZXBvY2hfc2l6ZTogNTAwMAogICAgICAgIGluZGV4X2xldmVsczoKICAgICAgICAtIGlzX2NhbmNlcgogICAgICAgIC0gc2xpZGVfbmFtZQogICAgICBhdWdtZW50YXRpb25zOgogICAgICAgIF90YXJnZXRfOiBhbGJ1bWVudGF0aW9ucy5Db21wb3NlCiAgICAgICAgcDogMS4wCiAgICAgICAgdHJhbnNmb3JtczoKICAgICAgICAtIF90YXJnZXRfOiBhbGJ1bWVudGF0aW9ucy5Ob3JtYWxpemUKICAgICAgICAgIG1lYW46IDAuNQogICAgICAgICAgc3RkOiAwLjUKICAgICAgICAgIG1heF9waXhlbF92YWx1ZTogMjU1CiAgICAgICAgICBwOiAxLjAKICAgICAgc2VlZDogMjg5ODI0MzM5CiAgZGF0YWxvYWRlcnNfa3dhcmdzOgogICAgdHJhaW46CiAgICAgIG51bV93b3JrZXJzOiA4CiAgICAgIGJhdGNoX3NpemU6IDMyCiAgICB2YWxpZDoKICAgICAgbnVtX3dvcmtlcnM6IDgKICAgICAgYmF0Y2hfc2l6ZTogMzIKdXNlcjogbWpha3ViaWsKc2VlZDogMjg5ODI0MzM5CnVzZV9kZXRlcm1pbmlzbTogZmFsc2UKbWxmbG93OgogIHRyYWNraW5nX3VyaTogaHR0cDovL21sZmxvdy5yYXRpb25haS1tbGZsb3c6NTAwMC8KbWV0YWRhdGE6CiAgZXhwZXJpbWVudF9uYW1lOiBQcm9zdGF0ZQogIHJ1bl9uYW1lOiBWR0cxNiByZXRyYWluaW5nCiAgZGVzY3JpcHRpb246ICdQcm9zdGF0ZSBjYW5jZXIgYmluYXJ5IGNsYXNzaWZpY2F0aW9uLgoKICAgIFRoZSBnb2FsIGlzIHRvIHJldHJhaW4gVkdHMTYgbW9kZWwgb24gdGhlIHNhbWUgZGF0YSBpbiB0aGUgbmV3IHBpcGVsaW5lIHdpdGggYW5hbG9nb3VzCiAgICBwZXJmb3JtYW5jZS4KCiAgICAnCiAgaHlwZXJwYXJhbWV0ZXJzOgogICAgbWF4X2Vwb2NoczogNTAKICAgIHRyYWluX2Vwb2NoX3NpemU6IDIwMDAwCiAgICB2YWxpZF9lcG9jaF9zaXplOiA1MDAwCiAgICBscjogNS4wZS0wNQogICAgd2VpZ2h0X2RlY2F5OiA1LjBlLTA1CiAgICBiYXRjaF9zaXplOiAzMgp0YXNrOgogIF90YXJnZXRfOiBoaXN0b3BpcGUuVGFzawogIG1sOgogICAgX3RhcmdldF86IGhpc3RvcGlwZS5tbC5IaXN0b1BpcGVNb2R1bGUKICAgIG5ldDoKICAgICAgZmVhdHVyZXM6CiAgICAgICAgX3RhcmdldF86IGhpc3RvcGlwZS5tbC5uZXRzLlZHRzE2RmVhdHVyZXMKICAgICAgICB3ZWlnaHRzOiBJTUFHRU5FVDFLX1YxCiAgICAgIGdsb2JhbF9tYXhfcG9vbGluZzoKICAgICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLm1sLm5ldHMuR01heFBvb2wKICAgICAgY2xhc3NpZmllcjoKICAgICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLm1sLm5ldHMuQmluYXJ5Q2xhc3NpZmllcgogICAgb3V0cHV0X2FjdGl2YXRpb246CiAgICAgIF90YXJnZXRfOiB0b3JjaC5ubi5TaWdtb2lkCiAgICBvcHRpbWl6ZXI6CiAgICAgIF90YXJnZXRfOiB0b3JjaC5vcHRpbS5BZGFtCiAgICAgIF9wYXJ0aWFsXzogdHJ1ZQogICAgICBscjogNS4wZS0wNQogICAgICB3ZWlnaHRfZGVjYXk6IDUuMGUtMDUKICAgIGxvc3M6CiAgICAgIF90YXJnZXRfOiB0b3JjaC5ubi5CQ0VMb3NzCiAgICAgIHJlZHVjdGlvbjogc3VtCiAgICBtZXRyaWNzOgogICAgICBiaW5hcnlfYWNjdXJhY3k6CiAgICAgICAgX3RhcmdldF86IHRvcmNobWV0cmljcy5jbGFzc2lmaWNhdGlvbi5CaW5hcnlBY2N1cmFjeQogICAgICBiaW5hcnlfYXVyb2M6CiAgICAgICAgX3RhcmdldF86IHRvcmNobWV0cmljcy5jbGFzc2lmaWNhdGlvbi5CaW5hcnlBVVJPQwogICAgICBiaW5hcnlfcmVjYWxsOgogICAgICAgIF90YXJnZXRfOiB0b3JjaG1ldHJpY3MuY2xhc3NpZmljYXRpb24uQmluYXJ5UmVjYWxsCiAgICAgIGJpbmFyeV9zcGVjaWZpY2l0eToKICAgICAgICBfdGFyZ2V0XzogdG9yY2htZXRyaWNzLmNsYXNzaWZpY2F0aW9uLkJpbmFyeVNwZWNpZmljaXR5CiAgICBscl9zY2hlZHVsZXI6CiAgICAgIHNjaGVkdWxlcjoKICAgICAgICBfdGFyZ2V0XzogdG9yY2gub3B0aW0ubHJfc2NoZWR1bGVyLlJlZHVjZUxST25QbGF0ZWF1CiAgICAgICAgX3BhcnRpYWxfOiB0cnVlCiAgICAgICAgbW9kZTogbWluCiAgICAgICAgZmFjdG9yOiAwLjUKICAgICAgICBwYXRpZW5jZTogMwogICAgICBtb25pdG9yOiB2YWxpZC9sb3NzCiAgZGF0YW1vZHVsZToKICAgIF90YXJnZXRfOiBoaXN0b3BpcGUuZGF0YW1vZHVsZS5XU0lEYXRhTW9kdWxlCiAgICBkYXRhX3NvdXJjZXM6CiAgICAgIHByb3N0YXRlOgogICAgICAgIF90YXJnZXRfOiBoaXN0b3BpcGUuZGF0YW1vZHVsZS5kYXRhc291cmNlcy5XU0lEYXRhU291cmNlCiAgICAgICAgc2VlZDogMjg5ODI0MzM5CiAgICAgICAgZGF0YV91cmlzOgogICAgICAgIC0gbWxmbG93LWFydGlmYWN0czovNC81Yjc4OTdkODU2OTY0ZjA0YmQxZmVmZTNlMDVkMDk4MS9hcnRpZmFjdHMvZGF0YXNldAogICAgICAgIC0gbWxmbG93LWFydGlmYWN0czovNC9iZjU4ZWVkYmEzYzI0YmUyYWQwNDZlZTk5YjQwMWY2ZS9hcnRpZmFjdHMvZGF0YXNldAogICAgICAgIC0gbWxmbG93LWFydGlmYWN0czovNC9iZjI1YTNjMjk5NTU0NWJjOTFmNzkzNmY4M2M2NmM3ZS9hcnRpZmFjdHMvZGF0YXNldAogICAgICAgIC0gbWxmbG93LWFydGlmYWN0czovNC8yNzFmNTA2NzM0NjA0OGViYTY0YWYzYWU1NjE4NjNiYS9hcnRpZmFjdHMvZGF0YXNldAogICAgICAgIGV4Y2xfdXJpczogbnVsbAogICAgICAgIHN0cmF0aWZpZWRfa2V5czoKICAgICAgICAtIGlzX2NhbmNlcgogICAgICAgIHNwbGl0czoKICAgICAgICAgIHRyYWluOiAwLjgKICAgICAgICAgIHZhbGlkOiAwLjIKICAgICAgcHJvc3RhdGVfdGVzdDoKICAgICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLmRhdGFtb2R1bGUuZGF0YXNvdXJjZXMuV1NJRGF0YVNvdXJjZQogICAgICAgIHNlZWQ6IDI4OTgyNDMzOQogICAgICAgIGRhdGFfdXJpczoKICAgICAgICAtIG1sZmxvdy1hcnRpZmFjdHM6LzQvNDJhNmFjZDliOTE5NDJiNDgzODY0NmI2ZTlhMmMxNTgvYXJ0aWZhY3RzL2RhdGFzZXQKICAgICAgICBleGNsX3VyaXM6IG51bGwKICAgICAgICBzcGxpdHM6CiAgICAgICAgICB0ZXN0OiAxLjAKICAgIGRhdGFzZXRzOgogICAgICB0cmFpbjoKICAgICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLmRhdGFtb2R1bGUuZGF0YXNldHMuQ2xhc3NpZmljYXRpb25EYXRhc2V0CiAgICAgICAgc2FtcGxlcjoKICAgICAgICAgIF90YXJnZXRfOiBoaXN0b3BpcGUuZGF0YW1vZHVsZS5zYW1wbGVycy5SYW5kb21UcmVlU2FtcGxlcgogICAgICAgICAgc2VlZDogMjg5ODI0MzM5CiAgICAgICAgICBlcG9jaF9zaXplOiAyMDAwMAogICAgICAgICAgaW5kZXhfbGV2ZWxzOgogICAgICAgICAgLSBpc19jYW5jZXIKICAgICAgICAgIC0gc2xpZGVfbmFtZQogICAgICAgIGF1Z21lbnRhdGlvbnM6CiAgICAgICAgICBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuQ29tcG9zZQogICAgICAgICAgcDogMS4wCiAgICAgICAgICB0cmFuc2Zvcm1zOgogICAgICAgICAgLSBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuUmFuZG9tUm90YXRlOTAKICAgICAgICAgICAgcDogMC43NQogICAgICAgICAgLSBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuRmxpcAogICAgICAgICAgICBwOiAwLjUKICAgICAgICAgIC0gX3RhcmdldF86IGFsYnVtZW50YXRpb25zLlJhbmRvbUdhbW1hCiAgICAgICAgICAgIHA6IDAuNQogICAgICAgICAgLSBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuUmFuZG9tQnJpZ2h0bmVzc0NvbnRyYXN0CiAgICAgICAgICAgIHA6IDAuNQogICAgICAgICAgLSBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuSHVlU2F0dXJhdGlvblZhbHVlCiAgICAgICAgICAgIHA6IDAuNQogICAgICAgICAgLSBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuTm9ybWFsaXplCiAgICAgICAgICAgIG1lYW46IDAuNQogICAgICAgICAgICBzdGQ6IDAuNQogICAgICAgICAgICBtYXhfcGl4ZWxfdmFsdWU6IDI1NQogICAgICAgICAgICBwOiAxLjAKICAgICAgICBzZWVkOiAyODk4MjQzMzkKICAgICAgdmFsaWQ6CiAgICAgICAgX3RhcmdldF86IGhpc3RvcGlwZS5kYXRhbW9kdWxlLmRhdGFzZXRzLkNsYXNzaWZpY2F0aW9uRGF0YXNldAogICAgICAgIHNhbXBsZXI6CiAgICAgICAgICBfdGFyZ2V0XzogaGlzdG9waXBlLmRhdGFtb2R1bGUuc2FtcGxlcnMuUmFuZG9tVHJlZVNhbXBsZXIKICAgICAgICAgIHNlZWQ6IDI4OTgyNDMzOQogICAgICAgICAgZXBvY2hfc2l6ZTogNTAwMAogICAgICAgICAgaW5kZXhfbGV2ZWxzOgogICAgICAgICAgLSBpc19jYW5jZXIKICAgICAgICAgIC0gc2xpZGVfbmFtZQogICAgICAgIGF1Z21lbnRhdGlvbnM6CiAgICAgICAgICBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuQ29tcG9zZQogICAgICAgICAgcDogMS4wCiAgICAgICAgICB0cmFuc2Zvcm1zOgogICAgICAgICAgLSBfdGFyZ2V0XzogYWxidW1lbnRhdGlvbnMuTm9ybWFsaXplCiAgICAgICAgICAgIG1lYW46IDAuNQogICAgICAgICAgICBzdGQ6IDAuNQogICAgICAgICAgICBtYXhfcGl4ZWxfdmFsdWU6IDI1NQogICAgICAgICAgICBwOiAxLjAKICAgICAgICBzZWVkOiAyODk4MjQzMzkKICAgIGRhdGFsb2FkZXJzX2t3YXJnczoKICAgICAgdHJhaW46CiAgICAgICAgbnVtX3dvcmtlcnM6IDgKICAgICAgICBiYXRjaF9zaXplOiAzMgogICAgICB2YWxpZDoKICAgICAgICBudW1fd29ya2VyczogOAogICAgICAgIGJhdGNoX3NpemU6IDMyCiAgdHJhaW5lcjoKICAgIF90YXJnZXRfOiBoaXN0b3BpcGUudHJhaW5lci5UcmFpbmVyCiAgICByZWxvYWRfZGF0YWxvYWRlcnNfZXZlcnlfbl9lcG9jaHM6IDEKICAgIGxvZ2dlcjoKICAgICAgX3RhcmdldF86IGxpZ2h0bmluZy5weXRvcmNoLmxvZ2dlcnMuTUxGbG93TG9nZ2VyCiAgICAgIGV4cGVyaW1lbnRfbmFtZTogUHJvc3RhdGUKICAgICAgcnVuX25hbWU6IFZHRzE2IHJldHJhaW5pbmcKICAgICAgdHJhY2tpbmdfdXJpOiBodHRwOi8vbWxmbG93LnJhdGlvbmFpLW1sZmxvdzo1MDAwLwogICAgICB0YWdzOgogICAgICAgIG1sZmxvdy51c2VyOiBtamFrdWJpawogICAgICAgIG1sZmxvdy5ub3RlLmNvbnRlbnQ6ICdQcm9zdGF0ZSBjYW5jZXIgYmluYXJ5IGNsYXNzaWZpY2F0aW9uLgoKICAgICAgICAgIFRoZSBnb2FsIGlzIHRvIHJldHJhaW4gVkdHMTYgbW9kZWwgb24gdGhlIHNhbWUgZGF0YSBpbiB0aGUgbmV3IHBpcGVsaW5lCiAgICAgICAgICB3aXRoIGFuYWxvZ291cyBwZXJmb3JtYW5jZS4KCiAgICAgICAgICAnCiAgICAgIGxvZ19tb2RlbDogYWxsCiAgICBjYWxsYmFja3M6CiAgICAgIGxvZ19iZXN0X21vZGVsOgogICAgICAgIF90YXJnZXRfOiBoaXN0b3BpcGUudHJhaW5lci5jYWxsYmFja3MuTUxGbG93TW9kZWxDaGVja3BvaW50CiAgICAgICAgbW9uaXRvcjogdmFsaWQvYmluYXJ5X2F1cm9jCiAgICAgICAgc2F2ZV93ZWlnaHRzX29ubHk6IHRydWUKICAgICAgICBtb2RlOiBtYXgKICAgICAgICBzYXZlX3RvcF9rOiAxCiAgICAgICAgYXV0b19pbnNlcnRfbWV0cmljX25hbWU6IHRydWUKICAgICAgICBzYXZlX2xhc3Q6IHRydWUKICAgICAgICBmaWxlbmFtZTogdmdnMTZfcHJvc3RhdGVfYmVzdAogICAgICBlYXJseV9zdG9wcGluZzoKICAgICAgICBfdGFyZ2V0XzogbGlnaHRuaW5nLnB5dG9yY2guY2FsbGJhY2tzLkVhcmx5U3RvcHBpbmcKICAgICAgICBtb25pdG9yOiB2YWxpZC9iaW5hcnlfYXVyb2MKICAgICAgICBwYXRpZW5jZTogNQogICAgICAgIG1vZGU6IG1heAogICAgICBscl9tb25pdG9yOgogICAgICAgIF90YXJnZXRfOiBsaWdodG5pbmcucHl0b3JjaC5jYWxsYmFja3MuTGVhcm5pbmdSYXRlTW9uaXRvcgogICAgICAgIGxvZ2dpbmdfaW50ZXJ2YWw6IGVwb2NoCiAgICBtYXhfZXBvY2hzOiA1MAogICAgbG9nX2V2ZXJ5X25fc3RlcHM6IDIwCiAgaHlwZXJwYXJhbWV0ZXJzOgogICAgbWF4X2Vwb2NoczogNTAKICAgIHRyYWluX2Vwb2NoX3NpemU6IDIwMDAwCiAgICB2YWxpZF9lcG9jaF9zaXplOiA1MDAwCiAgICBscjogNS4wZS0wNQogICAgd2VpZ2h0X2RlY2F5OiA1LjBlLTA1CiAgICBiYXRjaF9zaXplOiAzMgogIHN0YWdlOiA/Pz8KdHJhaW5lcjoKICBfdGFyZ2V0XzogaGlzdG9waXBlLnRyYWluZXIuVHJhaW5lcgogIHJlbG9hZF9kYXRhbG9hZGVyc19ldmVyeV9uX2Vwb2NoczogMQogIGxvZ2dlcjoKICAgIF90YXJnZXRfOiBsaWdodG5pbmcucHl0b3JjaC5sb2dnZXJzLk1MRmxvd0xvZ2dlcgogICAgZXhwZXJpbWVudF9uYW1lOiBQcm9zdGF0ZQogICAgcnVuX25hbWU6IFZHRzE2IHJldHJhaW5pbmcKICAgIHRyYWNraW5nX3VyaTogaHR0cDovL21sZmxvdy5yYXRpb25haS1tbGZsb3c6NTAwMC8KICAgIHRhZ3M6CiAgICAgIG1sZmxvdy51c2VyOiBtamFrdWJpawogICAgICBtbGZsb3cubm90ZS5jb250ZW50OiAnUHJvc3RhdGUgY2FuY2VyIGJpbmFyeSBjbGFzc2lmaWNhdGlvbi4KCiAgICAgICAgVGhlIGdvYWwgaXMgdG8gcmV0cmFpbiBWR0cxNiBtb2RlbCBvbiB0aGUgc2FtZSBkYXRhIGluIHRoZSBuZXcgcGlwZWxpbmUgd2l0aAogICAgICAgIGFuYWxvZ291cyBwZXJmb3JtYW5jZS4KCiAgICAgICAgJwogICAgbG9nX21vZGVsOiBhbGwKICBjYWxsYmFja3M6CiAgICBsb2dfYmVzdF9tb2RlbDoKICAgICAgX3RhcmdldF86IGhpc3RvcGlwZS50cmFpbmVyLmNhbGxiYWNrcy5NTEZsb3dNb2RlbENoZWNrcG9pbnQKICAgICAgbW9uaXRvcjogdmFsaWQvYmluYXJ5X2F1cm9jCiAgICAgIHNhdmVfd2VpZ2h0c19vbmx5OiB0cnVlCiAgICAgIG1vZGU6IG1heAogICAgICBzYXZlX3RvcF9rOiAxCiAgICAgIGF1dG9faW5zZXJ0X21ldHJpY19uYW1lOiB0cnVlCiAgICAgIHNhdmVfbGFzdDogdHJ1ZQogICAgICBmaWxlbmFtZTogdmdnMTZfcHJvc3RhdGVfYmVzdAogICAgZWFybHlfc3RvcHBpbmc6CiAgICAgIF90YXJnZXRfOiBsaWdodG5pbmcucHl0b3JjaC5jYWxsYmFja3MuRWFybHlTdG9wcGluZwogICAgICBtb25pdG9yOiB2YWxpZC9iaW5hcnlfYXVyb2MKICAgICAgcGF0aWVuY2U6IDUKICAgICAgbW9kZTogbWF4CiAgICBscl9tb25pdG9yOgogICAgICBfdGFyZ2V0XzogbGlnaHRuaW5nLnB5dG9yY2guY2FsbGJhY2tzLkxlYXJuaW5nUmF0ZU1vbml0b3IKICAgICAgbG9nZ2luZ19pbnRlcnZhbDogZXBvY2gKICBtYXhfZXBvY2hzOiA1MAogIGxvZ19ldmVyeV9uX3N0ZXBzOiAyMAo=" %% xsd:base64Binary])
+                entity(def:trainedModel,[prov:type = 'repr:Model', def:path = "model/" %% xsd:string, def:runID = "6bc00f9abbd0465d865f0c1e1fa7196a" %% xsd:string])
+                entity(def:logsTrain,[prov:type = 'repr:Log', def:path = "logs/task.log" %% xsd:string, def:runID = "6bc00f9abbd0465d865f0c1e1fa7196a" %% xsd:string, def:data = "WzIwMjQtMDEtMTYgMTY6NDA6NTYsNDQ5XVt0YXNrX2NsaV1bSU5GT10gLSBbUmVwcm9kdWNpYmlsaXR5XSBTZWVkaW5nIGV2ZXJ5dGhpbmcuIFNlZWQ9Mjg5ODI0MzM5LiBEZXRlcm1pbmlzbT1GYWxzZS4KWzIwMjQtMDEtMTcgMDE6MDA6MjcsNjI4XVt1cmxsaWIzLmNvbm5lY3Rpb25wb29sXVtXQVJOSU5HXSAtIFJldHJ5aW5nIChSZXRyeSh0b3RhbD00LCBjb25uZWN0PTQsIHJlYWQ9NSwgcmVkaXJlY3Q9NSwgc3RhdHVzPTUpKSBhZnRlciBjb25uZWN0aW9uIGJyb2tlbiBieSAnTmV3Q29ubmVjdGlvbkVycm9yKCc8dXJsbGliMy5jb25uZWN0aW9uLkhUVFBDb25uZWN0aW9uIG9iamVjdCBhdCAweDdmNWQxMDhkMDA5MD46IEZhaWxlZCB0byBlc3RhYmxpc2ggYSBuZXcgY29ubmVjdGlvbjogW0Vycm5vIDExMV0gQ29ubmVjdGlvbiByZWZ1c2VkJyknOiAvYXBpLzIuMC9tbGZsb3cvcnVucy9sb2ctYmF0Y2gKWzIwMjQtMDEtMTcgMDE6MDM6MDQsNDQ2XVt1cmxsaWIzLmNvbm5lY3Rpb25wb29sXVtXQVJOSU5HXSAtIFJldHJ5aW5nIChSZXRyeSh0b3RhbD00LCBjb25uZWN0PTQsIHJlYWQ9NSwgcmVkaXJlY3Q9NSwgc3RhdHVzPTUpKSBhZnRlciBjb25uZWN0aW9uIGJyb2tlbiBieSAnTmV3Q29ubmVjdGlvbkVycm9yKCc8dXJsbGliMy5jb25uZWN0aW9uLkhUVFBDb25uZWN0aW9uIG9iamVjdCBhdCAweDdmNWM3OTUwMzYxMD46IEZhaWxlZCB0byBlc3RhYmxpc2ggYSBuZXcgY29ubmVjdGlvbjogW0Vycm5vIDExMV0gQ29ubmVjdGlvbiByZWZ1c2VkJyknOiAvYXBpLzIuMC9tbGZsb3cvcnVucy9sb2ctYmF0Y2gKWzIwMjQtMDEtMTcgMDE6MDM6MDgsNTUwXVt1cmxsaWIzLmNvbm5lY3Rpb25wb29sXVtXQVJOSU5HXSAtIFJldHJ5aW5nIChSZXRyeSh0b3RhbD0zLCBjb25uZWN0PTMsIHJlYWQ9NSwgcmVkaXJlY3Q9NSwgc3RhdHVzPTUpKSBhZnRlciBjb25uZWN0aW9uIGJyb2tlbiBieSAnTmV3Q29ubmVjdGlvbkVycm9yKCc8dXJsbGliMy5jb25uZWN0aW9uLkhUVFBDb25uZWN0aW9uIG9iamVjdCBhdCAweDdmNWQ1YTJkYzc5MD46IEZhaWxlZCB0byBlc3RhYmxpc2ggYSBuZXcgY29ubmVjdGlvbjogW0Vycm5vIDExMV0gQ29ubmVjdGlvbiByZWZ1c2VkJyknOiAvYXBpLzIuMC9tbGZsb3cvcnVucy9sb2ctYmF0Y2gKWzIwMjQtMDEtMTcgMDE6MDM6MTcsMTA2XVt1cmxsaWIzLmNvbm5lY3Rpb25wb29sXVtXQVJOSU5HXSAtIFJldHJ5aW5nIChSZXRyeSh0b3RhbD0yLCBjb25uZWN0PTIsIHJlYWQ9NSwgcmVkaXJlY3Q9NSwgc3RhdHVzPTUpKSBhZnRlciBjb25uZWN0aW9uIGJyb2tlbiBieSAnTmV3Q29ubmVjdGlvbkVycm9yKCc8dXJsbGliMy5jb25uZWN0aW9uLkhUVFBDb25uZWN0aW9uIG9iamVjdCBhdCAweDdmNWQ1YTJkZjFkMD46IEZhaWxlZCB0byBlc3RhYmxpc2ggYSBuZXcgY29ubmVjdGlvbjogW0Vycm5vIDExMV0gQ29ubmVjdGlvbiByZWZ1c2VkJyknOiAvYXBpLzIuMC9tbGZsb3cvcnVucy9sb2ctYmF0Y2gKWzIwMjQtMDEtMTcgMDE6MDM6MzMsNTczXVt1cmxsaWIzLmNvbm5lY3Rpb25wb29sXVtXQVJOSU5HXSAtIFJldHJ5aW5nIChSZXRyeSh0b3RhbD0xLCBjb25uZWN0PTEsIHJlYWQ9NSwgcmVkaXJlY3Q9NSwgc3RhdHVzPTUpKSBhZnRlciBjb25uZWN0aW9uIGJyb2tlbiBieSAnTmV3Q29ubmVjdGlvbkVycm9yKCc8dXJsbGliMy5jb25uZWN0aW9uLkhUVFBDb25uZWN0aW9uIG9iamVjdCBhdCAweDdmNWQzMDdkY2E5MD46IEZhaWxlZCB0byBlc3RhYmxpc2ggYSBuZXcgY29ubmVjdGlvbjogW0Vycm5vIDExMV0gQ29ubmVjdGlvbiByZWZ1c2VkJyknOiAvYXBpLzIuMC9tbGZsb3cvcnVucy9sb2ctYmF0Y2gK" %% xsd:base64Binary])
+                activity(def:prostateTrain,-,-,[def:metrics = "eyJ2YWxpZC9iaW5hcnlfYXVyb2MiOjAuODM2MjA0NzA3NjIyNTI4MSwidmFsaWQvYmluYXJ5X2FjY3VyYWN5IjowLjc0MjIwMDAxNjk3NTQwMjgsImVwb2NoIjo0OSwidmFsaWQvYmluYXJ5X3JlY2FsbCI6MC41OTY2Nzg1NTUwMTE3NDkzLCJ0cmFpbi9sb3NzX3N0ZXAiOjEyLjg3OTA2MTY5ODkxMzU3NCwidHJhaW4vYmluYXJ5X2F1cm9jIjowLjkwODczMDE0OTI2OTEwNCwidHJhaW4vYmluYXJ5X2FjY3VyYWN5IjowLjg0Mzc1LCJ2YWxpZC9iaW5hcnlfc3BlY2lmaWNpdHkiOjAuODkxMTM3MTgyNzEyNTU0OSwibHItQWRhbSI6MS4yNUUtNSwidmFsaWQvbG9zcyI6MTUuOTM2MjEwNjMyMzI0MjE5LCJ0cmFpbi9sb3NzX2Vwb2NoIjoxNC4zNjY5MjE0MjQ4NjU3MjMsInRyYWluL2JpbmFyeV9zcGVjaWZpY2l0eSI6MC44MzMzMzMzMTM0NjUxMTg0LCJ0cmFpbi9iaW5hcnlfcmVjYWxsIjowLjg1NzE0Mjg2NTY1NzgwNjR9" %% xsd:string, def:runID = "6bc00f9abbd0465d865f0c1e1fa7196a" %% xsd:string])
+                wasGeneratedBy(def:logsTrain,def:prostateTrain,-)
+                wasGeneratedBy(def:trainedModel,def:prostateTrain,-)
+                wasDerivedFrom(def:trainedModel, def:trainingTilesDataset)
+                wasDerivedFrom(def:trainedModel, def:configTrain)
+                used(def:prostateTrain,def:trainingTilesDataset,-)
+                used(def:prostateTrain,def:configTrain,-)
+                specializationOf(def:trainedModel,conn:trainedModelConnector)
+                endBundle
+                endDocument
+                """;
+    }
+
+    private String getTemplate() {
+        return """
+                document
+                  prefix tmpl <http://openprovenance.org/tmpl#>
+                  prefix var <http://openprovenance.org/var#>
+                  prefix def <https://example.org/>
+                  prefix repr <https://w3id.org/reproduceme#>
+                  prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
+                  prefix conn <http://_PLACEHOLER_:8000/api/v1/connectors/>
+                                
+                  bundle bndl:train
+                    entity(def:trainingTilesDataset, [prov:type='repr:Dataset'])
+                    specializationOf(def:trainingTilesDataset, conn:trainTrainingTilesConnector)
+                    entity(def:configFile, [def:path='var:configTrainPath', def:runID='var:configTrainRunId'])
+                    wasDerivedFrom(def:configTrain, def:configFile, -, -, -)
+                    entity(def:configTrain, [def:data='var:configTrain'])
+                    entity(def:trainedModel, [prov:type='repr:Model', def:path='var:trainedModel', def:runID='var:trainedModelRunId'])
+                    entity(def:logsTrain, [prov:type='repr:Log', def:path='var:logsTrainPath', def:runID='var:logsTrainRunId', def:data='var:logsTrain'])
+                    activity(def:prostateTrain, -, -, [def:metrics='var:metricsTrain', def:runID='var:metricsTrainRunId'])
+                    wasGeneratedBy(def:logsTrain, def:prostateTrain, -)
+                    wasGeneratedBy(def:trainedModel, def:prostateTrain, -)
+                    wasDerivedFrom(def:trainedModel, def:trainingTilesDataset, -, -, -)
+                    wasDerivedFrom(def:trainedModel, def:configTrain, -, -, -)
+                    used(def:prostateTrain, def:trainingTilesDataset, -)
+                    used(def:prostateTrain, def:configTrain, -)
+                    specializationOf(def:trainedModel, conn:trainedModelConnector)
+                                
+                  endBundle
+                endDocument""";
+    }
+
+    private String getConfig(String templPath) {
+        return String.format("""
+                {
+                  "global": {
+                    "templatePath": "%s"
+                  },
+                  "runs": {
+                    "6bc00f9abbd0465d865f0c1e1fa7196a": {
+                      "config": {
+                        "name": "configTrain",
+                        "path": "conf/config_resolved.yaml"
+                      },
+                      "data": {
+                        "name": "trainedModel",
+                        "value": "model/"
+                      },
+                      "metrics": {
+                        "name": "metricsTrain",
+                        "keyList": []
+                      },
+                      "file": {
+                        "name": "logsTrain",
+                        "path": "logs/task.log"
+                      }
+                    }
+                  }
+                }""", StringEscapeUtils.escapeJson(templPath));
+    }
+
+}
