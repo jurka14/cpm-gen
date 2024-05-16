@@ -15,8 +15,6 @@ import org.openprovenance.prov.template.expander.Expand;
 import org.openprovenance.prov.template.json.Bindings;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class CpmGenerator {
@@ -110,13 +108,12 @@ public class CpmGenerator {
         String bundleId = b.getId().getPrefix() + ":" + b.getId().getLocalPart();
 
         for (Statement s : b.getStatement()) {
-            List<Class<?>> interfaces = Arrays.asList(s.getClass().getInterfaces());
 
-            if (interfaces.contains(Identifiable.class) && interfaces.contains(HasType.class)) {
+            if (Identifiable.class.isAssignableFrom(s.getClass()) && HasType.class.isAssignableFrom(s.getClass())) {
                 QualifiedName id = ((Identifiable) s).getId();
 
-                if (Objects.equals(id.getPrefix(), pidGen.getNamespace())) {
-                    String type = ((HasType) s).getType().get(0).getType().getLocalPart();
+                if (Objects.nonNull(id) && Objects.equals(id.getPrefix(), pidGen.getNamespace())) {
+                    String type = ((QualifiedName)((HasType) s).getType().get(0).getValue()).getLocalPart();
                     String name = bundleId + "-" + type;
 
                     pidGen.generate(id.getLocalPart(), name);
