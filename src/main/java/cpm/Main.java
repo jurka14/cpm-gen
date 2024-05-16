@@ -3,6 +3,7 @@ package cpm;
 import com.exasol.parquetio.data.Row;
 import com.exasol.parquetio.reader.RowParquetReader;
 import cpm.mlflow.MLFlowGenerator;
+import cpm.mlflow.dataloading.DataLoaderProvider;
 import cpm.pid.DummyPidGenerator;
 import cpm.pid.PidGenerator;
 import cpm.pid.uri.DummyPidUriGenerator;
@@ -26,7 +27,7 @@ public class Main {
     private static void generateProvenance(Formats.ProvFormat format) {
 
         CpmGenerator gen = new CpmGenerator();
-        MLFlowGenerator mlfGen = new MLFlowGenerator(TRACKING_URI);
+        MLFlowGenerator mlfGen = new MLFlowGenerator(new DataLoaderProvider(TRACKING_URI));
         PidGenerator pidGen = new DummyPidGenerator(new DummyPidUriGenerator());
 
         generateBundle(gen, mlfGen, pidGen, "preprocEval", true, format);

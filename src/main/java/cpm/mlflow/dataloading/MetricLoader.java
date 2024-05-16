@@ -17,8 +17,8 @@ public class MetricLoader extends DataLoader {
     private static final String DATA_TYPE = "xsd:string";
     private final MlflowClient client;
 
-    public MetricLoader(MlflowClient client, JSONObject bindings) {
-        super(bindings, DATA_TYPE);
+    public MetricLoader(MlflowClient client) {
+        super(DATA_TYPE);
         this.client = client;
     }
 

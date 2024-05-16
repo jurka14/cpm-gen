@@ -1,19 +1,18 @@
 package cpm.mlflow.dataloading;
 
-import org.json.JSONObject;
 import org.mlflow.tracking.MlflowClient;
 
 import java.util.Map;
 
 public class DataLoaderProvider {
     private final Map<String, DataLoader> saverMap;
-    public DataLoaderProvider(String clientTrackingUri, JSONObject bindings) {
+    public DataLoaderProvider(String clientTrackingUri) {
         MlflowClient client = new MlflowClient(clientTrackingUri);
 
-        DataLoader dataLoader = new DataLoader(bindings, "xsd:string");
-        FileLoader fileLoader = new FileLoader(client, bindings);
-        MetricLoader metricLoader = new MetricLoader(client, bindings);
-        FileNamesLoader fileNamesLoader = new FileNamesLoader(client, bindings);
+        DataLoader dataLoader = new DataLoader("xsd:string");
+        FileLoader fileLoader = new FileLoader(client);
+        MetricLoader metricLoader = new MetricLoader(client);
+        FileNamesLoader fileNamesLoader = new FileNamesLoader(client);
 
         saverMap = Map.of(
                 "data", dataLoader,

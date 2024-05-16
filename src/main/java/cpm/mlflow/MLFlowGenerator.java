@@ -18,16 +18,21 @@ public class MLFlowGenerator {
     private final JSONObject bindings;
     private final DataLoaderProvider dataLoaderProvider;
 
-    public MLFlowGenerator(String trackingUri) {
+    public MLFlowGenerator(DataLoaderProvider provider) {
         bindings = new JSONObject();
-        dataLoaderProvider = new DataLoaderProvider(trackingUri, bindings);
+        dataLoaderProvider = provider;
     }
 
     private void saveRunData(String runId, String dataType, JSONObject runCfg) {
 
         JSONObject dataInfo = runCfg.getJSONObject(dataType);
 
-        dataLoaderProvider.getLoader(dataType).loadData(runId, dataInfo);
+        JSONObject newBindings = dataLoaderProvider.getLoader(dataType).loadData(runId, dataInfo);
+
+        //append loaded bindings
+        for (String name : newBindings.keySet()) {
+            bindings.put(name, newBindings.get(name));
+        }
     }
 
     private Document generateDoc(String templatePath, String bindingsPath) {

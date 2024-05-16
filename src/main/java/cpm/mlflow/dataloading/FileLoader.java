@@ -16,8 +16,8 @@ public class FileLoader extends DataLoader {
     private final MlflowClient client;
     private static final String DATA_TYPE = "xsd:base64Binary";
 
-    public FileLoader(MlflowClient client, JSONObject bindings) {
-        super(bindings, DATA_TYPE);
+    public FileLoader(MlflowClient client) {
+        super(DATA_TYPE);
         this.client = client;
     }
 

@@ -11,18 +11,22 @@ public class DataLoader {
     protected final JSONObject bindings;
     protected final String dataType;
 
-    public DataLoader(JSONObject bindings, String dataType) {
-        this.bindings = bindings;
+    public DataLoader(String dataType) {
+        this.bindings = new JSONObject();
         this.dataType = dataType;
     }
 
-    public void loadData(String runId, JSONObject dataInfo) {
+    public JSONObject loadData(String runId, JSONObject dataInfo) {
+        //clear the bindings in case of repeated loading
+        bindings.clear();
 
         String name = dataInfo.getString("name");
         String data = getData(runId, dataInfo);
 
         saveBinding(name, data, dataType);
         saveBinding(name + "RunId", runId, "xsd:string");
+
+        return bindings;
     }
 
     protected void saveBinding(String name, String data, String dataType) {
