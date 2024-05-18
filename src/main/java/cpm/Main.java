@@ -1,27 +1,23 @@
 package cpm;
 
-import com.exasol.parquetio.data.Row;
-import com.exasol.parquetio.reader.RowParquetReader;
 import cpm.mlflow.MLFlowGenerator;
 import cpm.mlflow.dataloading.DataLoaderProvider;
 import cpm.pid.DummyPidGenerator;
 import cpm.pid.PidGenerator;
 import cpm.pid.uri.DummyPidUriGenerator;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.parquet.hadoop.ParquetReader;
-import org.apache.parquet.hadoop.util.HadoopInputFile;
 import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
-import org.openprovenance.prov.model.*;
+import org.openprovenance.prov.model.Document;
+import org.openprovenance.prov.model.Identifiable;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 public class Main {
+
+    private static Map<String, Document> documentMap;
+    private static Map<String, String> connectorMap;
+    private static InteropFramework intF = new InteropFramework();
     private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
 
     private static void generateProvenance(Formats.ProvFormat format) {
@@ -49,63 +45,44 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        InteropFramework intF = new InteropFramework();
         intF.writeDocument(name + "." + intF.getExtension(format), doc);
     }
 
     public static void main(String [] args) {
 
-        generateProvenance(Formats.ProvFormat.PROVN);
+        //generateProvenance(Formats.ProvFormat.PROVN);
 
-    }
+        Document preprocEval = intF.readDocumentFromFile("preprocEval.provn");
 
-    private static void query() {
+        Document preprocTrain = intF.readDocumentFromFile("preprocTrain.provn");
 
-        InteropFramework intF = new InteropFramework();
+        Document train = intF.readDocumentFromFile("train.provn");
 
-        Document pqDoc = intF.readDocumentFromFile("preprocEval.provn");
-        Bundle b = (Bundle) pqDoc.getStatementOrBundle().get(0);
-        String data = null;
+        Document eval = intF.readDocumentFromFile("eval.provn");
 
-        for (Statement s : b.getStatement()) {
-            if (s.getKind() == StatementOrBundle.Kind.PROV_ENTITY &&
-                    (Objects.equals(((Identifiable) s).getId().getLocalPart(), "WSIDataEval"))
-            ) {
-                for (Other o : ((Entity) s).getOther()) {
-                    if (Objects.equals(o.getElementName().getLocalPart(), "data")) {
-                        data = (String) o.getValue();
-                    }
-                }
+        documentMap = Map.of(
+                "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval", preprocEval,
+                "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocTrain", preprocTrain,
+                "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/train", train,
+                "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/eval", eval
+        );
 
-            }
-        }
+        connectorMap = Map.of(
+                "http://10.16.48.121:42069/api/v1/connectors/trainedModelConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/train",
+                "http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval",
+                "http://10.16.48.121:42069/api/v1/connectors/trainTilesConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocTrain"
+        );
 
-        Path temp;
+        Query q = new Query(documentMap, connectorMap);
+        q.run("http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/eval");
 
-        try {
-            temp = Files.createTempFile("temp", ".parquet");
-            Files.write(temp, Base64.getDecoder().decode(data));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        try (ParquetReader<Row> reader = RowParquetReader
-                .builder(HadoopInputFile.fromPath(new org.apache.hadoop.fs.Path(temp.toString()), new Configuration())).build()) {
-            Row row = reader.read();
 
-            System.out.println(row.getFieldNames());
 
-            int i = 0;
-            while (i < 100) {
-                List<Object> values = row.getValues();
-                System.out.println(values);
 
-                row = reader.read();
-                i++;
-            }
-        } catch (final IOException exception) {
-            //
-        }
+
+
+
     }
 
     /*
