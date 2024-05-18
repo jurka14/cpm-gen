@@ -1,7 +1,7 @@
 document
  prefix tmpl <http://openprovenance.org/tmpl#>
  prefix var <http://openprovenance.org/var#>
- prefix cpm <http://commonprovenancemodel.org/ns/cpm/>
+ prefix cpm <https://commonprovenancemodel.org/ns/cpm/>
  prefix repr <https://w3id.org/reproduceme#>
 
  bundle var:bndl

@@ -1,13 +1,13 @@
 document
 prefix repr <https://w3id.org/reproduceme#>
-prefix cpm <http://commonprovenancemodel.org/ns/cpm/>
+prefix cpm <https://commonprovenancemodel.org/ns/cpm/>
 prefix conn <http://10.16.48.121:42069/api/v1/connectors/>
 prefix bndl <http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/>
 prefix def <https://example.org/>
 prefix meta <http://10.16.48.121:42069/api/v1/graphs/meta/>
 bundle bndl:eval
 prefix repr <https://w3id.org/reproduceme#>
-prefix cpm <http://commonprovenancemodel.org/ns/cpm/>
+prefix cpm <https://commonprovenancemodel.org/ns/cpm/>
 prefix bndl <http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/>
 prefix conn <http://10.16.48.121:42069/api/v1/connectors/>
 prefix def <https://example.org/>
