@@ -46,12 +46,16 @@ public class Main {
         }
 
         intF.writeDocument(name + "." + intF.getExtension(format), doc);
+        intF.writeDocument(name + ".svg", doc);
     }
 
     public static void main(String [] args) {
 
-        //generateProvenance(Formats.ProvFormat.PROVN);
+        generateProvenance(Formats.ProvFormat.PROVN);
+        //query();
+    }
 
+    private static void query() {
         Document preprocEval = intF.readDocumentFromFile("preprocEval.provn");
 
         Document preprocTrain = intF.readDocumentFromFile("preprocTrain.provn");
@@ -75,23 +79,5 @@ public class Main {
 
         Query q = new Query(documentMap, connectorMap);
         q.run("http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/eval");
-
-
-
-
-
-
-
-
     }
-
-    /*
-        //convert yaml to json
-        ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
-        Object obj = yamlReader.readValue(new FileInputStream(file), Object.class);
-
-        ObjectMapper jsonWriter = new ObjectMapper();
-        return jsonWriter.writeValueAsString(obj);
-     */
-
 }

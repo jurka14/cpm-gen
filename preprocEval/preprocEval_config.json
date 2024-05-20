@@ -15,6 +15,9 @@
       "outParquet": {
         "name": "tilesEval",
         "path": "dataset/tiles.parquet"
+      },
+      "runInfo":{
+        "name": ""
       }
     }
   }

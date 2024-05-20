@@ -7,13 +7,13 @@ document
   prefix conn <http://10.16.48.121:42069/api/v1/connectors/>
 
   bundle bndl:preprocEval
-    activity(def:tilesGeneration, -, -)
+    activity(def:tilesGeneration, -, -, [def:runID='var:RunId', def:userID='var:UserId', def:startTime='var:Start', def:duration='var:Duration'])
 
-    entity(def:WSIDataEval, [prov:type='repr:Dataset', def:path='var:WSIDataEvalPath', def:runID='var:WSIDataEvalRunId', def:data='var:WSIDataEval'])
-    entity(def:configFile, [def:path='var:configEvalPath', def:runID='var:configEvalRunId'])
+    entity(def:WSIDataEval, [prov:type='repr:Dataset', def:path='var:WSIDataEvalPath', def:runID='var:WSIDataEvalRunId', def:data='var:WSIDataEval', def:sha256='var:WSIDataEvalHash'])
+    entity(def:configFile, [def:path='var:configEvalPath', def:runID='var:configEvalRunId', def:sha256='var:configEvalHash'])
     wasDerivedFrom(def:configEval, def:configFile, -, -, -)
     entity(def:configEval, [def:data='var:configEval'])
-    entity(def:tilesEval, [prov:type='repr:Dataset', def:path='var:tilesEvalPath', def:runID='var:tilesEvalRunId', def:data='var:tilesEval'])
+    entity(def:tilesEval, [prov:type='repr:Dataset', def:path='var:tilesEvalPath', def:runID='var:tilesEvalRunId', def:data='var:tilesEval', def:sha256='var:tilesEvalHash'])
     wasGeneratedBy(def:tilesEval, def:tilesGeneration, -)
     wasDerivedFrom(def:tilesEval, def:WSIDataEval, -, -, -)
     wasDerivedFrom(def:tilesEval, def:configEval, -, -, -)

@@ -19,6 +19,9 @@
       "file": {
         "name": "logsTrain",
         "path": "logs/task.log"
+      },
+      "runInfo": {
+        "name": ""
       }
     }
   }

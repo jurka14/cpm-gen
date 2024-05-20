@@ -6,11 +6,14 @@ import org.mlflow.tracking.MlflowClient;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 /**
- * Encodes the file data to base64 string, also saves the file path string representation.
+ * Encodes the file data to base64 string, also saves the file path string representation and its SHA-256 checksum.
  */
 public class FileLoader extends DataLoader {
     private final MlflowClient client;
@@ -36,11 +39,20 @@ public class FileLoader extends DataLoader {
         String name = dataInfo.getString("name");
 
         File file = loadFile(runId, name, path);
+        byte[] fileData;
 
         try {
-            return Base64.getEncoder().encodeToString(getFileData(file));
+            fileData = getFileData(file);
+
+            byte[] hash = MessageDigest.getInstance("SHA-256").digest(fileData);
+            String checksum = new BigInteger(1, hash).toString(16);
+            saveBinding(name + "Hash", checksum, "xsd:hexBinary");
+
+            return Base64.getEncoder().encodeToString(fileData);
         } catch (IOException e) {
             throw new MLFlowGenConfigException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 

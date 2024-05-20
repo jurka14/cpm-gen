@@ -11,6 +11,9 @@
       "filenames": {
         "name": "heatmaps1",
         "path": "test_heatmaps"
+      },
+      "runInfo":{
+        "name": "heatmaps1"
       }
     },
     "9fae5ffaaa1148f287757827daf9af7e": {
@@ -21,6 +24,9 @@
       "filenames": {
         "name": "heatmaps2",
         "path": "test_heatmaps"
+      },
+      "runInfo":{
+        "name": "heatmaps2"
       }
     },
     "50643d978335412591f42c970dd5b2b2": {
@@ -31,6 +37,9 @@
       "filenames": {
         "name": "heatmaps3",
         "path": "test_heatmaps"
+      },
+      "runInfo":{
+        "name": "heatmaps3"
       }
     },
     "bcc8d8d5912f48e0abed2584842c68ce": {
@@ -61,6 +70,9 @@
       "file": {
         "name": "sourceCodeEval",
         "path": "src/predict_slide_large.py"
+      },
+      "runInfo":{
+        "name": ""
       }
     }
   }

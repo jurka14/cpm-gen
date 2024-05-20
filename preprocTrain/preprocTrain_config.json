@@ -15,6 +15,9 @@
       "outParquet": {
         "name": "tilesTest",
         "path": "dataset/tiles.parquet"
+      },
+      "runInfo":{
+        "name": "test"
       }
     },
     "271f5067346048eba64af3ae561863ba": {
@@ -29,6 +32,9 @@
       "outParquet": {
         "name": "tilesTrainPos",
         "path": "dataset/tiles.parquet"
+      },
+      "runInfo":{
+        "name": "trainPos"
       }
     },
     "bf58eedba3c24be2ad046ee99b401f6e": {
@@ -43,6 +49,9 @@
       "outParquet": {
         "name": "tilesTrainArchPos",
         "path": "dataset/tiles.parquet"
+      },
+      "runInfo":{
+        "name": "trainArchPos"
       }
     },
     "bf25a3c2995545bc91f7936f83c66c7e": {
@@ -57,6 +66,9 @@
       "outParquet": {
         "name": "tilesTrainNeg",
         "path": "dataset/tiles.parquet"
+      },
+      "runInfo":{
+        "name": "trainNeg"
       }
     },
     "5b7897d856964f04bd1fefe3e05d0981": {
@@ -71,6 +83,9 @@
       "outParquet": {
         "name": "tilesTrainArchNeg",
         "path": "dataset/tiles.parquet"
+      },
+      "runInfo":{
+        "name": "trainArchNeg"
       }
     }
   }

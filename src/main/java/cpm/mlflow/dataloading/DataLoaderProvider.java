@@ -13,6 +13,7 @@ public class DataLoaderProvider {
         FileLoader fileLoader = new FileLoader(client);
         MetricLoader metricLoader = new MetricLoader(client);
         FileNamesLoader fileNamesLoader = new FileNamesLoader(client);
+        RunInfoLoader runInfoLoader = new RunInfoLoader(client);
 
         saverMap = Map.of(
                 "data", dataLoader,
@@ -21,7 +22,8 @@ public class DataLoaderProvider {
                 "inParquet", fileLoader,
                 "outParquet", fileLoader,
                 "metrics", metricLoader,
-                "filenames", fileNamesLoader
+                "filenames", fileNamesLoader,
+                "runInfo", runInfoLoader
         );
     }
 

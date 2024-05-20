@@ -7,14 +7,20 @@ import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.Bundle;
 import org.openprovenance.prov.model.HasType;
 import org.openprovenance.prov.model.Identifiable;
+import org.openprovenance.prov.model.SpecializationOf;
 import org.openprovenance.prov.model.Statement;
 import org.openprovenance.prov.model.*;
 import org.openprovenance.prov.scala.interop.StreamInput;
 import org.openprovenance.prov.scala.nf.*;
 import org.openprovenance.prov.template.expander.Expand;
 import org.openprovenance.prov.template.json.Bindings;
+import org.openprovenance.prov.template.json.Descriptor;
+import org.openprovenance.prov.template.json.Descriptors;
+import org.openprovenance.prov.template.json.QDescriptor;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class CpmGenerator {
@@ -30,7 +36,19 @@ public class CpmGenerator {
     }
 
     public Document createBundle(String backboneBindingsPath, Document dsDoc, PidGenerator pidGen, boolean first) throws IOException {
-        Document bbDoc = createBackbone(backboneBindingsPath, first);
+
+        Bindings backboneBindings;
+
+        try {
+            backboneBindings = new ObjectMapper().readValue(new File(backboneBindingsPath), Bindings.class);
+        } catch (IOException e) {
+            throw new FileNotFoundException("Bindings file for the backbone was not found.");
+        }
+
+        long timestamp = System.currentTimeMillis();
+        List<String> connIds = uniqueConnectorIds(backboneBindings, timestamp);
+
+        Document bbDoc = createBackbone(backboneBindings, first);
 
         createPids(bbDoc, pidGen);
 
@@ -39,9 +57,57 @@ public class CpmGenerator {
 
         Document finalDoc = iDoc.toDocument();
 
+        editSpecializations(finalDoc, connIds, timestamp);
+
         canonize(finalDoc);
 
         return finalDoc;
+    }
+
+    /**
+     * Makes backbone connector ids unique by adding a timestamp to them.
+     * @return List of original connector ids.
+     * */
+    private List<String> uniqueConnectorIds(Bindings backboneBindings, long timestamp) {
+        Descriptors backD = backboneBindings.var.get("back_conn_id");
+        Descriptors forwardD = backboneBindings.var.get("forward_conn_id");
+
+        List<String> connIds = new ArrayList<>();
+
+        if (backD != null) {
+            for (Descriptor id : backD.values) {
+                connIds.add(((QDescriptor) id).id);
+                ((QDescriptor) id).id = ((QDescriptor) id).id + timestamp;
+            }
+        }
+
+        if (forwardD != null) {
+            for (Descriptor id : forwardD.values) {
+                connIds.add(((QDescriptor) id).id);
+                ((QDescriptor) id).id = ((QDescriptor) id).id + timestamp;
+            }
+        }
+
+        return connIds;
+    }
+
+
+    /** Edits the specializations in the domain-specific provenance to be compatible with the unique connector ids. */
+    private void editSpecializations(Document doc, List<String> connIds, long timestamp) {
+
+        Bundle b = (Bundle) doc.getStatementOrBundle().get(0);
+        for (Statement s : b.getStatement()) {
+
+            if (s.getKind() == StatementOrBundle.Kind.PROV_SPECIALIZATION) {
+
+                QualifiedName id = ((SpecializationOf) s).getGeneralEntity();
+
+                if (connIds.contains(id.getPrefix() + ":" + id.getLocalPart())) {
+                    QualifiedName newId = pf.newQualifiedName(id.getNamespaceURI(), id.getLocalPart() + timestamp, id.getPrefix());
+                    ((SpecializationOf) s).setGeneralEntity(newId);
+                }
+            }
+        }
     }
 
 
@@ -83,33 +149,26 @@ public class CpmGenerator {
         }
     }
 
-    private Document createBackbone(String bindingsFilePath, boolean first) throws FileNotFoundException {
+    private Document createBackbone(Bindings bind, boolean first) {
+
         Expand expand = new Expand(pf, false, false);
-
-        Bindings bind;
-
-        try {
-            bind = new ObjectMapper().readValue(new File(bindingsFilePath), Bindings.class);
-        } catch (IOException e) {
-            throw new FileNotFoundException("Bindings file for the backbone was not found.");
-        }
-
 
         return expand.expander(intF.readDocumentFromFile(first ? BB_TEMPLATE_FIRST : BB_TEMPLATE), bind);
     }
 
-    private void createPids(Document backboneDoc, PidGenerator pidGen) {
+    /** Generates PIDs for backbone connectors based on the namespace prefix. */
+    private void createPids(Document bbDoc, PidGenerator pidGen) {
         //check if the generator does something
         if (pidGen.getNamespace() == null) {
             return;
         }
 
-        Bundle b = (Bundle) backboneDoc.getStatementOrBundle().get(0);
+        Bundle b = (Bundle) bbDoc.getStatementOrBundle().get(0);
         String bundleId = b.getId().getPrefix() + ":" + b.getId().getLocalPart();
 
         for (Statement s : b.getStatement()) {
 
-            if (Identifiable.class.isAssignableFrom(s.getClass()) && HasType.class.isAssignableFrom(s.getClass())) {
+            if (s.getKind() == StatementOrBundle.Kind.PROV_ENTITY) {
                 QualifiedName id = ((Identifiable) s).getId();
 
                 if (Objects.nonNull(id) && Objects.equals(id.getPrefix(), pidGen.getNamespace())) {
