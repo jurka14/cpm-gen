@@ -1,10 +1,5 @@
 package cpm;
 
-import com.exasol.parquetio.data.Row;
-import com.exasol.parquetio.reader.RowParquetReader;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.parquet.hadoop.ParquetReader;
-import org.apache.parquet.hadoop.util.HadoopInputFile;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.*;
 
@@ -15,10 +10,9 @@ import java.util.*;
 
 public class Query {
 
-    private  Map<String, Document> documentMap;
-    private  Map<String, String> connectorMap;
-    private InteropFramework intF = new InteropFramework();
-    private ProvFactory pf = InteropFramework.getDefaultFactory();
+    private final Map<String, Document> documentMap;
+    private final Map<String, String> connectorMap;
+    private final ProvFactory pf = InteropFramework.getDefaultFactory();
 
     private static final String PROCESS = "https://example.org/tilesGeneration";
 
@@ -26,9 +20,6 @@ public class Query {
         this.documentMap = documentMap;
         this.connectorMap = connectorMap;
     }
-
-
-
 
     public void run(String bundleId) {
 
@@ -39,35 +30,25 @@ public class Query {
             return;
         }
 
-        boolean disjunct = true;
+        List<String> equals = ParquetComparator.getEquals(dataLists);
 
-        for (Path p : dataLists.get(0)) {
-            if (!checkDisjunction(p, dataLists.get(1))) {
-                disjunct = false;
-            }
-        }
+        boolean disjunct = equals.isEmpty();
 
         System.out.println("The training and evaluation datasets " + (disjunct ? "ARE" : "ARE NOT") + " disjunct!");
-    }
 
+        if (!disjunct) {
+            System.out.println("Files present in both datasets:");
 
-    private boolean checkDisjunction(Path path, List<Path> pathList) {
-        boolean disjunct = true;
-
-        for (Path p : pathList) {
-            if (!checkFiles(path, p)) {
-                disjunct = false;
+            for (String s : equals) {
+                System.out.println(s);
             }
         }
-
-        return disjunct;
     }
 
-    private boolean checkFiles(Path path1, Path path2) {
-        return true;
-    }
-
-
+    /**
+     * Recursively traverses the prov documents through backward connectors to find the tiling processes.
+     * @return List of lists of parquet files to be checked for disjunction.
+     */
     private List<List<Path>> findData(String bundleId) {
 
         List<List<Path>> pathLists = new ArrayList<>();
@@ -136,56 +117,6 @@ public class Query {
         }
 
         return entityList;
-    }
-
-
-    private void query() {
-
-        InteropFramework intF = new InteropFramework();
-
-        Document pqDoc = intF.readDocumentFromFile("preprocEval.provn");
-        Bundle b = (Bundle) pqDoc.getStatementOrBundle().get(0);
-        String data = null;
-
-        for (Statement s : b.getStatement()) {
-            if (s.getKind() == StatementOrBundle.Kind.PROV_ENTITY &&
-                    (Objects.equals(((Identifiable) s).getId().getLocalPart(), "WSIDataEval"))
-            ) {
-                for (Other o : ((Entity) s).getOther()) {
-                    if (Objects.equals(o.getElementName().getLocalPart(), "data")) {
-                        data = (String) o.getValue();
-                    }
-                }
-
-            }
-        }
-
-        Path temp;
-
-        try {
-            temp = Files.createTempFile("temp", ".parquet");
-            Files.write(temp, Base64.getDecoder().decode(data));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (ParquetReader<Row> reader = RowParquetReader
-                .builder(HadoopInputFile.fromPath(new org.apache.hadoop.fs.Path(temp.toString()), new Configuration())).build()) {
-            Row row = reader.read();
-
-            System.out.println(row.getFieldNames());
-
-            int i = 0;
-            while (i < 100) {
-                List<Object> values = row.getValues();
-                System.out.println(values);
-
-                row = reader.read();
-                i++;
-            }
-        } catch (final IOException exception) {
-            //
-        }
     }
 
     private boolean isTargetDoc(Other hasPart) {
