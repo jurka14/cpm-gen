@@ -8,6 +8,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+
+/**
+ * Loads the run info (user id, run id, start timestamp, duration).
+ */
 public class RunInfoLoader extends DataLoader {
 
     private static final String DATA_TYPE = "xsd:string";

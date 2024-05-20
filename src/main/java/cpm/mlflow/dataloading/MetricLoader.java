@@ -8,7 +8,7 @@ import java.util.Base64;
 import java.util.List;
 
 /**
- * Saves the metrics based on the keys specified in config.
+ * Loads the metrics based on the keys specified in config.
  * If no keys are specified, all metrics from the run are saved.
  * The metrics are saved as a JSON object string encoded in base64.
  */

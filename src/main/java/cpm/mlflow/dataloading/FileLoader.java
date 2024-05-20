@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 /**
- * Encodes the file data to base64 string, also saves the file path string representation and its SHA-256 checksum.
+ * Encodes the file data to base64 string, also loads the file path string representation and its SHA-256 checksum.
  */
 public class FileLoader extends DataLoader {
     private final MlflowClient client;

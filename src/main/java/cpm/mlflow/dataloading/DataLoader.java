@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 
 /**
- * Basic class for saving data from the config to the bindings.
+ * Basic class for loading data from the config to the bindings.
  */
 public class DataLoader {
     protected final JSONObject bindings;

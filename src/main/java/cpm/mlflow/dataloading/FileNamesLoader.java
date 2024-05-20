@@ -8,9 +8,9 @@ import java.io.File;
 import java.util.Base64;
 
 /**
- * Saves the filenames inside a specified directory (or the single filename in case a file is specified).
+ * Loads the filenames inside a specified directory (or the single filename in case a file is specified).
  * The search is non-recursive.
- * The filenames are saved as a JSON array string encoded in base64.
+ * The filenames are loaded as a JSON array string encoded in base64.
  */
 public class FileNamesLoader extends DataLoader {
     private static final String DATA_TYPE = "xsd:base64Binary";
