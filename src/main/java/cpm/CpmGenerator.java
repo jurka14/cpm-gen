@@ -35,7 +35,7 @@ public class CpmGenerator {
         intF = new InteropFramework();
     }
 
-    public Document createBundle(String backboneBindingsPath, Document dsDoc, PidGenerator pidGen, boolean first) throws IOException {
+    public Document createBundle(String backboneBindingsPath, Document dsDoc, PidGenerator pidGen, boolean first, boolean uniqueConnectors) throws IOException {
 
         Bindings backboneBindings;
 
@@ -46,7 +46,12 @@ public class CpmGenerator {
         }
 
         long timestamp = System.currentTimeMillis();
-        List<String> connIds = uniqueConnectorIds(backboneBindings, timestamp);
+
+        List<String> connIds = new ArrayList<>();
+
+        if (uniqueConnectors) {
+            connIds = uniqueConnectorIds(backboneBindings, timestamp);
+        }
 
         Document bbDoc = createBackbone(backboneBindings, first);
 
@@ -57,7 +62,9 @@ public class CpmGenerator {
 
         Document finalDoc = iDoc.toDocument();
 
-        editSpecializations(finalDoc, connIds, timestamp);
+        if (uniqueConnectors) {
+            editSpecializations(finalDoc, connIds, timestamp);
+        }
 
         canonize(finalDoc);
 

@@ -57,7 +57,7 @@ class CpmGeneratorTest {
 
     @Test
     void createBundleWithNoBindings() {
-        assertThatThrownBy(() -> cpmGen.createBundle(backboneBindingsPath.toString(), getDsDoc(), pidGen, false))
+        assertThatThrownBy(() -> cpmGen.createBundle(backboneBindingsPath.toString(), getDsDoc(), pidGen, false, false))
                 .isInstanceOf(FileNotFoundException.class)
                 .hasMessageContaining("Bindings file for the backbone was not found.");
     }
@@ -69,7 +69,7 @@ class CpmGeneratorTest {
         Document doc;
 
         try {
-            doc = cpmGen.createBundle(backboneBindingsPath.toString(), dsDoc, pidGen, first);
+            doc = cpmGen.createBundle(backboneBindingsPath.toString(), dsDoc, pidGen, first, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -94,7 +94,7 @@ class CpmGeneratorTest {
                 prefix repr <https://w3id.org/reproduceme#>
                 prefix pre_0 <https://gitlab.ics.muni.cz/422328/pid-test/-/blob/master/>
                 prefix doi <https://doi.org/10.58092/>
-                prefix cpm <http://commonprovenancemodel.org/ns/cpm/>
+                prefix cpm <https://commonprovenancemodel.org/ns/cpm/>
                 prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
                 prefix meta <http://_PLACEHOLER_:8000/api/v1/graphs/meta/>
                 bundle bndl:train
@@ -103,31 +103,31 @@ class CpmGeneratorTest {
                 prefix repr <https://w3id.org/reproduceme#>
                 prefix pre_0 <https://gitlab.ics.muni.cz/422328/pid-test/-/blob/master/>
                 prefix doi <https://doi.org/10.58092/>
-                prefix cpm <http://commonprovenancemodel.org/ns/cpm/>
+                prefix cpm <https://commonprovenancemodel.org/ns/cpm/>
                 prefix bndl <http://_PLACEHOLER_:8000/api/v1/organizations/ORG/graphs/>
                 prefix meta <http://_PLACEHOLER_:8000/api/v1/graphs/meta/>
                                 
+                entity(doi:trainedModelConnector,[prov:type = 'cpm:forwardConnector', cpm:senderBundleId = 'bndl:eval'])
                 wasDerivedFrom(doi:trainedModelConnector, doi:trainTrainingTilesConnector)
                 specializationOf(trainedModel,doi:trainedModelConnector)
-                entity(configFile,[path = "mlflow-artifacts:/4/6bc00f9abbd0465d865f0c1e1fa7196a/artifacts/conf/config_resolved.yaml" %% xsd:string])
+                agent(def:researchDataCentre,[prov:type = 'cpm:senderAgent'])
                 wasGeneratedBy(doi:trainedModelConnector,def:training,-)
                 used(prostateTrain,configTrain,-)
+                activity(def:training,-,-,[prov:type = 'cpm:mainActivity', cpm:metabundle = 'meta:trainMeta', repr:hasPart = 'def:prostateTrain'])
                 used(def:training,doi:trainTrainingTilesConnector,-)
+                activity(prostateTrain,-,-)
                 wasDerivedFrom(configTrain, configFile)
                 wasAttributedTo(doi:trainTrainingTilesConnector, def:researchDataCentre)
-                activity(def:training,-,-,[prov:type = 'cpm:mainActivity', cpm:metabundle = 'meta:trainMeta', repr:hasPart = 'def:prostateTrain'])
+                entity(trainingTilesDataset,[prov:type = 'repr:Dataset'])
                 used(prostateTrain,trainingTilesDataset,-)
                 wasDerivedFrom(trainedModel, trainingTilesDataset)
                 entity(trainedModel)
                 specializationOf(trainingTilesDataset,doi:trainTrainingTilesConnector)
                 wasDerivedFrom(trainedModel, configTrain)
                 entity(doi:trainTrainingTilesConnector,[prov:type = 'cpm:backwardConnector', cpm:receiverBundleId = 'bndl:preprocTrain'])
-                activity(prostateTrain,-,-)
+                entity(configFile,[path = "mlflow-artifacts:/4/6bc00f9abbd0465d865f0c1e1fa7196a/artifacts/conf/config_resolved.yaml" %% xsd:string])
                 entity(configTrain)
-                entity(doi:trainedModelConnector,[prov:type = 'cpm:forwardConnector', cpm:senderBundleId = 'bndl:eval'])
                 wasGeneratedBy(trainedModel,prostateTrain,-)
-                entity(trainingTilesDataset,[prov:type = 'repr:Dataset'])
-                agent(def:researchDataCentre,[prov:type = 'cpm:senderAgent'])
                 endBundle
                 endDocument
                 """;

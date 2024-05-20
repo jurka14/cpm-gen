@@ -16,6 +16,7 @@ public class Main {
 
     private static final InteropFramework intF = new InteropFramework();
     private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
+    private static final boolean UNIQUE_CONNECTORS = false;
 
     private static void generateProvenance(Formats.ProvFormat format) {
 
@@ -37,7 +38,7 @@ public class Main {
         Document doc;
 
         try {
-            doc = gen.createBundle(namewfolder + "_bindings_bb.json", dsDoc, pidGen, first);
+            doc = gen.createBundle(namewfolder + "_bindings_bb.json", dsDoc, pidGen, first, UNIQUE_CONNECTORS);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -48,7 +49,7 @@ public class Main {
 
     public static void main(String [] args) {
 
-        //generateProvenance(Formats.ProvFormat.PROVN);
+        generateProvenance(Formats.ProvFormat.PROVN);
         query();
     }
 
@@ -69,9 +70,9 @@ public class Main {
         );
 
         Map<String, String> connectorMap = Map.of(
-                "http://10.16.48.121:42069/api/v1/connectors/trainedModelConnector1716200887931", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/train",
-                "http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector1716200887931", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval",
-                "http://10.16.48.121:42069/api/v1/connectors/trainTilesConnector1716200853766", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocTrain"
+                "http://10.16.48.121:42069/api/v1/connectors/trainedModelConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/train",
+                "http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval",
+                "http://10.16.48.121:42069/api/v1/connectors/trainTilesConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocTrain"
         );
 
         Query q = new Query(documentMap, connectorMap);
