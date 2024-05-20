@@ -8,16 +8,13 @@ import cpm.pid.uri.DummyPidUriGenerator;
 import org.openprovenance.prov.interop.Formats;
 import org.openprovenance.prov.interop.InteropFramework;
 import org.openprovenance.prov.model.Document;
-import org.openprovenance.prov.model.Identifiable;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class Main {
 
-    private static Map<String, Document> documentMap;
-    private static Map<String, String> connectorMap;
-    private static InteropFramework intF = new InteropFramework();
+    private static final InteropFramework intF = new InteropFramework();
     private static final String TRACKING_URI = "https://mlflow.rationai.cloud.trusted.e-infra.cz/";
 
     private static void generateProvenance(Formats.ProvFormat format) {
@@ -51,8 +48,8 @@ public class Main {
 
     public static void main(String [] args) {
 
-        generateProvenance(Formats.ProvFormat.PROVN);
-        //query();
+        //generateProvenance(Formats.ProvFormat.PROVN);
+        query();
     }
 
     private static void query() {
@@ -64,17 +61,17 @@ public class Main {
 
         Document eval = intF.readDocumentFromFile("eval.provn");
 
-        documentMap = Map.of(
+        Map<String, Document> documentMap = Map.of(
                 "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval", preprocEval,
                 "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocTrain", preprocTrain,
                 "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/train", train,
                 "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/eval", eval
         );
 
-        connectorMap = Map.of(
-                "http://10.16.48.121:42069/api/v1/connectors/trainedModelConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/train",
-                "http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval",
-                "http://10.16.48.121:42069/api/v1/connectors/trainTilesConnector", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocTrain"
+        Map<String, String> connectorMap = Map.of(
+                "http://10.16.48.121:42069/api/v1/connectors/trainedModelConnector1716200887931", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/train",
+                "http://10.16.48.121:42069/api/v1/connectors/evalTilesConnector1716200887931", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocEval",
+                "http://10.16.48.121:42069/api/v1/connectors/trainTilesConnector1716200853766", "http://10.16.48.121:42069/api/v1/organizations/ORG/graphs/preprocTrain"
         );
 
         Query q = new Query(documentMap, connectorMap);
